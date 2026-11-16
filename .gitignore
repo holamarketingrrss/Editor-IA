@@ -6,3 +6,15 @@ renders/
 *.mov
 *.wav
 .hyperframes/
+*.MP4
+*.MOV
+*.mp3
+*.png
+*.jpg
+proyectos/*/raw/
+proyectos/*/thumbs/
+proyectos/*/sheets*/
+proyectos/*/strips/
+proyectos/*/audio/
+proyectos/*/reel/public/clips/
+*.log
