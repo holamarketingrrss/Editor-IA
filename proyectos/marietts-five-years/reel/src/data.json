@@ -1,0 +1,855 @@
+{
+ "duration": 44.23,
+ "intro": {
+  "end": 5.3
+ },
+ "card": {
+  "start": 5.3,
+  "end": 6.72,
+  "title": "Mariett's in five years",
+  "sub": "¿Cómo ven Mariett's en cinco años?"
+ },
+ "overlays": {
+  "start": 6.72,
+  "end": 41.23
+ },
+ "outro": {
+  "start": 41.23,
+  "title": "Full episode on YouTube",
+  "sub": "LINK IN BIO"
+ },
+ "clips": [
+  {
+   "file": "c00.mp4",
+   "start": 0.0,
+   "end": 6.72,
+   "kind": "W2",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c01.mp4",
+   "start": 6.72,
+   "end": 9.27,
+   "kind": "H",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c02.mp4",
+   "start": 9.27,
+   "end": 11.72,
+   "kind": "S",
+   "ovBottom": "light",
+   "ovTop": "light"
+  },
+  {
+   "file": "c03.mp4",
+   "start": 11.72,
+   "end": 14.42,
+   "kind": "W2",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c04.mp4",
+   "start": 14.42,
+   "end": 16.13,
+   "kind": "H",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c05.mp4",
+   "start": 16.13,
+   "end": 19.52,
+   "kind": "S",
+   "ovBottom": "light",
+   "ovTop": "light"
+  },
+  {
+   "file": "c06.mp4",
+   "start": 19.52,
+   "end": 21.77,
+   "kind": "H2",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c07.mp4",
+   "start": 21.77,
+   "end": 25.67,
+   "kind": "W",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c08.mp4",
+   "start": 25.67,
+   "end": 28.81,
+   "kind": "E",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c09.mp4",
+   "start": 28.81,
+   "end": 30.07,
+   "kind": "S",
+   "ovBottom": "light",
+   "ovTop": "light"
+  },
+  {
+   "file": "c10.mp4",
+   "start": 30.07,
+   "end": 31.6,
+   "kind": "E",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c11.mp4",
+   "start": 31.6,
+   "end": 36.29,
+   "kind": "W2",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c12.mp4",
+   "start": 36.29,
+   "end": 38.2,
+   "kind": "E",
+   "ovBottom": "dark",
+   "ovTop": "light"
+  },
+  {
+   "file": "c13.mp4",
+   "start": 38.2,
+   "end": 41.23,
+   "kind": "S",
+   "ovBottom": "light",
+   "ovTop": "light"
+  }
+ ],
+ "captions": [
+  {
+   "start": 0.23,
+   "words": [
+    {
+     "t": 0.23,
+     "text": "Mariett's",
+     "em": false
+    },
+    {
+     "t": 0.94,
+     "text": "in",
+     "em": false
+    },
+    {
+     "t": 1.13,
+     "text": "five",
+     "em": true
+    },
+    {
+     "t": 1.5,
+     "text": "years",
+     "em": true
+    }
+   ],
+   "tr": "¿Cómo ven Mariett's en cinco años?",
+   "end": 2.88,
+   "y": 520,
+   "dark": false
+  },
+  {
+   "start": 2.88,
+   "words": [
+    {
+     "t": 2.88,
+     "text": "Yeah",
+     "em": false
+    },
+    {
+     "t": 3.219,
+     "text": "man,",
+     "em": false
+    },
+    {
+     "t": 3.558,
+     "text": "you're",
+     "em": false
+    },
+    {
+     "t": 3.896,
+     "text": "gonna",
+     "em": false
+    },
+    {
+     "t": 4.235,
+     "text": "make",
+     "em": false
+    },
+    {
+     "t": 4.574,
+     "text": "me",
+     "em": false
+    },
+    {
+     "t": 4.912,
+     "text": "cry,",
+     "em": true
+    },
+    {
+     "t": 5.251,
+     "text": "bro.",
+     "em": false
+    }
+   ],
+   "tr": "Me vas a hacer llorar.",
+   "end": 5.3,
+   "y": 520,
+   "dark": false
+  },
+  {
+   "start": 7.15,
+   "words": [
+    {
+     "t": 7.15,
+     "text": "We",
+     "em": false
+    },
+    {
+     "t": 7.31,
+     "text": "could",
+     "em": false
+    },
+    {
+     "t": 7.61,
+     "text": "easily",
+     "em": true
+    },
+    {
+     "t": 8.21,
+     "text": "sit",
+     "em": false
+    },
+    {
+     "t": 8.24,
+     "text": "here",
+     "em": false
+    },
+    {
+     "t": 8.48,
+     "text": "and",
+     "em": false
+    },
+    {
+     "t": 8.68,
+     "text": "say,",
+     "em": false
+    }
+   ],
+   "tr": "Fácilmente podríamos decir:",
+   "end": 9.27,
+   "y": 560,
+   "dark": false
+  },
+  {
+   "start": 9.27,
+   "words": [
+    {
+     "t": 9.27,
+     "text": "yes,",
+     "em": false
+    },
+    {
+     "t": 9.39,
+     "text": "in",
+     "em": false
+    },
+    {
+     "t": 9.54,
+     "text": "five",
+     "em": false
+    },
+    {
+     "t": 9.9,
+     "text": "years",
+     "em": false
+    },
+    {
+     "t": 10.36,
+     "text": "we'll",
+     "em": false
+    },
+    {
+     "t": 10.49,
+     "text": "have",
+     "em": false
+    },
+    {
+     "t": 10.82,
+     "text": "a",
+     "em": false
+    },
+    {
+     "t": 10.87,
+     "text": "coffee",
+     "em": true
+    },
+    {
+     "t": 11.22,
+     "text": "shop",
+     "em": true
+    }
+   ],
+   "tr": "«en cinco años tendremos una cafetería»",
+   "end": 11.72,
+   "band": true,
+   "y": 960
+  },
+  {
+   "start": 11.72,
+   "words": [
+    {
+     "t": 11.72,
+     "text": "or",
+     "em": false
+    },
+    {
+     "t": 11.72,
+     "text": "in",
+     "em": false
+    },
+    {
+     "t": 11.92,
+     "text": "five",
+     "em": false
+    },
+    {
+     "t": 12.36,
+     "text": "years",
+     "em": false
+    },
+    {
+     "t": 12.92,
+     "text": "we'll",
+     "em": false
+    },
+    {
+     "t": 13.14,
+     "text": "have",
+     "em": false
+    },
+    {
+     "t": 13.36,
+     "text": "50",
+     "em": true
+    },
+    {
+     "t": 13.87,
+     "text": "carts.",
+     "em": true
+    }
+   ],
+   "tr": "«o en cinco años tendremos 50 carritos».",
+   "end": 14.42,
+   "y": 520,
+   "dark": false
+  },
+  {
+   "start": 14.42,
+   "words": [
+    {
+     "t": 14.42,
+     "text": "But",
+     "em": false
+    },
+    {
+     "t": 14.59,
+     "text": "one",
+     "em": false
+    },
+    {
+     "t": 14.82,
+     "text": "thing",
+     "em": false
+    },
+    {
+     "t": 15.26,
+     "text": "that",
+     "em": false
+    },
+    {
+     "t": 15.61,
+     "text": "I",
+     "em": false
+    },
+    {
+     "t": 15.69,
+     "text": "think",
+     "em": false
+    }
+   ],
+   "tr": "Pero algo que creo",
+   "end": 16.13,
+   "y": 560,
+   "dark": false
+  },
+  {
+   "start": 16.13,
+   "words": [
+    {
+     "t": 16.13,
+     "text": "and",
+     "em": false
+    },
+    {
+     "t": 16.39,
+     "text": "I",
+     "em": false
+    },
+    {
+     "t": 16.49,
+     "text": "pray",
+     "em": true
+    },
+    {
+     "t": 16.93,
+     "text": "that",
+     "em": false
+    },
+    {
+     "t": 17.29,
+     "text": "in",
+     "em": false
+    },
+    {
+     "t": 17.48,
+     "text": "five",
+     "em": false
+    },
+    {
+     "t": 17.87,
+     "text": "years",
+     "em": false
+    },
+    {
+     "t": 18.4,
+     "text": "we're",
+     "em": false
+    },
+    {
+     "t": 18.53,
+     "text": "still",
+     "em": false
+    },
+    {
+     "t": 18.68,
+     "text": "doing",
+     "em": false
+    },
+    {
+     "t": 18.92,
+     "text": "is",
+     "em": false
+    }
+   ],
+   "tr": "y pido que lo que sigamos haciendo en cinco años",
+   "end": 19.52,
+   "band": true,
+   "y": 960
+  },
+  {
+   "start": 19.52,
+   "words": [
+    {
+     "t": 19.52,
+     "text": "that",
+     "em": false
+    },
+    {
+     "t": 20.08,
+     "text": "we",
+     "em": false
+    },
+    {
+     "t": 20.23,
+     "text": "can",
+     "em": false
+    },
+    {
+     "t": 20.48,
+     "text": "still",
+     "em": false
+    },
+    {
+     "t": 20.83,
+     "text": "serve",
+     "em": true
+    },
+    {
+     "t": 21.2,
+     "text": "people.",
+     "em": true
+    }
+   ],
+   "tr": "sea poder servir a la gente.",
+   "end": 21.77,
+   "y": 520,
+   "dark": false
+  },
+  {
+   "start": 21.77,
+   "words": [
+    {
+     "t": 21.77,
+     "text": "I",
+     "em": false
+    },
+    {
+     "t": 21.91,
+     "text": "see",
+     "em": false
+    },
+    {
+     "t": 22.08,
+     "text": "our",
+     "em": false
+    },
+    {
+     "t": 22.38,
+     "text": "marriage",
+     "em": false
+    },
+    {
+     "t": 23.18,
+     "text": "being",
+     "em": false
+    },
+    {
+     "t": 23.69,
+     "text": "of",
+     "em": false
+    },
+    {
+     "t": 23.93,
+     "text": "constant",
+     "em": true
+    },
+    {
+     "t": 24.71,
+     "text": "service.",
+     "em": true
+    }
+   ],
+   "tr": "Veo nuestro matrimonio como un servicio constante.",
+   "end": 25.96,
+   "y": 560,
+   "dark": false
+  },
+  {
+   "start": 25.96,
+   "words": [
+    {
+     "t": 25.96,
+     "text": "Okay,",
+     "em": false
+    },
+    {
+     "t": 26.316,
+     "text": "but",
+     "em": false
+    },
+    {
+     "t": 26.672,
+     "text": "don't",
+     "em": false
+    },
+    {
+     "t": 27.029,
+     "text": "steal",
+     "em": true
+    },
+    {
+     "t": 27.385,
+     "text": "the",
+     "em": false
+    },
+    {
+     "t": 27.741,
+     "text": "stuff",
+     "em": false
+    },
+    {
+     "t": 28.098,
+     "text": "from",
+     "em": false
+    },
+    {
+     "t": 28.454,
+     "text": "me.",
+     "em": false
+    }
+   ],
+   "tr": "Ok, pero no me robes lo que iba a decir.",
+   "end": 28.81,
+   "y": 470,
+   "dark": false
+  },
+  {
+   "start": 28.81,
+   "words": [
+    {
+     "t": 28.81,
+     "text": "Let",
+     "em": false
+    },
+    {
+     "t": 28.99,
+     "text": "me",
+     "em": false
+    },
+    {
+     "t": 29.12,
+     "text": "talk.",
+     "em": true
+    }
+   ],
+   "tr": "Déjame hablar.",
+   "end": 30.07,
+   "band": true,
+   "y": 960
+  },
+  {
+   "start": 30.07,
+   "words": [
+    {
+     "t": 30.07,
+     "text": "I",
+     "em": false
+    },
+    {
+     "t": 30.23,
+     "text": "would",
+     "em": false
+    },
+    {
+     "t": 30.38,
+     "text": "love",
+     "em": false
+    },
+    {
+     "t": 30.64,
+     "text": "to",
+     "em": false
+    },
+    {
+     "t": 30.76,
+     "text": "have",
+     "em": false
+    },
+    {
+     "t": 31.01,
+     "text": "a",
+     "em": false
+    },
+    {
+     "t": 31.06,
+     "text": "podcast,",
+     "em": true
+    }
+   ],
+   "tr": "Me encantaría tener un podcast,",
+   "end": 31.6,
+   "y": 470,
+   "dark": false
+  },
+  {
+   "start": 31.6,
+   "words": [
+    {
+     "t": 31.6,
+     "text": "maybe",
+     "em": false
+    },
+    {
+     "t": 31.96,
+     "text": "have",
+     "em": false
+    },
+    {
+     "t": 32.3,
+     "text": "some",
+     "em": false
+    },
+    {
+     "t": 33.04,
+     "text": "retreats",
+     "em": true
+    },
+    {
+     "t": 33.27,
+     "text": "with",
+     "em": false
+    },
+    {
+     "t": 33.56,
+     "text": "married",
+     "em": false
+    },
+    {
+     "t": 34.1,
+     "text": "couples",
+     "em": false
+    }
+   ],
+   "tr": "quizás hacer retiros con matrimonios",
+   "end": 34.66,
+   "y": 520,
+   "dark": false
+  },
+  {
+   "start": 34.66,
+   "words": [
+    {
+     "t": 34.66,
+     "text": "and",
+     "em": false
+    },
+    {
+     "t": 34.88,
+     "text": "impact",
+     "em": true
+    },
+    {
+     "t": 35.36,
+     "text": "their",
+     "em": false
+    },
+    {
+     "t": 35.75,
+     "text": "lives.",
+     "em": false
+    }
+   ],
+   "tr": "e impactar sus vidas.",
+   "end": 36.33,
+   "y": 520,
+   "dark": false
+  },
+  {
+   "start": 36.33,
+   "words": [
+    {
+     "t": 36.33,
+     "text": "You",
+     "em": false
+    },
+    {
+     "t": 36.53,
+     "text": "know,",
+     "em": false
+    },
+    {
+     "t": 36.79,
+     "text": "grace",
+     "em": true
+    },
+    {
+     "t": 37.12,
+     "text": "has",
+     "em": false
+    },
+    {
+     "t": 37.32,
+     "text": "been",
+     "em": false
+    },
+    {
+     "t": 37.6,
+     "text": "given",
+     "em": false
+    },
+    {
+     "t": 37.91,
+     "text": "to",
+     "em": false
+    },
+    {
+     "t": 38.04,
+     "text": "us.",
+     "em": false
+    }
+   ],
+   "tr": "La gracia nos fue dada.",
+   "end": 38.2,
+   "y": 470,
+   "dark": false
+  },
+  {
+   "start": 38.2,
+   "words": [
+    {
+     "t": 38.2,
+     "text": "We",
+     "em": false
+    },
+    {
+     "t": 38.43,
+     "text": "shall",
+     "em": false
+    },
+    {
+     "t": 38.8,
+     "text": "give",
+     "em": true
+    },
+    {
+     "t": 39.14,
+     "text": "grace",
+     "em": true
+    },
+    {
+     "t": 39.53,
+     "text": "to",
+     "em": false
+    },
+    {
+     "t": 39.74,
+     "text": "other",
+     "em": false
+    },
+    {
+     "t": 40.16,
+     "text": "people.",
+     "em": false
+    }
+   ],
+   "tr": "Debemos dar gracia a otros.",
+   "end": 40.8,
+   "band": true,
+   "y": 960
+  },
+  {
+   "start": 40.8,
+   "words": [
+    {
+     "t": 40.8,
+     "text": "That's",
+     "em": false
+    },
+    {
+     "t": 41.01,
+     "text": "right.",
+     "em": false
+    }
+   ],
+   "tr": "Así es.",
+   "end": 41.23,
+   "band": true,
+   "y": 960
+  }
+ ]
+}
