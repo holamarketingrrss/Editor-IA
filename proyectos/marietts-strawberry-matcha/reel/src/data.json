@@ -1,0 +1,84 @@
+{
+ "duration": 20.0,
+ "outroAt": 16.3,
+ "clips": [
+  {
+   "file": "c00.mp4",
+   "start": 0.0,
+   "end": 3.3,
+   "src": "IMG_3544_2.MOV",
+   "inPoint": 0.0
+  },
+  {
+   "file": "c01.mp4",
+   "start": 3.3,
+   "end": 4.3,
+   "src": "IMG_3542_2.MOV",
+   "inPoint": 0.5
+  },
+  {
+   "file": "c02.mp4",
+   "start": 4.3,
+   "end": 5.6,
+   "src": "IMG_3542_2.MOV",
+   "inPoint": 4.2
+  },
+  {
+   "file": "c03.mp4",
+   "start": 5.6,
+   "end": 6.9,
+   "src": "IMG_3543_2.MOV",
+   "inPoint": 6.3
+  },
+  {
+   "file": "c04.mp4",
+   "start": 6.9,
+   "end": 8.9,
+   "src": "IMG_3543_2.MOV",
+   "inPoint": 17.6
+  },
+  {
+   "file": "c05.mp4",
+   "start": 8.9,
+   "end": 10.9,
+   "src": "IMG_3544_2.MOV",
+   "inPoint": 2.6
+  },
+  {
+   "file": "c06.mp4",
+   "start": 10.9,
+   "end": 11.9,
+   "src": "IMG_3545.MOV",
+   "inPoint": 0.65
+  },
+  {
+   "file": "c07.mp4",
+   "start": 11.9,
+   "end": 13.0,
+   "src": "IMG_3571.MOV",
+   "inPoint": 0.8
+  },
+  {
+   "file": "c08.mp4",
+   "start": 13.0,
+   "end": 14.0,
+   "src": "IMG_3592.MOV",
+   "inPoint": 0.4
+  },
+  {
+   "file": "c09.mp4",
+   "start": 14.0,
+   "end": 15.1,
+   "src": "IMG_2451.MOV",
+   "inPoint": 6.0
+  },
+  {
+   "file": "c10.mp4",
+   "start": 15.1,
+   "end": 16.3,
+   "src": "IMG_3572.MOV",
+   "inPoint": 0.8
+  }
+ ],
+ "music": "music.mp3"
+}
