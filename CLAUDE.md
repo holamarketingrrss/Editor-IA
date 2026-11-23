@@ -36,8 +36,10 @@ con el design system y avisalo en la entrega.
 - Defaults: corte directo, arranque con el gancho, cierre con logo + @handle, zona segura 9:16
   (sin texto en los 220 px de arriba ni los 420 px de abajo), audio a -14 LUFS / -1,5 dBTP, MP4 H.264 30 fps.
 - Antes de renderizar todo, revisá stills de las palabras clave (contraste y que no tapen caras).
+- Render final: `scripts/render.sh <proyecto>` (Remotion + loudnorm en 2 pasadas) deja `<proyecto>/out/MARCA_Tema_Formato_vN.mp4`
+  (la versión sube sola) y chequea H.264, 1080x1920, 30 fps, -14 LUFS y pico ≤ -1 dBTP; si dice REVISAR, no se entrega.
 - Entrega: el conector de Drive no sube más de ~3 MB; mandá el video por el chat (SendUserFile)
-  y avisá que hay que subirlo a Editor IA › Resultados Finales. Nombre: `MARCA_Tema_Formato_vN.mp4`.
+  y avisá que hay que subirlo a Editor IA › Resultados Finales.
 
 ## Setup de una sesión nueva
 

@@ -2,7 +2,7 @@
 # Recorta cada toma del EDL a vertical 1080x1920 30fps y arma reel/src/data.json
 # uso: python3 scripts/make_clips.py proyectos/<cliente>-<tema>
 # Lee: edl.tsv (inicio  fin  archivo  punto_de_entrada  [objectPosition]), proyecto.json, words.json (opcional)
-import json, os, subprocess, sys
+import json, os, shutil, subprocess, sys
 
 P = sys.argv[1]
 cfg = json.load(open(f'{P}/proyecto.json')) if os.path.exists(f'{P}/proyecto.json') else {}
@@ -24,6 +24,9 @@ for line in open(f'{P}/edl.tsv'):
     clips.append(clip)
 if not clips:
     sys.exit('edl.tsv está vacío')
+
+if os.path.exists(f'{P}/audio/voz.mp3'):
+    shutil.copy(f'{P}/audio/voz.mp3', f'{P}/reel/public/voz.mp3')
 
 duration = cfg.get('duration', clips[-1]['end'])
 outro_at = cfg.get('outroAt', round(duration - cfg.get('outroDur', 1.94), 2))
