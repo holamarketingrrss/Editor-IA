@@ -8,7 +8,7 @@ cd app && npm install      # una vez (scripts/instalar.sh ya lo hace)
 npm run editor             # abre http://127.0.0.1:4321
 ```
 
-- **Claude** (el motor): sin proyecto abierto, *Pedido nuevo* recibe el brief y Claude arma el reel completo
+- **Claude** (el motor): sin proyecto abierto, *Pedido nuevo* (con selector de marca: usa su preset) recibe el brief y Claude arma el reel completo
   (Notion, design system, Drive, voz con ElevenLabs, corte, subtítulos, cierre). Con un proyecto abierto, *Cambios*:
   un cambio por línea con el segundo del reel (*Insertar tiempo* pone el actual). Claude sigue la misma sesión del
   pedido (`proyectos/<id>/.claude.json`), se ve su progreso en vivo y la vista previa se actualiza sola.
@@ -18,6 +18,7 @@ npm run editor             # abre http://127.0.0.1:4321
   Guarda `edl.tsv` y corre `make_clips.py` (recorta solo las tomas que cambiaron).
 - **Audio:** volumen de voz y música, elegir o subir música, audio original. Guarda en `proyecto.json`.
 - **Estilo:** las opciones del brief (`scripts/estilo.py`). Guarda solo lo que cambió en `proyecto.json` → `estilo`.
+  *Guardar como estilo de <marca>* lo pasa al preset de la marca (`presets/`).
 - **Exportar:** corre `scripts/render.sh` con el progreso en vivo y deja el link de descarga.
 
 ### Claude en la compu del equipo

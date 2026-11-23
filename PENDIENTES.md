@@ -16,4 +16,9 @@
 - Base probable: Remotion Studio (ya corre en localhost, con vista previa en vivo), con controles para recortar, cambiar texto y subtítulos, colores, reemplazar un clip, ajustar volumen y exportar con un clic.
 - Decidido: la usa solo el equipo, en su compu (Mac, y Windows con WSL). Ediciones básicas: textos/subtítulos, tomas y audio. Presets = marca + estilos de edición.
 - Claude es el motor: la app usa Claude Code instalado y logueado con la cuenta de la agencia (`claude -p`), con sus conectores (Notion, Drive, ElevenLabs). Caja de pedido (brief) y caja de cambios ("0:04 — ...") sobre la misma sesión; los retoques a mano no gastan IA.
-- Orden: estilos (hecho) → app mínima (**hecha**: `app/`, probada con Playwright: retoque de texto, estilo, tomas, audio y exportar) → conexión con Claude (**hecha**: pestaña Claude, `claude -p` en modo auto con sesión por proyecto; probada acá con cambios reales y continuación de sesión. Falta confirmar en una compu del equipo que carguen los conectores de claude.ai) → presets por marca → instalador → prueba B desde la app.
+- Orden: estilos (hecho) → app mínima (**hecha**: `app/`, probada con Playwright: retoque de texto, estilo, tomas, audio y exportar) → conexión con Claude (**hecha**: pestaña Claude, `claude -p` en modo auto con sesión por proyecto; probada acá con cambios reales y continuación de sesión. Falta confirmar en una compu del equipo que carguen los conectores de claude.ai) → presets por marca (**hechos**: `presets/lujis` y `presets/pausa` con assets del design system, `--preset` en nuevo_proyecto, guardar estilo desde la app, `tests/presets.sh`) → instalador → prueba B desde la app.
+
+## Decisiones pendientes
+
+- **Fuente script de LUJI'S (Avallon, sin archivo):** propuesta Kaushan Script (la del reel v1), ya cargada en `presets/lujis`. Alternativas probadas: Yellowtail, Permanent Marker, Caveat Brush, Rock Salt. Falta el OK.
+- **Helvetica Now de PAUSA (comercial):** se usa Arimo (libre, mismas métricas que Arial) hasta tener los archivos.

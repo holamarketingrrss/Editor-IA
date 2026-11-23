@@ -10,6 +10,8 @@ const post = (url, body) => pedir(url, {method: 'POST', headers: {'Content-Type'
 export const api = {
   proyectos: () => pedir('/api/proyectos'),
   opciones: () => pedir('/api/opciones'),
+  presets: () => pedir('/api/presets'),
+  guardarPreset: (id) => post(`/api/p/${id}/guardar-preset`, {}),
   proyecto: (id) => pedir(`/api/p/${id}`),
   guardarGuion: (id, guion) => post(`/api/p/${id}/guion`, {guion}),
   guardarEdl: (id, edl) => post(`/api/p/${id}/edl`, {edl}),
@@ -21,7 +23,7 @@ export const api = {
 
 export const claudeApi = {
   estado: () => pedir('/api/claude/estado'),
-  iniciar: (modo, p, texto) => post('/api/claude/iniciar', {modo, p, texto}),
+  iniciar: (modo, p, texto, marca) => post('/api/claude/iniciar', {modo, p, texto, marca}),
   parar: () => post('/api/claude/parar', {}),
   eventos: () => new EventSource('/api/claude/eventos'),
 };

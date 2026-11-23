@@ -1,0 +1,23 @@
+{
+ "nombre": "PAUSA",
+ "handle": "@enjoypausa",
+ "logo": "pausa-logo-yellow.png",
+ "colores": {
+  "texto": "#FFFFFF",
+  "noche": "#061D39",
+  "azul": "#3A699D",
+  "celeste": "#88C0D1",
+  "amarillo": "#ECC165",
+  "coral": "#E47A6C",
+  "verde": "#576D47",
+  "blanco": "#FFFFFF"
+ },
+ "acentos": ["amarillo", "celeste", "coral"],
+ "fuentes": {
+  "G": {"familia": "Playfair Display", "archivo": "playfair-display-latin-700-normal.woff2", "peso": 700, "mayusculas": false, "interlineado": 1.05, "espaciado": 0, "ancho": 0.54, "respaldo": "Georgia, serif"},
+  "B": {"familia": "Arimo", "archivo": "arimo-latin-700-normal.woff2", "peso": 700, "mayusculas": false, "interlineado": 1.1, "espaciado": 0, "ancho": 0.52, "respaldo": "'Helvetica Neue', Helvetica, Arial, sans-serif"},
+  "S": {"familia": "Arimo", "archivo": "arimo-latin-700-normal.woff2", "peso": 700, "mayusculas": true, "interlineado": 1, "espaciado": 3, "ancho": 0.71, "respaldo": "'Helvetica Neue', Helvetica, Arial, sans-serif"},
+  "K": {"familia": "Playfair Display Italic", "archivo": "playfair-display-latin-400-italic.woff2", "peso": 400, "mayusculas": false, "interlineado": 1.1, "espaciado": 0, "ancho": 0.5, "respaldo": "Georgia, serif"}
+ },
+ "outro": {"fondo": "noche", "fuenteHandle": "S", "colorHandle": "texto"}
+}

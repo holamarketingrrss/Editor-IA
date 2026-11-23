@@ -35,10 +35,12 @@ function emitir(ev) {
   for (const res of trabajo.clientes) res.write(`data: ${JSON.stringify(ev)}\n\n`);
 }
 
-function prompt(REPO, modo, p, texto) {
+function prompt(REPO, modo, p, texto, marca) {
   if (modo === 'pedido') {
+    const pre = marca ? `Marca: ${marca}. Creá el proyecto con scripts/nuevo_proyecto.sh <cliente> <tema> --preset ${marca} `
+      + `(presets/${marca}: brand, assets, voz y estilo por defecto; leé sus notas en preset.json).\n` : '';
     return `Pedido nuevo desde la app del editor. Seguí CLAUDE.md de punta a punta hasta dejar el reel armado en un proyecto `
-      + `de la plantilla (proyectos/<cliente>-<tema>), con voz, tomas, subtítulos y estilo, y los stills revisados.\n\n${texto}`;
+      + `de la plantilla (proyectos/<cliente>-<tema>), con voz, tomas, subtítulos y estilo, y los stills revisados.\n${pre}\n${texto}`;
   }
   return `Cambios sobre proyectos/${p} (los tiempos m:ss son del reel; 0:00 = inicio). Aplicalos y dejá el proyecto actualizado `
     + `(make_words/make_clips según corresponda). Si un cambio es ambiguo, hacé lo más razonable y avisalo.\n\n${texto}`;
@@ -49,12 +51,13 @@ export function claude(REPO) {
   const PROY = path.join(REPO, 'proyectos');
   const proyectos = () => (fs.existsSync(PROY) ? fs.readdirSync(PROY) : []);
 
-  function iniciar({modo, p, texto}) {
+  function iniciar({modo, p, texto, marca}) {
     if (trabajo && !trabajo.fin) throw new Error('Claude ya está trabajando en otro pedido');
     if (!texto?.trim()) throw new Error('falta el texto');
     if (modo === 'cambios' && !/^[a-z0-9][a-z0-9-]*$/.test(p || '')) throw new Error('falta el proyecto');
     const sesion = modo === 'cambios' ? leer(path.join(PROY, p, '.claude.json'), {}).sesion : null;
-    const args = ['-p', prompt(REPO, modo, p, texto), '--output-format', 'stream-json', '--verbose',
+    if (marca && !/^[a-z0-9-]+$/.test(marca)) throw new Error('marca inválida');
+    const args = ['-p', prompt(REPO, modo, p, texto, marca), '--output-format', 'stream-json', '--verbose',
       '--permission-mode', PERMISOS, '--append-system-prompt', SISTEMA];
     if (MODELO) args.push('--model', MODELO);
     if (sesion) args.push('--resume', sesion);

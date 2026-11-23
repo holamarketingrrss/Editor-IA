@@ -23,3 +23,7 @@ proyectos/*/reel/public/clips/
 __pycache__/
 proyectos/estilos-prueba/
 proyectos/*/.claude.json
+proyectos/*-prueba-preset/
+proyectos/presets-prueba.jpg
+!presets/*/public/brand/*.png
+!template/reel/public/sfx/*.wav

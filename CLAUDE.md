@@ -22,7 +22,10 @@ con el design system y avisalo en la entrega.
 
 ## Flujo de trabajo
 
-- Proyecto nuevo: `scripts/nuevo_proyecto.sh <cliente> <tema> --tokens <tokens.json del design system> --handle @marca
+- Si existe `presets/<cliente>/` (hoy: `lujis`, `pausa`), creá el proyecto con `scripts/nuevo_proyecto.sh <cliente> <tema> --preset <cliente>`:
+  trae brand, fuentes, logos, stickers, voz y estilo por defecto, y sus `notas` resumen el design system (ver `presets/README.md`).
+  Lo que pida el brief va en `proyecto.json` → `estilo` y manda sobre el preset.
+- Proyecto nuevo sin preset: `scripts/nuevo_proyecto.sh <cliente> <tema> --tokens <tokens.json del design system> --handle @marca
   --logo <archivo> [--fondo-outro <color>] [--acentos a,b,c] [--assets <dir con fonts/ y brand/>]` crea
   `proyectos/<cliente>-<tema>/` desde `template/` con `reel/src/brand.json` (colores, fuentes, logo y handle de la marca;
   el aviso de fuente sin archivo se resuelve a mano). Después: `inventario.tsv` → miniaturas → `edl.tsv` →

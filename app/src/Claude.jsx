@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {claudeApi} from './api.js';
+import {api, claudeApi} from './api.js';
 
 const PLANTILLA = `Editá el video de esta pieza: [link a la ficha en Notion].
 Material: [link de Drive] (excluir […]). Formato 9:16, 15 s.`;
@@ -13,6 +13,8 @@ export function Claude({p, t, recargar, alTerminar}) {
   const [eventos, setEventos] = useState([]);
   const [corriendo, setCorriendo] = useState(false);
   const [error, setError] = useState('');
+  const [presets, setPresets] = useState([]);
+  const [marca, setMarca] = useState('');
   const fuente = useRef(null), caja = useRef(null), area = useRef(null), ultimoRefresco = useRef(0);
 
   const conectar = () => {
@@ -33,13 +35,14 @@ export function Claude({p, t, recargar, alTerminar}) {
   };
   useEffect(() => {
     claudeApi.estado().then((e) => { setEstado(e); if (e.corriendo) conectar(); }).catch((e) => setError(e.message));
+    if (!p) api.presets().then(setPresets).catch(() => {});
     return () => fuente.current?.close();
   }, []);
   useEffect(() => { caja.current && (caja.current.scrollTop = caja.current.scrollHeight); }, [eventos]);
 
   const enviar = async () => {
     setError('');
-    try { await claudeApi.iniciar(modo, p?.id, texto); setTexto(''); conectar(); } catch (e) { setError(e.message); }
+    try { await claudeApi.iniciar(modo, p?.id, texto, marca || undefined); setTexto(''); conectar(); } catch (e) { setError(e.message); }
   };
   const insertarTiempo = () => {
     const a = area.current, marca = `${mmss(t)} — `;
@@ -64,6 +67,11 @@ export function Claude({p, t, recargar, alTerminar}) {
             baja el material de Drive, genera la voz, arma el corte, los subtítulos y el cierre. Lo vas a ver en la vista previa.</p>
         : <p className="nota">Un cambio por línea, con el segundo del reel. Pausá donde querés el cambio y tocá <b>Insertar tiempo</b>.
             Claude sigue la misma sesión del pedido y reusa lo que ya armó.</p>}
+      {modo === 'pedido' && presets.length > 0 && (
+        <label className="marca">Marca <select value={marca} onChange={(e) => setMarca(e.target.value)} disabled={corriendo}>
+          <option value="">La que diga el pedido</option>{presets.map((x) => <option key={x.id} value={x.id}>{x.marca}</option>)}</select>
+          <span className="sub">usa su preset: logo, fuentes, voz y estilo de edición</span></label>
+      )}
       <textarea ref={area} value={texto} onChange={(e) => setTexto(e.target.value)} disabled={corriendo}
         placeholder={modo === 'pedido' ? PLANTILLA : '0:04 — "argentina" se lee poco: pasala a blanco\n0:06–0:07 — cambiá la toma por una de clientes comiendo'}
         rows={modo === 'pedido' ? 10 : 5}

@@ -92,3 +92,4 @@ main.pedido h2 { margin: 0 0 8px; }
 .ev.fin.ok { background: #183b29; color: #9ff0c3; }
 .ev.fin.error { background: #3d1c1c; color: #ffc2c2; }
 .ev.fin pre, .ev.fin ul { font-weight: 400; margin: 6px 0 0; white-space: pre-wrap; }
+.claude label.marca { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }

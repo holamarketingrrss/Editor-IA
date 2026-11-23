@@ -171,7 +171,7 @@ const diferencia = (a, b) => {
   return out;
 };
 
-export function Estilo({p, data, setData, opciones, aplicar, ocupado}) {
+export function Estilo({p, data, setData, opciones, aplicar, guardarPreset, ocupado}) {
   const e = data.estilo || opciones.defaults;
   const cambios = diferencia(p.data.estilo || opciones.defaults, e);
   const poner = (r, v) => {
@@ -199,7 +199,11 @@ export function Estilo({p, data, setData, opciones, aplicar, ocupado}) {
       <div className="acciones">
         <button className="primario" disabled={!Object.keys(cambios).length || ocupado} onClick={() => aplicar(cambios)}>Aplicar estilo</button>
         <button disabled={!Object.keys(cambios).length || ocupado} onClick={() => setData((d) => ({...d, estilo: p.data.estilo}))}>Descartar</button>
+        {p.proyecto.preset && <button disabled={!!Object.keys(cambios).length || ocupado || !p.proyecto.estilo} onClick={guardarPreset}
+          title="Lo que cambiaste en esta pieza pasa a ser el estilo por defecto de la marca (menos zócalo, títulos y destacados)">
+          Guardar como estilo de {p.proyecto.preset}</button>}
       </div>
+      {p.proyecto.preset && <p className="nota">Marca: <b>{p.proyecto.preset}</b>. Lo que no cambies acá lo decide su preset (<code>presets/{p.proyecto.preset}</code>).</p>}
     </>
   );
 }

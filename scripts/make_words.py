@@ -34,6 +34,8 @@ modo, posicion = S['modo'], S['posicion']
 agrupado = modo in ('grupo', 'frase', 'karaoke')
 norm = lambda t: ''.join(ch for ch in t.lower() if ch.isalnum())
 destacar = {norm(t) for t in S['destacar']}
+if S.get('rotacion'):
+    ORDEN = [k for k in S['rotacion'] if k in FUENTES] or ORDEN
 base = {'blanco': 'texto', 'marca': acentos[0], 'negro': '#111111'}[S['color']]
 for k in (S['fuente'], S['fuenteDestacado']):
     if k not in FUENTES:

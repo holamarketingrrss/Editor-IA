@@ -6,6 +6,8 @@
 //   POST /api/p/<id>/guion     {guion}       guarda guion.json y corre make_words.py
 //   POST /api/p/<id>/edl       {edl}         guarda edl.tsv y corre make_clips.py
 //   POST /api/p/<id>/proyecto  {cambios}     mezcla en proyecto.json (estilo, música, volúmenes) y corre los dos scripts
+//   POST /api/p/<id>/guardar-preset         el estilo de la pieza pasa a presets/<marca> (menos lo propio de la pieza)
+//   GET  /api/presets                        marcas con preset
 //   POST /api/p/<id>/subir?tipo=musica|toma&nombre=x   (cuerpo = archivo)
 //   GET  /api/p/<id>/miniatura?archivo=x&t=1.5
 //   GET  /api/p/<id>/exportar                render.sh con el progreso en vivo (text/event-stream)
@@ -20,6 +22,9 @@ import {claude} from './claude.js';
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PROY = path.join(REPO, 'proyectos');
+const PRESETS = path.join(REPO, 'presets');
+// lo propio de cada pieza: no pasa al estilo de la marca
+const DE_LA_PIEZA = [['zocalo'], ['entrada', 'texto'], ['cierre', 'texto'], ['subtitulos', 'destacar']];
 const ID_OK = /^[a-z0-9][a-z0-9-]*$/;
 const TIPOS = {'.mp4': 'video/mp4', '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.png': 'image/png', '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff',
@@ -147,6 +152,10 @@ export function api() {
         if (id === 'iniciar' && req.method === 'POST') return json(motor.iniciar(JSON.parse((await cuerpo(req)).toString() || '{}')));
         return json({error: 'ruta desconocida'}, 404);
       }
+      if (que === 'presets') {
+        const lista = fs.existsSync(PRESETS) ? fs.readdirSync(PRESETS).filter((m) => fs.existsSync(path.join(PRESETS, m, 'preset.json'))) : [];
+        return json(lista.map((m) => ({id: m, marca: leer(path.join(PRESETS, m, 'preset.json')).marca || m})));
+      }
       if (que === 'opciones') return json(JSON.parse(await correr('python3', ['scripts/estilo.py', '--opciones'])));
       if (que !== 'p' || !id) return json({error: 'ruta desconocida'}, 404);
       const d = dir(id);
@@ -183,6 +192,27 @@ export function api() {
         const p = leer(path.join(d, 'proyecto.json'), {});
         if (p.duration) { delete p.duration; escribir(path.join(d, 'proyecto.json'), p); }   // la duración pasa a ser la del EDL
         return json(await regenerar(id, {palabras: false}));
+      }
+      if (accion === 'guardar-preset') {
+        // el estilo propio de esta pieza pasa a ser el de la marca (y deja de estar repetido en proyecto.json)
+        const fp = path.join(d, 'proyecto.json'), pr = leer(fp, {});
+        if (!pr.preset || !fs.existsSync(path.join(PRESETS, pr.preset, 'preset.json'))) return json({error: 'este proyecto no usa un preset de marca'}, 400);
+        const fpre = path.join(PRESETS, pr.preset, 'preset.json'), pre = leer(fpre);
+        const estilo = JSON.parse(JSON.stringify(pr.estilo || {})), queda = {};
+        for (const ruta of DE_LA_PIEZA) {
+          let o = estilo, q = queda;
+          for (const k of ruta.slice(0, -1)) { o = o?.[k]; q = (q[k] ??= {}); }
+          const k = ruta[ruta.length - 1];
+          if (o && k in o) { q[k] = o[k]; delete o[k]; }
+        }
+        const limpio = (o) => Object.fromEntries(Object.entries(o).filter(([, v]) => !(v && typeof v === 'object' && !Array.isArray(v) && !Object.keys(limpio(v)).length)).map(([k, v]) => [k, v && typeof v === 'object' && !Array.isArray(v) ? limpio(v) : v]));
+        if (!Object.keys(limpio(estilo)).length) return json({error: 'no hay cambios de estilo de la marca para guardar (aplicá primero los cambios)'}, 400);
+        pre.estilo = mezclar(pre.estilo || {}, estilo);
+        escribir(fpre, pre);
+        pr.estilo = limpio(queda); if (!Object.keys(pr.estilo).length) delete pr.estilo;
+        escribir(fp, pr);
+        await correr('bash', ['scripts/sync_reel.sh', path.relative(REPO, d)]);
+        return json({...(await regenerar(id)), log: `Estilo guardado en presets/${pr.preset}: ${JSON.stringify(limpio(estilo))}`});
       }
       if (accion === 'proyecto') {
         const f = path.join(d, 'proyecto.json');

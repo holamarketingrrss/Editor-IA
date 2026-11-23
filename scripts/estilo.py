@@ -12,6 +12,7 @@ DEFAULTS = {
         'tipografias': 'alternadas',   # alternadas | una | texto+destacados
         'fuente': 'B',                 # casillero de brand.json para "una" y para el texto de "texto+destacados"
         'fuenteDestacado': 'G',        # para los destacados con "texto+destacados"
+        'rotacion': None,              # casilleros que se alternan con "alternadas" (None = todos los de brand.json)
         'color': 'blanco',             # blanco (destacados en colores de marca) | marca | negro
         'legibilidad': 'sombra',       # sombra | contorno | caja | barra
         'animacion': 'pop',            # pop | fade | deslizar | maquina | no

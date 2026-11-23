@@ -1,0 +1,22 @@
+{
+ "marca": "LUJI'S",
+ "designSystem": "https://claude.ai/code/artifact/02074959-2407-48fc-b4e6-48db86e68bec",
+ "voz": {"voice_id": "YLtqUTaEXb7a9MAYuJu4", "nombre": "Julieta", "nota": "mujer argentina, joven, amigable; el copy va en inglés con guiños en español"},
+ "notas": [
+  "Food truck de comida argentina en Miami: callejero, cálido, alegre, con energía. Copy en inglés ('Hello Friend!', 'DM us for catering & special orders.') con guiños en español ('sabor argentino').",
+  "Escribí LUJI'S en mayúsculas con apóstrofo. Siempre invita a algo: visitar el truck, escribir por DM o pedir catering.",
+  "Stickers: los garabatos de public/brand (bandera, corazones, corazon-mensaje, numeral, paz, sonrisa, dolar, garabato), de 2 a 4 por pieza, en blanco (white: true) sobre el video.",
+  "Fuente script (K, Kaushan Script en lugar de Avallon): una sola palabra o frase por pieza, tipo saludo; por eso no entra en la rotación de subtítulos.",
+  "Cierre: logo oficial + @luji.miami sobre naranja. Fotos y tomas con luz de sol y calidez, cerca del producto."
+ ],
+ "estilo": {
+  "subtitulos": {"modo": "palabra", "posicion": "dinamica", "tipografias": "alternadas", "rotacion": ["G", "B"], "color": "blanco",
+                 "legibilidad": "sombra", "animacion": "pop"},
+  "camara": "pushin",
+  "transicion": {"tipo": "corte"},
+  "cierre": {"tipo": "logo"},
+  "animacionLogo": "sello",
+  "look": "calido",
+  "vineta": true
+ }
+}

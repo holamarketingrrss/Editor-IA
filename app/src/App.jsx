@@ -101,7 +101,8 @@ export function App() {
                 aplicar={(c) => aplicar('Audio', () => api.guardarProyecto(p.id, c))}
                 subir={(f) => aplicar('Subir música', () => api.subir(p.id, 'musica', f))} ocupado={!!ocupado} />}
               {panel === 'estilo' && opciones && <Estilo p={p} data={data} setData={setData} opciones={opciones}
-                aplicar={(estilo) => aplicar('Estilo', () => api.guardarProyecto(p.id, {estilo}))} ocupado={!!ocupado} />}
+                aplicar={(estilo) => aplicar('Estilo', () => api.guardarProyecto(p.id, {estilo}))}
+                guardarPreset={() => aplicar('Estilo de la marca', () => api.guardarPreset(p.id))} ocupado={!!ocupado} />}
               {panel === 'exportar' && <Exportar p={p} recargar={() => api.proyecto(p.id).then(setP)} />}
             </div>
           </section>
