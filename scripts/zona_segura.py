@@ -104,27 +104,66 @@ if '--frames' in sys.argv:
         print(f'{f}\t{n}')
     sys.exit(0)
 
+E = data.get('estilo') or {}
+SUB, LAY = E.get('subtitulos', {}), E.get('layout', {})
+MODO = SUB.get('modo', 'palabra')
+CON_CAJA = SUB.get('legibilidad') in ('contorno', 'caja', 'barra')   # con contorno, caja o barra el texto ya se separa del fondo
+
+
+def bloques():
+    """Modos grupo/frase/karaoke: (texto, inicio, fin, caja) por bloque, con el mismo layout que la composición."""
+    out, act = [], None
+    for w in data['words']:
+        if act and act[0] == w.get('g'):
+            act[1].append(w)
+        else:
+            act = (w.get('g'), [w]); out.append(act)
+    res = []
+    for _, ws in out:
+        size = ws[0]['size']
+        f = lambda w: brand['fuentes'][w['font']]
+        ancho = sum(len(w['text']) * f(w).get('ancho', 0.5) * w['size'] for w in ws) + 0.28 * size * (len(ws) - 1)
+        lineas = max(1, math.ceil(ancho / LAY.get('ancho', 900)))
+        pad = 22 if SUB.get('legibilidad') == 'barra' else 0
+        alto = lineas * size * max(f(w).get('interlineado', 1) for w in ws) + 0.12 * size * (lineas - 1) + 2 * pad
+        w_box = min(ancho, LAY.get('ancho', 900)) + 2 * pad
+        if SUB.get('posicion') == 'medio':
+            y0 = LAY.get('yMedio', 960) - alto / 2
+        else:
+            y0 = LAY.get('yAbajo', 1440) - alto
+        a, b = ws[0]['start'] + data['voiceOffset'], ws[-1]['end'] + data['voiceOffset']
+        res.append((' '.join(w['text'] for w in ws), a, b, (540 - w_box / 2, y0, 540 + w_box / 2, y0 + alto), ws[0]['color']))
+    return res
+
+
+if MODO == 'no':
+    revisar = []
+elif MODO == 'palabra':
+    revisar = [(w['text'], *tiempo_palabra(w), caja_palabra(w), w['color']) for w in data['words']]
+else:
+    revisar = bloques()
+
 zona, aviso, medidas = [], [], 0
-for w in data['words']:
-    x0, y0, x1, y1 = caja_palabra(w)
-    a, b = tiempo_palabra(w)
+for texto, a, b, (x0, y0, x1, y1), color in revisar:
     if y0 < Y_MIN - 5 or y1 > Y_MAX + 5:
-        zona.append(f"palabra «{w['text']}» ({a:.2f} s): ocupa y {y0:.0f}-{y1:.0f}; la zona segura es {Y_MIN}-{Y_MAX}")
+        zona.append(f"texto «{texto}» ({a:.2f} s): ocupa y {y0:.0f}-{y1:.0f}; la zona segura es {Y_MIN}-{Y_MAX}")
     if x0 < X_PALABRAS[0] - 5 or x1 > X_PALABRAS[1] + 5:
-        zona.append(f"palabra «{w['text']}» ({a:.2f} s): ocupa x {x0:.0f}-{x1:.0f}; el margen es {X_PALABRAS[0]}-{X_PALABRAS[1]}")
+        zona.append(f"texto «{texto}» ({a:.2f} s): ocupa x {x0:.0f}-{x1:.0f}; el margen es {X_PALABRAS[0]}-{X_PALABRAS[1]}")
+    if CON_CAJA:
+        continue
     bg, clip = fondo_luminancia(min(a + 0.25, (a + b) / 2), (x0, y0, x1, y1))
     if bg is not None:
         medidas += 1
-        l = lum(col(w['color']))
+        l = lum(col(color))
         cr = (max(l, bg) + 0.05) / (min(l, bg) + 0.05)
         if cr < CONTRASTE_MIN:
-            aviso.append((cr, f"palabra «{w['text']}» ({a:.2f} s): contraste {cr:.1f}:1 sobre {clip} (mínimo {CONTRASTE_MIN:g}:1); probá otro color o posición"))
+            aviso.append((cr, f"texto «{texto}» ({a:.2f} s): contraste {cr:.1f}:1 sobre {clip} (mínimo {CONTRASTE_MIN:g}:1); probá otro color o posición"))
 for s in data['stickers']:
     x0, y0, x1, y1 = caja_sticker(s)
     if y0 < Y_MIN - 5 or y1 > Y_MAX + 5 or x0 < X_STICKERS[0] - 5 or x1 > X_STICKERS[1] + 5:
         zona.append(f"sticker {s['img']} ({s['start']:.2f} s): ocupa x {x0:.0f}-{x1:.0f}, y {y0:.0f}-{y1:.0f}; fuera de x {X_STICKERS[0]}-{X_STICKERS[1]} / y {Y_MIN}-{Y_MAX}")
 
-print(f"Zona segura 9:16: {len(data['words'])} palabras y {len(data['stickers'])} stickers revisados; contraste medido en {medidas} palabras.")
+print(f"Zona segura 9:16 (subtítulos: {MODO}): {len(revisar)} textos y {len(data['stickers'])} stickers revisados; contraste medido en {medidas}" + (' (con contorno, caja o barra no se mide)' if CON_CAJA else '') + ".")
 for m in zona:
     print('  FUERA DE ZONA:', m)
 aviso = [m for _, m in sorted(aviso)]  # los peores primero

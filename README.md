@@ -42,6 +42,7 @@ scripts/nuevo_proyecto.sh <cliente> <tema> --tokens <tokens.json> --handle @marc
    -> python3 scripts/make_clips.py <proyecto>      recorta las tomas y arma reel/src/data.json
    -> scripts/voz.sh <proyecto> --texto | --url <mp3> | --mp3 <archivo>   voz (ElevenLabs) -> audio/voz.json (whisper)
    -> python3 scripts/make_words.py <proyecto>      palabras con tiempos (voz.json de whisper) y estilo
+   (estilo de la pieza en proyecto.json "estilo": opciones en scripts/estilo.py)
    -> scripts/stills.sh <proyecto>                  una hoja de contactos para revisar antes de renderizar
    -> scripts/render.sh <proyecto>                  video final en <proyecto>/out/MARCA_Tema_Formato_vN.mp4
 ```

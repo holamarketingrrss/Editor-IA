@@ -26,9 +26,13 @@ con el design system y avisalo en la entrega.
   --logo <archivo> [--fondo-outro <color>] [--acentos a,b,c] [--assets <dir con fonts/ y brand/>]` crea
   `proyectos/<cliente>-<tema>/` desde `template/` con `reel/src/brand.json` (colores, fuentes, logo y handle de la marca;
   el aviso de fuente sin archivo se resuelve a mano). Después: `inventario.tsv` → miniaturas → `edl.tsv` →
-  `python3 scripts/make_clips.py <proyecto>` → `python3 scripts/make_words.py <proyecto>` → `reel/` (Remotion).
-  Detalles por pieza en `proyecto.json` (stickers, música, outro) y `guion.json` (estilo por palabra). Los scripts
-  empujan el texto a la zona segura 9:16 solos. `proyectos/lujis-thanksgiving` es el ejemplo histórico (scripts propios).
+  `python3 scripts/make_clips.py <proyecto>` → `python3 scripts/make_words.py <proyecto>` → `reel/` (Remotion); el orden
+  de esos dos da igual. Detalles por pieza en `proyecto.json` (stickers, música, `estilo`) y `guion.json` (por palabra).
+  `estilo` lleva las opciones del brief (subtítulos, cámara, transición, entrada, cierre, look, audio original, SFX,
+  zócalo, logo en esquina): nombres y defaults en `scripts/estilo.py` (`python3 scripts/estilo.py <proyecto>` muestra el
+  resuelto). Los scripts empujan el texto a la zona segura 9:16 solos. La composición vive en `template/reel/src/index.jsx`;
+  `scripts/sync_reel.sh` (lo corren stills y render) la copia a cada proyecto. `proyectos/lujis-thanksgiving` es el ejemplo
+  histórico (scripts y composición propios, marcado con `reel/src/.propia`).
 - Drive: listar con el conector; descargar videos con `scripts/drive_get.sh` (partes de 16 MB).
   No pedir archivos completos en paralelo: Drive bloquea la descarga por cupo. Miniaturas con
   `scripts/thumb_head.sh`, de a 4 en paralelo como máximo.
@@ -40,7 +44,8 @@ con el design system y avisalo en la entrega.
   (sin texto en los 220 px de arriba ni los 420 px de abajo), audio a -14 LUFS / -1,5 dBTP, MP4 H.264 30 fps.
 - Antes de renderizar todo: `scripts/stills.sh <proyecto>` deja UNA hoja `out/stills/hoja.jpg` con las palabras clave, stickers y
   cierre; mirá solo esa imagen (contraste y que no tapen caras: eso no se detecta solo). `scripts/zona_segura.py <proyecto>`
-  chequea zona segura y contraste sin renderizar; `render.sh` frena si algo invade la zona segura. `bash tests/smoke.sh` prueba el flujo.
+  chequea zona segura y contraste sin renderizar; `render.sh` frena si algo invade la zona segura. `bash tests/smoke.sh` prueba el flujo; `bash tests/estilos.sh`
+  deja una hoja con un still por opción de estilo (correla si tocás `index.jsx` o `estilo.py`).
 - Render final: `scripts/render.sh <proyecto>` (Remotion + loudnorm en 2 pasadas) deja `<proyecto>/out/MARCA_Tema_Formato_vN.mp4`
   (la versión sube sola) y chequea H.264, 1080x1920, 30 fps, -14 LUFS y pico ≤ -1 dBTP; si dice REVISAR, no se entrega.
 - Entrega: el conector de Drive no sube más de ~3 MB; mandá el video por el chat (SendUserFile)

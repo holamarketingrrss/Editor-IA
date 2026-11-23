@@ -1,6 +1,6 @@
 # Plantilla de prompt – Pedido de video
 
-Nov 16, 2026 · @HM
+Nov 16, 2026 · @HM · actualizada Nov 23, 2026 (opciones = lo que el editor implementa)
 
 El prompt solo lleva lo que es propio de este video: qué pieza es, qué material usar y cómo querés la edición. Tono, público, copy y estilo visual el editor los saca del portal de Notion del cliente y de su design system.
 
@@ -28,23 +28,23 @@ Editá un video para [CLIENTE].
 PIEZA: [link a la ficha en Notion · Plan de publicaciones]
 Tomá objetivo, guion, copy, CTA y tono de Notion y el estilo visual del design system de [CLIENTE].
 
-FORMATO: [Reel 9:16 / 4:5 / 1:1 / 16:9] · [duración, ej. 12–15 s]
+FORMATO: [Reel 9:16] · [duración, ej. 12–15 s]
 MATERIAL: [link de Drive] — usar: [carpetas o clips] — excluir: [carpetas, clips o personas]
 TOMAS OBLIGATORIAS: [ej. logo del truck, producto en mano, las dueñas]
 REFERENCIA: [link en Referencias + qué tomar de ella, ej. "el ritmo del 0:03 al 0:08"]
 
 VOZ EN OFF: [no / sí: guion exacto o "el de Notion"] · voz: [género, edad, acento, tono]
-MÚSICA: [sin música / estilo / link] · volumen: [bajo / medio / protagonista]
+MÚSICA: [sin música / link o archivo] · volumen: [bajo / medio / protagonista]
 AUDIO ORIGINAL: [muteado / ambiente bajo / en primer plano]
 
 SUBTÍTULOS: [modo] · [posición] · [tipografías] · [color + palabras destacadas] · [animación]
 TEXTOS EXTRA: [precio, fecha, dirección, zócalos… o "no"]
-RITMO: [muy rápido / dinámico / pausado] · cortes con [la voz / el beat / libre]
+RITMO: [muy rápido / dinámico / pausado] · cortes con [la voz / libre]
 TRANSICIONES: [corte directo / otra + dónde]
 ENTRADA: [arranca con el gancho / intro con logo]
 CIERRE: [logo + @handle sobre color de marca / CTA en pantalla / otro]
-COLOR Y LUZ: [solo corrección / look: cálido, natural, cine… / referencia]
-ELEMENTOS DE MARCA: [stickers, patrón, logo en esquina… o "no"]
+COLOR Y LUZ: [original / look: cálido, vibrante, cine…] · [viñeta / grano]
+ELEMENTOS DE MARCA: [stickers, logo en esquina… o "no"]
 
 ENTREGA: [versiones de formato o largo]
 NOTAS: [cualquier cosa que no esté en Notion]
@@ -70,18 +70,22 @@ Usá estos nombres en el prompt: son los que el editor entiende sin ambigüedad.
 | Subtítulos · legibilidad | Sombra sin caja · contorno · caja de color por palabra · barra de fondo |
 | Subtítulos · animación | Pop con rebote · fade · deslizar desde abajo · máquina de escribir · sin animación |
 | Ritmo | Muy rápido (0,3–0,6 s por toma) · dinámico (0,6–1,2 s) · pausado (2–4 s) |
-| Movimiento de cámara en edición | Push-in lento · punch-in en palabras clave · cámara lenta · timelapse · sin movimiento |
-| Transiciones | Corte directo (por defecto) · corte al beat · fundido cruzado · fundido a color · whip pan · zoom · match cut · cortina con color o patrón de marca · glitch · deslizar |
+| Movimiento de cámara en edición | Push-in lento (por defecto) · punch-in en palabras clave · sin movimiento |
+| Transiciones | Corte directo (por defecto) · fundido cruzado · fundido a color · cortina con color de marca · zoom · deslizar |
 | Entrada | Arranca con el gancho (por defecto) · logo de 0,5 s · cartel con título |
 | Cierre | Logo + @handle sobre color de marca (1,5–2 s) · CTA en pantalla · última toma congelada · loop con el inicio |
 | Animación de logo y textos | Pop con rebote · fade · deslizar · sello que cae · estático |
-| Color y luz | Solo corrección (igualar tomas) · cálido · natural · vibrante · cine (teal & orange) · vintage / film · blanco y negro · "como esta referencia" |
-| Retoques | Levantar sombras · recuperar cielos · más brillo y saturación en el producto · cuidar tonos de piel · viñeta · grano |
+| Color y luz | Original de cámara (por defecto) · cálido · vibrante · cine (teal & orange) · vintage / film · blanco y negro |
+| Retoques | Viñeta suave (por defecto) · sin viñeta · grano |
 | Voz en off | Mujer / hombre · joven / adulto · argentino, neutro, inglés · amigable, enérgico, sereno · una voz ya usada ("Julieta") |
-| Música | Sin música · estilo (acústico, urbano, latino, lo-fi) · link a un tema · volumen bajo, medio o protagonista |
+| Música | Sin música · link o archivo del tema · volumen bajo, medio o protagonista |
 | Efectos de sonido | Whoosh en transiciones · pop en textos · ninguno |
+| Audio original | Muteado (por defecto) · ambiente bajo · en primer plano |
+| Textos extra | Zócalo (precio, fecha, dirección) · CTA en el cierre · cartel de título en la entrada |
 
-Por defecto, si no lo pedís: corte directo, arranque con el gancho, cierre con logo, audio a -14 LUFS y textos dentro de la zona segura de Instagram y TikTok.
+Próximamente: formatos 4:5, 1:1 y 16:9, varias versiones en una entrega y patrón de marca en la cortina.
+
+Por defecto, si no lo pedís: lo que diga el preset de la marca; si no hay, corte directo, arranque con el gancho, subtítulos palabra por palabra con pop, cierre con logo, audio a -14 LUFS y textos dentro de la zona segura de Instagram y TikTok.
 
 ## Ejemplo: reel LUJI'S Thanksgiving
 

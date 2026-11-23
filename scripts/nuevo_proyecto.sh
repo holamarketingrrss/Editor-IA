@@ -21,6 +21,7 @@ done
 [ ! -e "$P" ] || { echo "ya existe $P"; exit 1; }
 mkdir -p "$P"/{raw,audio,thumbs} "$P"/reel/public/{clips,brand,fonts}
 cp -r template/reel/package.json template/reel/package-lock.json template/reel/src "$P/reel/"
+cp -r template/reel/public/sfx "$P/reel/public/"
 cp template/proyecto.json template/guion.json "$P/"
 : > "$P/edl.tsv"; : > "$P/inventario.tsv"
 if [ -n "$TOKENS" ]; then

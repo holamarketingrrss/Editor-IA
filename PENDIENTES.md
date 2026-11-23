@@ -7,10 +7,13 @@
 5. **Entrega a Drive:** decidir qué hacer con el límite de ~3 MB (hoy el video sale por el chat y se sube a mano).
 6. ~~**Higiene del repo:** aclarar cuál es el vigente entre `catalogo.tsv` y `catalogo_v1.tsv`, limpiar `tests/`, crear `.claude/settings.json` con permisos y escribir un `README` con un pedido de ejemplo.~~ **Hecho** (se borró `catalogo_v1.tsv`, idéntico a `catalogo.tsv`; `tests/` quedó solo con `smoke.sh`; `.claude/settings.json` con permisos para los scripts; `README.md`). Los permisos usan la sintaxis con comodín `Bash(cmd *)`: si Claude Code sigue pidiendo confirmación para alguno, ajustarlo ahí.
 7. **Validación real:** probar el flujo completo con un segundo cliente de otra marca.
-8. **App local:** convertir el editor en una app que corra en `localhost`, para editar rápido con presets y cambios pequeños (ediciones básicas).
+8. **Estilos del brief (tabla D):** **Hecho** en `scripts/estilo.py` + `template/reel/src/index.jsx`: subtítulos (palabra, 2–3 palabras, frase, karaoke, sin; dinámica/abajo/medio; tipografías; color; sombra/contorno/caja/barra; pop/fade/deslizar/máquina/sin), cámara (push-in, sin, punch-in), transiciones (corte, fundido, fundido a color, cortina, zoom, deslizar), entrada (gancho, logo, título), cierre (logo, CTA, congelada, loop), animación de logo, looks (cálido, vibrante, B&N, vintage, cine), viñeta, grano, audio original, SFX (whoosh/pop sintetizados en `template/reel/public/sfx`), zócalo y logo en esquina. Probado con `tests/estilos.sh` (hoja de 16 stills) y un render completo. Pendiente: formatos 4:5/1:1/16:9, varias versiones por entrega, patrón de marca.
+9. **App local:** convertir el editor en una app que corra en `localhost`, para editar rápido con presets y cambios pequeños (ediciones básicas).
 
-## Notas sobre el punto 8
+## Notas sobre el punto 9
 
 - Depende de los puntos 1 a 3: la app sería una interfaz sobre `brand.json` (presets de marca), `render.sh` (exportar) y `stills.sh` (previsualizar).
 - Base probable: Remotion Studio (ya corre en localhost, con vista previa en vivo), con controles para recortar, cambiar texto y subtítulos, colores, reemplazar un clip, ajustar volumen y exportar con un clic.
-- A definir: qué ediciones entran en "básicas" y si la usa solo el equipo o también los clientes.
+- Decidido: la usa solo el equipo, en su compu (Mac, y Windows con WSL). Ediciones básicas: textos/subtítulos, tomas y audio. Presets = marca + estilos de edición.
+- Claude es el motor: la app usa Claude Code instalado y logueado con la cuenta de la agencia (`claude -p`), con sus conectores (Notion, Drive, ElevenLabs). Caja de pedido (brief) y caja de cambios ("0:04 — ...") sobre la misma sesión; los retoques a mano no gastan IA.
+- Orden: estilos (hecho) → app mínima (preview con @remotion/player, proyecto, retoques, exportar) → conexión con Claude → presets por marca → instalador → prueba B desde la app.
