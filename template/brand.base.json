@@ -1,0 +1,18 @@
+{
+ "nombre": "MARCA",
+ "handle": "@marca",
+ "logo": "logo.png",
+ "colores": {
+  "texto": "#FFFFFF",
+  "principal": "#E11D48",
+  "acento": "#F59E0B"
+ },
+ "acentos": ["acento", "principal"],
+ "fuentes": {
+  "G": {"familia": "Impact", "archivo": null, "peso": 400, "mayusculas": true, "interlineado": 0.9, "espaciado": 1, "ancho": 0.38, "respaldo": "sans-serif"},
+  "B": {"familia": "Impact", "archivo": null, "peso": 400, "mayusculas": true, "interlineado": 0.9, "espaciado": 2, "ancho": 0.38, "respaldo": "sans-serif"},
+  "S": {"familia": "Arial", "archivo": null, "peso": 700, "mayusculas": true, "interlineado": 1, "espaciado": -1, "ancho": 0.62, "respaldo": "sans-serif"},
+  "K": {"familia": "Brush Script MT", "archivo": null, "peso": 400, "mayusculas": false, "interlineado": 1.1, "espaciado": 0, "ancho": 0.48, "respaldo": "cursive"}
+ },
+ "outro": {"fondo": "principal", "fuenteHandle": "S", "colorHandle": "texto"}
+}

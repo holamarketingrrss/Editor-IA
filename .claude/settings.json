@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ffmpeg *)",
+      "Bash(ffprobe *)",
+      "Bash(npx remotion *)",
+      "Bash(npm install)",
+      "Bash(npm run studio)",
+      "Bash(bash scripts/*)",
+      "Bash(scripts/*)",
+      "Bash(python3 scripts/*)",
+      "Bash(python3 -I scripts/*)",
+      "Bash(bash tests/smoke.sh)",
+      "Bash(tools/whisper.cpp/build/bin/whisper-cli *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ]
+  }
+}

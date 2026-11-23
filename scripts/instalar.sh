@@ -10,6 +10,6 @@ if [ ! -x tools/whisper.cpp/build/bin/whisper-cli ]; then
   (cd tools/whisper.cpp && cmake -B build -DCMAKE_BUILD_TYPE=Release >/dev/null && cmake --build build -j"$(nproc)" --config Release >/dev/null)
 fi
 [ -f tools/whisper.cpp/models/ggml-small.bin ] || sh tools/whisper.cpp/models/download-ggml-model.sh small
-(cd tests/remotion-test && npm install --silent)
+(cd template/reel && npm install --silent)   # instala (y deja en caché) las dependencias de Remotion para los proyectos nuevos
 npx -y hyperframes@0.9.56 --version
 echo "Listo."

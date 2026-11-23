@@ -1,14 +1,10 @@
 {
-  "name": "remotion-test",
+  "name": "reel",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "studio": "remotion studio src/index.jsx"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@remotion/cli": "^4.0.544",
     "react": "^18.3.1",
