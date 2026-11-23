@@ -21,8 +21,13 @@ con el design system y avisalo en la entrega.
 
 ## Flujo de trabajo
 
-- Proyecto nuevo en `proyectos/<cliente>-<tema>/` (ver `proyectos/lujis-thanksgiving` como modelo):
-  `inventario.tsv` → miniaturas → `edl.tsv` → `make_clips.py` → `make_words.py` → `reel/` (Remotion).
+- Proyecto nuevo: `scripts/nuevo_proyecto.sh <cliente> <tema> --tokens <tokens.json del design system> --handle @marca
+  --logo <archivo> [--fondo-outro <color>] [--acentos a,b,c] [--assets <dir con fonts/ y brand/>]` crea
+  `proyectos/<cliente>-<tema>/` desde `template/` con `reel/src/brand.json` (colores, fuentes, logo y handle de la marca;
+  el aviso de fuente sin archivo se resuelve a mano). Después: `inventario.tsv` → miniaturas → `edl.tsv` →
+  `python3 scripts/make_clips.py <proyecto>` → `python3 scripts/make_words.py <proyecto>` → `reel/` (Remotion).
+  Detalles por pieza en `proyecto.json` (stickers, música, outro) y `guion.json` (estilo por palabra). Los scripts
+  empujan el texto a la zona segura 9:16 solos. `proyectos/lujis-thanksgiving` es el ejemplo histórico (scripts propios).
 - Drive: listar con el conector; descargar videos con `scripts/drive_get.sh` (partes de 16 MB).
   No pedir archivos completos en paralelo: Drive bloquea la descarga por cupo. Miniaturas con
   `scripts/thumb_head.sh`, de a 4 en paralelo como máximo.

@@ -1,6 +1,6 @@
 # Pendientes del editor
 
-1. **Plantilla reutilizable:** `brand.json` generado desde `tokens.json` del design system, carpeta `template/` genérica y `scripts/nuevo_proyecto.sh <cliente> <tema>`.
+1. ~~**Plantilla reutilizable:** `brand.json` generado desde `tokens.json` del design system, carpeta `template/` genérica y `scripts/nuevo_proyecto.sh <cliente> <tema>`.~~ **Hecho** (probado con LUJI'S: 24/26 palabras idénticas al reel v1, stills de palabra y cierre renderizados). Queda para el punto 7: probarlo con un segundo cliente; y migrar `lujis-thanksgiving` a la plantilla si se vuelve a editar.
 2. **Render y entrega:** `scripts/render.sh` con Remotion, `loudnorm` a -14 LUFS / -1,5 dBTP, H.264 a 30 fps y nombre `MARCA_Tema_Formato_vN.mp4`.
 3. **Chequeo de calidad:** `scripts/stills.sh` para ver frames de palabras clave, más un chequeo de zona segura 9:16 (220 px arriba, 420 px abajo).
 4. **Voz y audio:** unir guion → ElevenLabs → `words.json` en un solo comando, y verificar que el conector esté autorizado en la cuenta nueva.
