@@ -32,8 +32,10 @@ con el design system y avisalo en la entrega.
 - Drive: listar con el conector; descargar videos con `scripts/drive_get.sh` (partes de 16 MB).
   No pedir archivos completos en paralelo: Drive bloquea la descarga por cupo. Miniaturas con
   `scripts/thumb_head.sh`, de a 4 en paralelo como máximo.
-- Voz: ElevenLabs (`creative_generate_speech`, eleven_v4). Tiempos por palabra: whisper.cpp
-  (`tools/whisper.cpp`, modelo small, `-ml 1 -sow -ojf`).
+- Voz: texto en `<proyecto>/guion.txt` → `scripts/voz.sh <proyecto> --texto` → ElevenLabs (`creative_generate_speech`,
+  eleven_v4, voz argentina; default Julieta `YLtqUTaEXb7a9MAYuJu4`, 1 toma) → `scripts/voz.sh <proyecto> --url <content_url>`
+  baja `audio/voz.mp3` y corre whisper.cpp (small, `-ml 1 -sow -ojf`) a `audio/voz.json`, alineado con el guion. Locución
+  grabada: `--mp3 <archivo>`. Si avisa que no coinciden las palabras, corregí guion o audio antes de `make_words.py`.
 - Defaults: corte directo, arranque con el gancho, cierre con logo + @handle, zona segura 9:16
   (sin texto en los 220 px de arriba ni los 420 px de abajo), audio a -14 LUFS / -1,5 dBTP, MP4 H.264 30 fps.
 - Antes de renderizar todo: `scripts/stills.sh <proyecto>` deja UNA hoja `out/stills/hoja.jpg` con las palabras clave, stickers y
