@@ -18,7 +18,7 @@ const clean = (t) => t.replace(/[.,]/g, '');
 
 const Clip = ({clip}) => {
   const frame = useCurrentFrame();
-  const dur = Math.round((clip.end - clip.start) * FPS);
+  const dur = Math.round(clip.end * FPS) - Math.round(clip.start * FPS);
   // punch-in fijo por toma + leve deriva; en los inserts, push-in más marcado
   const drift = clip.broll ? interpolate(frame, [0, dur], [1.04, 1.12]) : interpolate(frame, [0, dur], [0, 0.025]);
   const scale = clip.broll ? drift : clip.zoom + drift;
@@ -130,7 +130,9 @@ const Reel = () => {
     <AbsoluteFill style={{backgroundColor: '#000'}}>
       <style>{fontFaces}</style>
       {data.clips.map((c, i) => (
-        <Sequence key={i} from={Math.round(c.start * FPS)} durationInFrames={Math.round((c.end - c.start) * FPS)}>
+        // duración = fin redondeado − inicio redondeado (sin huecos de 1 cuadro); la última toma sigue bajo el fundido del cierre
+        <Sequence key={i} from={Math.round(c.start * FPS)}
+          durationInFrames={Math.round(c.end * FPS) - Math.round(c.start * FPS) + (i === data.clips.length - 1 ? 6 : 0)}>
           <Clip clip={c} />
         </Sequence>
       ))}
