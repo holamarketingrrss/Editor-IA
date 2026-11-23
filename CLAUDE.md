@@ -30,7 +30,7 @@ con el design system y avisalo en la entrega.
   de esos dos da igual. Detalles por pieza en `proyecto.json` (stickers, música, `estilo`) y `guion.json` (por palabra).
   `estilo` lleva las opciones del brief (subtítulos, cámara, transición, entrada, cierre, look, audio original, SFX,
   zócalo, logo en esquina): nombres y defaults en `scripts/estilo.py` (`python3 scripts/estilo.py <proyecto>` muestra el
-  resuelto). Los scripts empujan el texto a la zona segura 9:16 solos. La composición vive en `template/reel/src/index.jsx`;
+  resuelto). Los scripts empujan el texto a la zona segura 9:16 solos. La composición vive en `template/reel/src/Reel.jsx` (la registra `index.jsx` y la usa la app);
   `scripts/sync_reel.sh` (lo corren stills y render) la copia a cada proyecto. `proyectos/lujis-thanksgiving` es el ejemplo
   histórico (scripts y composición propios, marcado con `reel/src/.propia`).
 - Drive: listar con el conector; descargar videos con `scripts/drive_get.sh` (partes de 16 MB).
@@ -50,6 +50,9 @@ con el design system y avisalo en la entrega.
   (la versión sube sola) y chequea H.264, 1080x1920, 30 fps, -14 LUFS y pico ≤ -1 dBTP; si dice REVISAR, no se entrega.
 - Entrega: el conector de Drive no sube más de ~3 MB; mandá el video por el chat (SendUserFile)
   y avisá que hay que subirlo a Editor IA › Resultados Finales.
+
+- App local: `cd app && npm run editor` (localhost:4321): vista previa en vivo y retoques de textos, tomas, audio y estilo,
+  y exportar. Ver `app/README.md`. Escribe los mismos archivos que los scripts (`guion.json`, `edl.tsv`, `proyecto.json`).
 
 ## Setup de una sesión nueva
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Estilo de edición de una pieza: defaults del editor <- preset de la marca <- proyecto.json "estilo".
 # Lo usan make_words.py, make_clips.py (lo deja resuelto en data.json "estilo") y zona_segura.py.
-# uso suelto: python3 scripts/estilo.py <proyecto>   -> imprime el estilo resuelto
+# uso suelto: python3 scripts/estilo.py <proyecto>   -> imprime el estilo resuelto  ·  --opciones -> opciones y defaults (JSON)
 # Las opciones son las del brief (docs/brief.md); los nombres van en minúscula y sin tildes.
 import copy, json, os, sys
 
@@ -98,4 +98,7 @@ def resolver(P):
 
 
 if __name__ == '__main__':
-    print(json.dumps(resolver(sys.argv[1].rstrip('/')), ensure_ascii=False, indent=1))
+    if sys.argv[1] == '--opciones':   # para la app: opciones válidas y defaults
+        print(json.dumps({'opciones': {'.'.join(k): v for k, v in OPCIONES.items()}, 'defaults': DEFAULTS}, ensure_ascii=False))
+    else:
+        print(json.dumps(resolver(sys.argv[1].rstrip('/')), ensure_ascii=False, indent=1))

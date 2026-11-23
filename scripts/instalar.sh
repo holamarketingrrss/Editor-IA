@@ -11,5 +11,6 @@ if [ ! -x tools/whisper.cpp/build/bin/whisper-cli ]; then
 fi
 [ -f tools/whisper.cpp/models/ggml-small.bin ] || sh tools/whisper.cpp/models/download-ggml-model.sh small
 (cd template/reel && npm install --silent)   # instala (y deja en caché) las dependencias de Remotion para los proyectos nuevos
+(cd app && npm install --silent)            # app del editor: cd app && npm run editor
 npx -y hyperframes@0.9.56 --version
 echo "Listo."

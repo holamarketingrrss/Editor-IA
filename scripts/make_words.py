@@ -3,7 +3,7 @@
 # uso: python3 scripts/make_words.py proyectos/<cliente>-<tema>
 # Lee: audio/voz.json (whisper.cpp -ml 1 -sow -ojf), reel/src/brand.json y guion.json (opcional).
 # guion.json = lista, una entrada por palabra, todos los campos opcionales:
-#   {"text": "Pedí", "font": "G", "color": "amarillo", "size": 300, "x": 360, "y": 700, "rot": -4, "hold": false}
+#   {"text": "Pedí", "font": "G", "color": "amarillo", "size": 300, "x": 360, "y": 700, "rot": -4, "hold": false, "start": 0.1, "end": 0.4}
 # - text: corrige lo que Whisper escuchó distinto. font: G, B, S o K (casilleros de brand.json).
 # - color: nombre de la paleta de la marca ("texto", "rojo"...) o un hex. Lo que falte lo decide el preset automático.
 import json, math, os, shutil, sys
@@ -86,6 +86,7 @@ for i, (a, b, texto) in enumerate(segs):
             ajustadas += 1
         x, y = x2, y2
     end = segs[i + 1][0] if i + 1 < len(segs) else b + 0.35
+    a, end = g.get('start', a), g.get('end', end)   # retoque de tiempos desde guion.json
     w = dict(text=text, start=round(a, 3), end=round(end, 3), font=font, color=color,
              size=size, x=int(x), y=int(y), rot=rot, hold=bool(g.get('hold', False)), destacado=es_dest)
     if agrupado:   # bloques de hasta N palabras; corta después de un signo de puntuación

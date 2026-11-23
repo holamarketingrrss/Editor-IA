@@ -16,4 +16,4 @@
 - Base probable: Remotion Studio (ya corre en localhost, con vista previa en vivo), con controles para recortar, cambiar texto y subtítulos, colores, reemplazar un clip, ajustar volumen y exportar con un clic.
 - Decidido: la usa solo el equipo, en su compu (Mac, y Windows con WSL). Ediciones básicas: textos/subtítulos, tomas y audio. Presets = marca + estilos de edición.
 - Claude es el motor: la app usa Claude Code instalado y logueado con la cuenta de la agencia (`claude -p`), con sus conectores (Notion, Drive, ElevenLabs). Caja de pedido (brief) y caja de cambios ("0:04 — ...") sobre la misma sesión; los retoques a mano no gastan IA.
-- Orden: estilos (hecho) → app mínima (preview con @remotion/player, proyecto, retoques, exportar) → conexión con Claude → presets por marca → instalador → prueba B desde la app.
+- Orden: estilos (hecho) → app mínima (**hecha**: `app/`, probada con Playwright: retoque de texto, estilo, tomas, audio y exportar) → conexión con Claude → presets por marca → instalador → prueba B desde la app.
