@@ -1,576 +1,658 @@
 [
  {
   "text": "Es",
-  "start": 0.05,
   "key": false,
   "seg": 0,
-  "end": 0.25
+  "start": 0.035,
+  "wend": 0.115,
+  "end": 0.155
  },
  {
   "text": "Black Friday",
-  "start": 0.25,
   "key": true,
   "seg": 0,
-  "end": 1.15
+  "start": 0.155,
+  "wend": 0.956,
+  "end": 1.076
  },
  {
   "text": "y",
-  "start": 1.95,
   "key": false,
   "seg": 0,
-  "end": 1.99
+  "start": 1.076,
+  "wend": 1.096,
+  "end": 1.157
  },
  {
   "text": "estabas",
-  "start": 1.99,
   "key": false,
   "seg": 0,
-  "end": 2.31
+  "start": 1.157,
+  "wend": 1.497,
+  "end": 1.537
  },
  {
   "text": "esperando",
-  "start": 2.31,
   "key": false,
   "seg": 0,
-  "end": 2.73
+  "start": 1.537,
+  "wend": 1.918,
+  "end": 1.958
  },
  {
   "text": "para",
-  "start": 2.73,
   "key": false,
   "seg": 0,
-  "end": 2.91
+  "start": 1.958,
+  "wend": 2.098,
+  "end": 2.158
  },
  {
   "text": "cambiar",
-  "start": 2.91,
   "key": false,
   "seg": 0,
-  "end": 3.23
+  "start": 2.158,
+  "wend": 2.439,
+  "end": 2.479
  },
  {
   "text": "el",
-  "start": 3.23,
   "key": false,
   "seg": 0,
-  "end": 3.32
+  "start": 2.479,
+  "wend": 2.579,
+  "end": 2.639
  },
  {
   "text": "celu.",
-  "start": 3.32,
   "key": true,
   "seg": 0,
-  "end": 3.76
+  "start": 2.639,
+  "wend": 2.879,
+  "end": 3.229
  },
  {
   "text": "Este",
-  "start": 3.76,
   "key": false,
   "seg": 0,
-  "end": 4.04
+  "start": 3.3,
+  "wend": 3.6,
+  "end": 3.801
  },
  {
   "text": "es",
-  "start": 4.04,
   "key": false,
   "seg": 0,
-  "end": 4.22
+  "start": 3.801,
+  "wend": 3.881,
+  "end": 3.921
  },
  {
   "text": "el",
-  "start": 4.22,
   "key": false,
   "seg": 0,
-  "end": 4.35
+  "start": 3.921,
+  "wend": 4.001,
+  "end": 4.041
  },
  {
   "text": "momento",
-  "start": 4.35,
   "key": true,
   "seg": 0,
-  "end": 4.83
+  "start": 4.041,
+  "wend": 4.362,
+  "end": 4.402
  },
  {
   "text": "para",
-  "start": 4.83,
   "key": false,
   "seg": 0,
-  "end": 5.0
+  "start": 4.402,
+  "wend": 4.522,
+  "end": 4.542
  },
  {
   "text": "hacerlo.",
-  "start": 5.0,
   "key": false,
   "seg": 0,
-  "end": 5.55
+  "start": 4.542,
+  "wend": 4.922,
+  "end": 5.047
  },
  {
   "text": "En",
-  "start": 5.55,
   "key": false,
   "seg": 1,
-  "end": 5.67
+  "start": 5.047,
+  "wend": 5.148,
+  "end": 5.228
  },
  {
   "text": "TECNO",
-  "start": 5.67,
   "key": true,
   "seg": 1,
-  "end": 6.07
+  "start": 5.228,
+  "wend": 5.569,
+  "end": 5.85
  },
  {
   "text": "siempre",
-  "start": 6.07,
   "key": false,
   "seg": 1,
-  "end": 6.65
+  "start": 5.85,
+  "wend": 6.131,
+  "end": 6.191
  },
  {
   "text": "buscamos",
-  "start": 6.65,
   "key": false,
   "seg": 1,
-  "end": 7.31
+  "start": 6.191,
+  "wend": 6.592,
+  "end": 6.652
  },
  {
   "text": "ofrecerte",
-  "start": 7.31,
   "key": false,
   "seg": 1,
-  "end": 8.04
+  "start": 6.652,
+  "wend": 7.194,
+  "end": 7.455
  },
  {
   "text": "distintas",
-  "start": 8.04,
   "key": false,
   "seg": 1,
-  "end": 8.78
+  "start": 7.455,
+  "wend": 7.976,
+  "end": 8.036
  },
  {
   "text": "opciones.",
-  "start": 8.78,
   "key": true,
   "seg": 1,
-  "end": 9.6
+  "start": 8.036,
+  "wend": 8.598,
+  "end": 8.723
  },
  {
   "text": "Pero",
-  "start": 9.6,
   "key": false,
   "seg": 2,
-  "end": 9.88
+  "start": 8.723,
+  "wend": 8.903,
+  "end": 8.944
  },
  {
   "text": "lo",
-  "start": 9.88,
   "key": false,
   "seg": 2,
-  "end": 9.99
+  "start": 8.944,
+  "wend": 9.024,
+  "end": 9.064
  },
  {
   "text": "más",
-  "start": 9.99,
   "key": false,
   "seg": 2,
-  "end": 10.2
+  "start": 9.064,
+  "wend": 9.225,
+  "end": 9.285
  },
  {
   "text": "importante",
-  "start": 10.2,
   "key": false,
   "seg": 2,
-  "end": 10.91
+  "start": 9.285,
+  "wend": 9.928,
+  "end": 10.109
  },
  {
   "text": "es",
-  "start": 10.91,
   "key": false,
   "seg": 2,
-  "end": 11.05
+  "start": 10.109,
+  "wend": 10.209,
+  "end": 10.269
  },
  {
   "text": "elegir",
-  "start": 11.05,
   "key": false,
   "seg": 2,
-  "end": 11.47
+  "start": 10.269,
+  "wend": 10.631,
+  "end": 10.671
  },
  {
   "text": "el",
-  "start": 11.47,
   "key": false,
   "seg": 2,
-  "end": 11.61
+  "start": 10.671,
+  "wend": 10.771,
+  "end": 10.812
  },
  {
   "text": "modelo",
-  "start": 11.61,
   "key": false,
   "seg": 2,
-  "end": 12.03
+  "start": 10.812,
+  "wend": 11.133,
+  "end": 11.193
  },
  {
   "text": "correcto",
-  "start": 12.03,
   "key": true,
   "seg": 2,
-  "end": 12.65
+  "start": 11.193,
+  "wend": 11.555,
+  "end": 11.595
  },
  {
   "text": "para",
-  "start": 12.65,
   "key": false,
   "seg": 2,
-  "end": 12.93
+  "start": 11.595,
+  "wend": 11.756,
+  "end": 11.796
  },
  {
   "text": "vos.",
-  "start": 12.93,
   "key": true,
   "seg": 2,
-  "end": 13.09
+  "start": 11.796,
+  "wend": 12.017,
+  "end": 12.112
  },
  {
   "text": "Si",
-  "start": 13.09,
   "key": false,
   "seg": 3,
-  "end": 13.33
+  "start": 12.112,
+  "wend": 12.192,
+  "end": 12.272
  },
  {
   "text": "priorizás",
-  "start": 13.33,
   "key": false,
   "seg": 3,
-  "end": 14.23
+  "start": 12.272,
+  "wend": 12.874,
+  "end": 13.054
  },
  {
   "text": "un",
-  "start": 14.26,
   "key": false,
   "seg": 3,
-  "end": 14.47
+  "start": 13.054,
+  "wend": 13.134,
+  "end": 13.175
  },
  {
   "text": "diseño",
-  "start": 14.47,
   "key": false,
   "seg": 3,
-  "end": 15.11
+  "start": 13.175,
+  "wend": 13.716,
+  "end": 13.876
  },
  {
   "text": "pequeño",
-  "start": 15.11,
   "key": false,
   "seg": 3,
-  "end": 15.9
+  "start": 13.876,
+  "wend": 14.358,
+  "end": 14.358
  },
  {
   "text": "y",
-  "start": 15.9,
   "key": false,
   "seg": 3,
-  "end": 15.95
+  "start": 14.358,
+  "wend": 14.378,
+  "end": 14.438
  },
  {
   "text": "liviano,",
-  "start": 15.95,
   "key": true,
   "seg": 3,
-  "end": 16.85
+  "start": 14.438,
+  "wend": 14.919,
+  "end": 15.1
  },
  {
   "text": "podemos",
-  "start": 16.99,
   "key": false,
   "seg": 3,
-  "end": 17.53
+  "start": 15.1,
+  "wend": 15.481,
+  "end": 15.521
  },
  {
   "text": "ofrecerte",
-  "start": 17.53,
   "key": false,
   "seg": 3,
-  "end": 18.21
+  "start": 15.521,
+  "wend": 16.183,
+  "end": 16.343
  },
  {
   "text": "el",
-  "start": 18.21,
   "key": false,
   "seg": 3,
-  "end": 18.36
+  "start": 16.343,
+  "wend": 16.464,
+  "end": 16.524
  },
  {
   "text": "iPhone 18 Pro.",
-  "start": 18.36,
   "key": true,
   "seg": 3,
-  "end": 19.26
+  "start": 16.524,
+  "wend": 17.928,
+  "end": 18.023
  },
  {
   "text": "Y",
-  "start": 19.97,
   "key": false,
   "seg": 4,
-  "end": 20.06
+  "start": 18.023,
+  "wend": 18.043,
+  "end": 18.123
  },
  {
   "text": "si",
-  "start": 20.06,
   "key": false,
   "seg": 4,
-  "end": 20.18
+  "start": 18.123,
+  "wend": 18.203,
+  "end": 18.263
  },
  {
   "text": "creás",
-  "start": 20.18,
   "key": false,
   "seg": 4,
-  "end": 20.54
+  "start": 18.263,
+  "wend": 18.504,
+  "end": 18.564
  },
  {
   "text": "contenido",
-  "start": 20.54,
   "key": true,
   "seg": 4,
-  "end": 21.2
+  "start": 18.564,
+  "wend": 19.064,
+  "end": 19.125
  },
  {
   "text": "y",
-  "start": 21.2,
   "key": false,
   "seg": 4,
-  "end": 21.27
+  "start": 19.125,
+  "wend": 19.145,
+  "end": 19.185
  },
  {
   "text": "necesitás",
-  "start": 21.27,
   "key": false,
   "seg": 4,
-  "end": 21.92
+  "start": 19.185,
+  "wend": 19.505,
+  "end": 19.545
  },
  {
   "text": "una",
-  "start": 21.92,
   "key": false,
   "seg": 4,
-  "end": 22.14
+  "start": 19.545,
+  "wend": 19.665,
+  "end": 19.705
  },
  {
   "text": "pantalla",
-  "start": 22.14,
   "key": false,
   "seg": 4,
-  "end": 22.73
+  "start": 19.705,
+  "wend": 20.126,
+  "end": 20.186
  },
  {
   "text": "más",
-  "start": 22.73,
   "key": false,
   "seg": 4,
-  "end": 22.94
+  "start": 20.186,
+  "wend": 20.306,
+  "end": 20.326
  },
  {
   "text": "grande,",
-  "start": 22.94,
   "key": true,
   "seg": 4,
-  "end": 23.57
+  "start": 20.326,
+  "wend": 20.707,
+  "end": 21.057
  },
  {
   "text": "el",
-  "start": 23.57,
   "key": false,
   "seg": 4,
-  "end": 23.74
+  "start": 21.127,
+  "wend": 21.228,
+  "end": 21.248
  },
  {
   "text": "18 Pro Max",
-  "start": 23.74,
   "key": true,
   "seg": 4,
-  "end": 24.64
+  "start": 21.248,
+  "wend": 22.229,
+  "end": 22.51
  },
  {
   "text": "es",
-  "start": 24.93,
   "key": false,
   "seg": 4,
-  "end": 24.95
+  "start": 22.51,
+  "wend": 22.59,
+  "end": 22.63
  },
  {
   "text": "para",
-  "start": 24.95,
   "key": false,
   "seg": 4,
-  "end": 25.29
+  "start": 22.63,
+  "wend": 22.81,
+  "end": 22.85
  },
  {
   "text": "vos.",
-  "start": 25.29,
   "key": false,
   "seg": 4,
-  "end": 25.6
+  "start": 22.85,
+  "wend": 23.09,
+  "end": 23.215
  },
  {
   "text": "Y",
-  "start": 25.6,
   "key": false,
   "seg": 5,
-  "end": 25.82
+  "start": 23.215,
+  "wend": 23.235,
+  "end": 23.296
  },
  {
   "text": "si",
-  "start": 25.82,
   "key": false,
   "seg": 5,
-  "end": 26.26
+  "start": 23.296,
+  "wend": 23.376,
+  "end": 23.436
  },
  {
   "text": "ya",
-  "start": 26.26,
   "key": false,
   "seg": 5,
-  "end": 26.69
+  "start": 23.436,
+  "wend": 23.536,
+  "end": 23.596
  },
  {
   "text": "tenés",
-  "start": 26.69,
   "key": false,
   "seg": 5,
-  "end": 27.59
+  "start": 23.596,
+  "wend": 23.857,
+  "end": 23.937
  },
  {
   "text": "un",
-  "start": 27.8,
   "key": false,
   "seg": 5,
-  "end": 28.24
+  "start": 23.937,
+  "wend": 24.017,
+  "end": 24.058
  },
  {
   "text": "iPhone",
-  "start": 28.24,
   "key": true,
   "seg": 5,
-  "end": 29.14
+  "start": 24.058,
+  "wend": 24.398,
+  "end": 24.579
  },
  {
   "text": "y",
-  "start": 29.6,
   "key": false,
   "seg": 5,
-  "end": 29.66
+  "start": 24.579,
+  "wend": 24.599,
+  "end": 24.679
  },
  {
   "text": "querés",
-  "start": 29.66,
   "key": false,
   "seg": 5,
-  "end": 30.03
+  "start": 24.679,
+  "wend": 24.92,
+  "end": 24.98
  },
  {
   "text": "cotizarlo,",
-  "start": 30.03,
   "key": true,
   "seg": 5,
-  "end": 30.75
+  "start": 24.98,
+  "wend": 25.622,
+  "end": 25.882
  },
  {
   "text": "consultanos",
-  "start": 30.75,
   "key": false,
   "seg": 5,
-  "end": 31.35
+  "start": 25.882,
+  "wend": 26.484,
+  "end": 26.524
  },
  {
   "text": "también",
-  "start": 31.35,
   "key": false,
   "seg": 5,
-  "end": 31.73
+  "start": 26.524,
+  "wend": 26.885,
+  "end": 27.045
  },
  {
   "text": "por",
-  "start": 31.73,
   "key": false,
   "seg": 5,
-  "end": 31.92
+  "start": 27.045,
+  "wend": 27.186,
+  "end": 27.226
  },
  {
   "text": "el",
-  "start": 31.92,
   "key": false,
   "seg": 5,
-  "end": 32.01
+  "start": 27.226,
+  "wend": 27.306,
+  "end": 27.326
  },
  {
   "text": "Plan Canje.",
-  "start": 32.01,
   "key": true,
   "seg": 5,
-  "end": 32.78
+  "start": 27.326,
+  "wend": 27.968,
+  "end": 27.983
  },
  {
   "text": "Comentá",
-  "start": 32.78,
   "key": true,
   "seg": 6,
-  "end": 33.21
+  "start": 27.983,
+  "wend": 28.324,
+  "end": 28.344
  },
  {
   "text": "este",
-  "start": 33.21,
   "key": false,
   "seg": 6,
-  "end": 33.62
+  "start": 28.344,
+  "wend": 28.505,
+  "end": 28.645
  },
  {
   "text": "reel",
-  "start": 33.62,
   "key": true,
   "seg": 6,
-  "end": 34.03
+  "start": 28.645,
+  "wend": 28.846,
+  "end": 29.027
  },
  {
   "text": "y",
-  "start": 34.03,
   "key": false,
   "seg": 6,
-  "end": 34.13
+  "start": 29.027,
+  "wend": 29.047,
+  "end": 29.107
  },
  {
   "text": "te",
-  "start": 34.13,
   "key": false,
   "seg": 6,
-  "end": 34.57
+  "start": 29.107,
+  "wend": 29.167,
+  "end": 29.207
  },
  {
   "text": "pasamos",
-  "start": 34.57,
   "key": false,
   "seg": 6,
-  "end": 35.04
+  "start": 29.207,
+  "wend": 29.569,
+  "end": 29.609
  },
  {
   "text": "las",
-  "start": 35.04,
   "key": false,
   "seg": 6,
-  "end": 35.34
+  "start": 29.609,
+  "wend": 29.729,
+  "end": 29.79
  },
  {
   "text": "opciones",
-  "start": 35.34,
   "key": false,
   "seg": 6,
-  "end": 36.15
+  "start": 29.79,
+  "wend": 30.171,
+  "end": 30.211
  },
  {
   "text": "disponibles.",
-  "start": 36.15,
   "key": true,
   "seg": 6,
-  "end": 37.05
+  "start": 30.211,
+  "wend": 30.874,
+  "end": 30.964
  }
 ]

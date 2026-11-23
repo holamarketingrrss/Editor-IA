@@ -1,8 +1,8 @@
-# archivo	desde	hasta	texto (aprox., se ajusta por energía)
-C4665	10.9	17.1	Es Black Friday y estabas esperando para cambiar el celu. Este es el momento para hacerlo.
-C4666	22.3	26.5	En Tecno siempre buscamos ofrecerte distintas opciones.
-C4666	37.8	41.2	Pero lo más importante es elegir el modelo correcto para vos.
-C4667	0.2	7.14	Si priorizás un diseño pequeño y liviano, podemos ofrecerte el iPhone 18 Pro.
-C4668	4.0	9.95	Y si creás contenido y necesitás una pantalla más grande, el 18 Pro Max es para vos.
-C4669	0.2	7.5	Y si ya tenés un iPhone y querés cotizarlo, consultanos también por el plan canje.
-C4670	0.3	5.0	Comentá este reel y te pasamos las opciones disponibles.
+# archivo	ventana_desde	ventana_hasta	texto mostrado	(pronunciación para el alineador entre [ ] cuando difiere)
+C4665	10.90	17.35	Es *Black_Friday y estabas esperando para cambiar el *celu. Este es el *momento para hacerlo.
+C4666	20.10	26.70	En *TECNO siempre buscamos ofrecerte distintas *opciones.
+C4666	36.60	41.30	Pero lo más importante es elegir el modelo *correcto para *vos.
+C4667	0.00	7.14	Si priorizás un diseño pequeño y *liviano, podemos ofrecerte el *iPhone_18_Pro.
+C4668	3.45	10.30	Y si creás *contenido y necesitás una pantalla más *grande, el *18_Pro_Max es para vos.
+C4669	0.00	7.48	Y si ya tenés un *iPhone y querés *cotizarlo, consultanos también por el *Plan_Canje.
+C4670	0.00	5.30	*Comentá este *reel y te pasamos las opciones *disponibles.

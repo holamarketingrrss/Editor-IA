@@ -2,7 +2,7 @@
 # y arma reel/src/data.json con palabras y outro.
 import json, subprocess, sys
 P = sys.argv[1] if len(sys.argv) > 1 else '.'
-CORR = 'eq=contrast=1.06:saturation=1.08:gamma=0.98,colorbalance=rm=0.015:bm=-0.015,unsharp=5:5:0.4'
+CORR = 'null'  # sin corrección: la toma tal cual (v2)
 clips = []
 for i, line in enumerate(open(f'{P}/edl.tsv')):
     a, b, f, inp, z = line.strip().split('\t'); a, b, inp, z = float(a), float(b), float(inp), float(z)
