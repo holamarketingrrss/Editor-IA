@@ -1,11 +1,9 @@
 # inicio	fin	archivo	entrada	velocidad	modo	nota
-0.00	1.50	1.MP4	17.40	1	rot	gancho: espuma con el logo impreso (títulos)
-1.50	4.00	1.MP4	7.00	2.5	rot	la impresora imprimiendo sobre el latte (x2,5)
-4.00	5.30	1.MP4	18.90	1	rot	retiran el café impreso
-5.30	8.30	ai/2_kling.mp4	0.30	1	full	carrito (foto 2 animada)
-8.30	11.50	ai/3_kling.mp4	1.00	1	full	reacción del invitado (foto 3 animada)
-11.50	14.00	4.jpg	0	1	photo	café con el logo en mano (paneo lateral, sin zoom)
-14.00	16.30	5.MOV	0.20	1	full	paneo del carrito personalizado
-16.30	21.30	6.MP4	52.50	1	panel	split arriba: drone fachada con logos
-16.30	21.30	6.MP4	13.00	1	panel	split medio: carrito a pie
-16.30	21.30	6.MP4	159.50	1	panel	split abajo: drone cerca, barista atendiendo
+0.00	4.70	1.MP4	15.50	1	rot	la impresora termina, aparece el logo en la espuma y retiran el vaso (tiempo real)
+4.70	7.50	ai/2_kling.mp4	0.30	1	full	carrito (foto 2 animada)
+7.50	10.70	ai/3_kling_v2.mp4	0.30	1	full	reacción del invitado (foto 3 animada, v2)
+10.70	13.00	4.jpg	0	1	photo	café con el logo en mano (paneo lateral, sin zoom)
+13.00	15.20	5.MOV	0.20	1	full	paneo del carrito personalizado
+15.20	20.20	6.MP4	31.00	1	panel	split arriba: a pie, desplazamiento lateral frente al carrito
+15.20	20.20	6.MP4	130.80	1	panel	split medio: drone baja del techo, revela logos y carrito
+15.20	20.20	6.MP4	63.00	1	panel	split abajo: drone cenital, auto pasando junto al carrito

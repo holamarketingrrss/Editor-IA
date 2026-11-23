@@ -20,8 +20,8 @@ const s = (t) => Math.round(t * FPS);
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'};
 
 // Layout de la pantalla dividida (sin escalar hacia arriba: paneles 1080x540 del 16:9 original)
-const PANEL_H = 540;
-const SPLIT = {a: 0, b: 548, band: [1088, 1372], c: 1372};
+const PANEL_H = 636;
+const SPLIT = {a: 0, b: 642, c: 1284}; // 3 paneles a pantalla completa, filete fino de 6 px
 
 const Clip = ({clip}) => (
   <AbsoluteFill style={{backgroundColor: '#000'}}>
@@ -37,13 +37,13 @@ const HookTitles = ({dur}) => {
   const t2 = interpolate(f, [s(0.85), s(1.5)], [0, 1], {...clamp, easing: ease});
   return (
     <AbsoluteFill style={{opacity: out}}>
-      <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,.30) 0%, rgba(0,0,0,.12) 26%, rgba(0,0,0,0) 40%)'}} />
-      <div style={{position: 'absolute', top: 270, left: 0, right: 0, textAlign: 'center', color: C.white}}>
-        <div style={{fontFamily: "'The Seasons'", fontStyle: 'italic', fontSize: 132, lineHeight: 1.0, letterSpacing: -1,
+      <AbsoluteFill style={{background: 'linear-gradient(0deg, rgba(0,0,0,.42) 18%, rgba(0,0,0,.18) 34%, rgba(0,0,0,0) 46%)'}} />
+      <div style={{position: 'absolute', top: 1262, left: 0, right: 0, textAlign: 'center', color: C.white}}>
+        <div style={{fontFamily: "'The Seasons'", fontStyle: 'italic', fontSize: 132, lineHeight: 0.92, letterSpacing: -1,
           textShadow: SHADOW, opacity: t1, transform: `translateY(${(1 - t1) * 26}px)`}}>
           Your logo
         </div>
-        <div style={{fontFamily: 'Lexend', fontWeight: 400, fontSize: 60, marginTop: 16, letterSpacing: 0.5,
+        <div style={{fontFamily: 'Lexend', fontWeight: 400, fontSize: 60, lineHeight: 1.0, marginTop: 8, letterSpacing: 0.5,
           textShadow: SHADOW, opacity: t2, transform: `translateX(${(1 - t2) * 160}px)`}}>
           on the first sip.
         </div>
@@ -65,8 +65,8 @@ const SplitOutro = ({fadeAt}) => {
   const fade = interpolate(f, [s(fadeAt), s(fadeAt + 0.7)], [1, 0], {...clamp, easing: Easing.inOut(Easing.quad)});
   const move = interpolate(f, [s(fadeAt + 0.2), s(fadeAt + 1.0)], [0, 1], {...clamp, easing: ease});
   const logo = interpolate(f, [s(fadeAt + 0.6), s(fadeAt + 1.5)], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
-  const [b0, b1] = SPLIT.band;
-  const textY = interpolate(move, [0, 1], [(b0 + b1) / 2, 1110]);
+  // sobre la parte alta del panel medio (techo/fachada), lejos del carrito
+  const textY = interpolate(move, [0, 1], [SPLIT.b + 110, 1110]);
   return (
     <AbsoluteFill style={{backgroundColor: C.moss}}>
       <AbsoluteFill style={{opacity: fade}}>
@@ -87,7 +87,7 @@ const SplitOutro = ({fadeAt}) => {
 
 const Reel = () => {
   const split = s(data.splitAt);
-  const hookEnd = s(2.6); // los títulos cubren el gancho y el inicio de la impresión
+  const hookEnd = s(data.titlesEnd); // títulos hasta la mitad del video
   return (
     <AbsoluteFill style={{backgroundColor: '#000'}}>
       <style>{fontFaces}</style>

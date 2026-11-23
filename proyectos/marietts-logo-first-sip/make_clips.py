@@ -10,7 +10,7 @@ def src_path(f): return f'{P}/{f}' if f.startswith('ai/') else f'{P}/raw/{f}'
 def geom(mode, dur):
     if mode == 'rot': return 'transpose=1'
     if mode == 'full': return 'scale=1080:1920:flags=lanczos'
-    if mode == 'panel': return 'scale=1080:608:flags=lanczos,crop=1080:540:0:34'
+    if mode == 'panel': return 'scale=1131:636:flags=lanczos,crop=1080:636:25:0'
     if mode == 'photo': return f"scale=1280:1920:flags=lanczos,crop=1080:1920:'200*t/{dur}':0"
 
 def base_cmd(f, inp, dur, speed, mode):
@@ -46,5 +46,5 @@ for i, line in enumerate(l for l in open(f'{P}/edl.tsv') if not l.startswith('#'
     print(out, f, 'neutro', ratio.round(3), 'y', round(ymed, 2), 'gain', gain.round(3), 'gamma', round(gamma, 2))
     item = dict(file=out, start=a, end=b, src=f, inPoint=inp)
     (panels if mode == 'panel' else clips).append(item)
-data = dict(duration=24.0, splitAt=16.3, fadeAt=21.3, clips=clips, panels=panels, music='music.mp3')
+data = dict(titlesEnd=10.7, duration=23.0, splitAt=15.2, fadeAt=20.2, clips=clips, panels=panels, music='music.mp3')
 json.dump(data, open(f'{P}/reel/src/data.json', 'w'), ensure_ascii=False, indent=1)
