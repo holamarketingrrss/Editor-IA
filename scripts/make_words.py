@@ -6,7 +6,7 @@
 #   {"text": "Pedí", "font": "G", "color": "amarillo", "size": 300, "x": 360, "y": 700, "rot": -4, "hold": false}
 # - text: corrige lo que Whisper escuchó distinto. font: G, B, S o K (casilleros de brand.json).
 # - color: nombre de la paleta de la marca ("texto", "rojo"...) o un hex. Lo que falte lo decide el preset automático.
-import json, os, shutil, sys
+import json, math, os, shutil, sys
 
 P = sys.argv[1]
 brand = json.load(open(f'{P}/reel/src/brand.json'))
@@ -39,10 +39,12 @@ for i, (a, b, texto) in enumerate(segs):
     width = len(text) * ratio * size
     if width > MAXW:
         size = int(MAXW / (len(text) * ratio)); width = MAXW
-    half = width / 2
-    x2 = max(X_MIN + half, min(X_MAX - half, x))
     alto = size * f.get('interlineado', 1)
-    y2 = max(Y_MIN + alto / 2, min(Y_MAX - alto / 2, y))
+    ang = math.radians(rot)   # la caja rotada ocupa más: se usa ella para entrar en la zona segura
+    half = (abs(width * math.cos(ang)) + abs(alto * math.sin(ang))) / 2
+    half_y = (abs(width * math.sin(ang)) + abs(alto * math.cos(ang))) / 2
+    x2 = max(X_MIN + half, min(X_MAX - half, x))
+    y2 = max(Y_MIN + half_y, min(Y_MAX - half_y, y))
     if int(x2) != int(x) or int(y2) != int(y):
         ajustadas += 1
     end = segs[i + 1][0] if i + 1 < len(segs) else b + 0.35

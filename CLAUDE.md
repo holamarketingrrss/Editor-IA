@@ -35,7 +35,9 @@ con el design system y avisalo en la entrega.
   (`tools/whisper.cpp`, modelo small, `-ml 1 -sow -ojf`).
 - Defaults: corte directo, arranque con el gancho, cierre con logo + @handle, zona segura 9:16
   (sin texto en los 220 px de arriba ni los 420 px de abajo), audio a -14 LUFS / -1,5 dBTP, MP4 H.264 30 fps.
-- Antes de renderizar todo, revisá stills de las palabras clave (contraste y que no tapen caras).
+- Antes de renderizar todo: `scripts/stills.sh <proyecto>` deja UNA hoja `out/stills/hoja.jpg` con las palabras clave, stickers y
+  cierre; mirá solo esa imagen (contraste y que no tapen caras: eso no se detecta solo). `scripts/zona_segura.py <proyecto>`
+  chequea zona segura y contraste sin renderizar; `render.sh` frena si algo invade la zona segura. `bash tests/smoke.sh` prueba el flujo.
 - Render final: `scripts/render.sh <proyecto>` (Remotion + loudnorm en 2 pasadas) deja `<proyecto>/out/MARCA_Tema_Formato_vN.mp4`
   (la versión sube sola) y chequea H.264, 1080x1920, 30 fps, -14 LUFS y pico ≤ -1 dBTP; si dice REVISAR, no se entrega.
 - Entrega: el conector de Drive no sube más de ~3 MB; mandá el video por el chat (SendUserFile)

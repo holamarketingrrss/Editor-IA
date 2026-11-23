@@ -1,14 +1,16 @@
 #!/bin/bash
 # Renderiza el reel de un proyecto: Remotion -> loudnorm en 2 pasadas (-14 LUFS / -1,5 dBTP) -> MARCA_Tema_Formato_vN.mp4
-# uso: scripts/render.sh proyectos/<cliente>-<tema> [--marca MARCA] [--tema Tema] [--formato Reel] [--version N]
+# uso: scripts/render.sh proyectos/<cliente>-<tema> [--marca MARCA] [--tema Tema] [--formato Reel] [--version N] [--sin-chequeo]
+# Antes de renderizar corre el chequeo de zona segura (scripts/zona_segura.py): si hay texto o stickers fuera de zona, frena.
 # Salida: <proyecto>/out/MARCA_Tema_Formato_vN.mp4 (H.264, 1080x1920, 30 fps, AAC) y un chequeo de los defaults de entrega.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 [ $# -ge 1 ] || { sed -n '2,4p' "$0"; exit 1; }
 P="${1%/}"; shift
-MARCA=""; TEMA=""; FORMATO="Reel"; VERSION=""
+MARCA=""; TEMA=""; FORMATO="Reel"; VERSION=""; CHEQUEO=1
 while [ $# -gt 0 ]; do
   case "$1" in
+    --sin-chequeo) CHEQUEO=0; shift; continue;;
     --marca) MARCA="$2";; --tema) TEMA="$2";; --formato) FORMATO="$2";; --version) VERSION="$2";;
     *) echo "opción desconocida: $1"; exit 1;;
   esac
@@ -24,6 +26,12 @@ TEMA=$(limpiar "$TEMA"); FORMATO=$(limpiar "$FORMATO")
 OUT="$(pwd)/$P/out"; mkdir -p "$OUT"
 if [ -z "$VERSION" ]; then VERSION=1; while [ -e "$OUT/${MARCA}_${TEMA}_${FORMATO}_v$VERSION.mp4" ]; do VERSION=$((VERSION+1)); done; fi
 FINAL="$OUT/${MARCA}_${TEMA}_${FORMATO}_v$VERSION.mp4"; CRUDO="$OUT/.crudo.mp4"
+
+# 0) Zona segura (rápido, sin renderizar)
+if [ "$CHEQUEO" = 1 ]; then
+  python3 -I scripts/zona_segura.py "$P" | grep -v '^  CONTRASTE' || true
+  python3 -I scripts/zona_segura.py "$P" >/dev/null || { echo "FRENADO: hay texto o stickers fuera de la zona segura. Corregilo o usá --sin-chequeo."; exit 1; }
+fi
 
 # 1) Render con Remotion
 [ -d "$P/reel/node_modules" ] || (cd "$P/reel" && npm install --silent)
