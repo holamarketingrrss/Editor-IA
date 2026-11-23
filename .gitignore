@@ -18,3 +18,5 @@ proyectos/*/strips/
 proyectos/*/audio/
 proyectos/*/reel/public/clips/
 *.log
+
+.claude/settings.local.json

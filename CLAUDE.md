@@ -1,8 +1,9 @@
 # Editor IA — Hola Marketing
 
 Este repo es el editor de video de la agencia. Los pedidos llegan con la plantilla de prompt
-"Brief de video – Editor IA" (https://claude.ai/artifact/M5jZec7d913eC9akKkGMku). Si el link no abre
-en la cuenta donde corrés, buscala por ese nombre listando los artifacts.
+"Brief de video – Editor IA" (https://claude.ai/artifact/M5jZec7d913eC9akKkGMku; adentro se titula
+"Plantilla de prompt – Pedido de video"). Si el link no abre en la cuenta donde corrés, buscala por
+cualquiera de esos nombres listando los artifacts.
 
 ## Antes de editar, juntá el contexto (no lo pidas si está acá)
 
