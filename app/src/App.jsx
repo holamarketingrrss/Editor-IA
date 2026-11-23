@@ -3,8 +3,9 @@ import {Player} from '@remotion/player';
 import {Reel, FPS, duracionEnFrames} from '../../template/reel/src/Reel.jsx';
 import {api} from './api.js';
 import {Textos, Tomas, Audio, Estilo, Exportar} from './Paneles.jsx';
+import {Claude} from './Claude.jsx';
 
-const PANELES = [['textos', 'Textos'], ['tomas', 'Tomas'], ['audio', 'Audio'], ['estilo', 'Estilo'], ['exportar', 'Exportar']];
+const PANELES = [['claude', 'Claude'], ['textos', 'Textos'], ['tomas', 'Tomas'], ['audio', 'Audio'], ['estilo', 'Estilo'], ['exportar', 'Exportar']];
 export const fmt = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`;
 
 export function App() {
@@ -13,19 +14,23 @@ export function App() {
   const [p, setP] = useState(null);          // lo que dice el disco
   const [data, setData] = useState(null);    // lo que se ve (con los retoques sin aplicar)
   const [opciones, setOpciones] = useState(null);
-  const [panel, setPanel] = useState('textos');
+  const [panel, setPanel] = useState('claude');
   const [ocupado, setOcupado] = useState('');
   const [aviso, setAviso] = useState(null);  // {tipo: 'ok'|'error', texto}
   const [frame, setFrame] = useState(0);
   const [mover, setMover] = useState(null);  // índice de palabra a reubicar con un clic en la vista previa
   const player = useRef(null);
 
-  useEffect(() => { api.proyectos().then(setLista).catch((e) => setAviso({tipo: 'error', texto: e.message})); api.opciones().then(setOpciones); }, []);
+  const listar = () => api.proyectos().then(setLista).catch((e) => setAviso({tipo: 'error', texto: e.message}));
+  useEffect(() => { listar(); api.opciones().then(setOpciones); }, []);
+  const recargar = () => id && api.proyecto(id).then((x) => { setP(x); setData(x.data); }).catch(() => {});
   useEffect(() => {
-    if (!id) return;
-    history.replaceState(null, '', `?p=${id}`);
+    history.replaceState(null, '', id ? `?p=${id}` : location.pathname);
+    if (!id) { setP(null); setData(null); return; }
     api.proyecto(id).then((x) => { setP(x); setData(x.data); setAviso(null); }).catch((e) => setAviso({tipo: 'error', texto: e.message}));
   }, [id]);
+  // cuando Claude termina un pedido, se abre el proyecto que armó
+  const alTerminar = (proy) => { listar(); if (proy && proy !== id) { setId(proy); setPanel('claude'); } else recargar(); };
   useEffect(() => {
     const pl = player.current; if (!pl) return;
     const f = (e) => setFrame(e.detail.frame);
@@ -66,10 +71,13 @@ export function App() {
           {lista.map((x) => <option key={x.id} value={x.id}>{x.id}</option>)}
         </select>
         {p && <span className="sub">{p.brand.nombre} · {p.data.clips.length} tomas · {p.data.duration.toFixed(1)} s</span>}
+        <button onClick={() => setId('')} disabled={!id}>+ Pedido nuevo</button>
         <span className="espacio" />
         {ocupado && <span className="ocupado">{ocupado}…</span>}
       </header>
-      {!p || !props ? <main className="vacio">{lista.length ? 'Elegí un proyecto arriba.' : 'No hay proyectos de la plantilla en proyectos/ (se crean con scripts/nuevo_proyecto.sh).'}</main> : (
+      {!id ? <main className="pedido"><div><h2>Pedido nuevo</h2><Claude p={null} t={0} alTerminar={alTerminar} />
+        <p className="nota">O elegí un proyecto arriba para retocarlo.</p></div></main>
+        : !p || !props ? <main className="vacio">Cargando…</main> : (
         <main>
           <section className="vista">
             <div className={'marco' + (mover !== null ? ' moviendo' : '')}>
@@ -84,6 +92,7 @@ export function App() {
             <nav>{PANELES.map(([k, n]) => <button key={k} className={panel === k ? 'activo' : ''} onClick={() => setPanel(k)}>{n}</button>)}</nav>
             {aviso && <pre className={'aviso ' + aviso.tipo} onClick={() => setAviso(null)}>{aviso.texto}</pre>}
             <div className="contenido">
+              {panel === 'claude' && <Claude key={p.id} p={p} t={t} recargar={recargar} alTerminar={alTerminar} />}
               {panel === 'textos' && <Textos p={p} data={data} setData={setData} t={t} irA={irA} mover={mover} setMover={setMover}
                 aplicar={(guion) => aplicar('Textos', () => api.guardarGuion(p.id, guion))} ocupado={!!ocupado} />}
               {panel === 'tomas' && <Tomas p={p} irA={irA} aplicar={(edl) => aplicar('Tomas', () => api.guardarEdl(p.id, edl))}

@@ -22,3 +22,4 @@ proyectos/*/reel/public/clips/
 .claude/settings.local.json
 __pycache__/
 proyectos/estilos-prueba/
+proyectos/*/.claude.json

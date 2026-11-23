@@ -75,3 +75,20 @@ legend { color: var(--suave); padding: 0 6px; }
 .log { background: #0b0c0e; border: 1px solid var(--borde); border-radius: 8px; padding: 10px; max-height: 340px; overflow: auto; font-size: 12px; white-space: pre-wrap; }
 .videos { padding-left: 18px; }
 .videos a { color: var(--acento); }
+
+main.pedido { display: grid; place-items: start center; overflow: auto; padding: 40px 16px; }
+main.pedido > div { width: min(760px, 100%); }
+main.pedido h2 { margin: 0 0 8px; }
+.claude textarea { width: 100%; background: var(--campo); border: 1px solid var(--borde); border-radius: 8px; padding: 10px 12px; font: 14px/1.5 ui-monospace, Menlo, monospace; resize: vertical; color: var(--texto); }
+.claude .acciones { position: static; }
+.registro { margin-top: 12px; border: 1px solid var(--borde); border-radius: 10px; background: #0d0e10; padding: 10px 12px; max-height: 52vh; overflow: auto; display: flex; flex-direction: column; gap: 6px; }
+.ev { font-size: 13px; }
+.ev.paso { color: var(--suave); font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+.ev.paso b { color: #c9b6ff; font-weight: 500; margin-right: 4px; }
+.ev.texto { white-space: pre-wrap; background: var(--panel); border-radius: 8px; padding: 8px 10px; }
+.ev.alerta { color: #ffd58a; }
+.ev.pensando { color: var(--acento); animation: pulso 1s infinite alternate; }
+.ev.fin { border-radius: 8px; padding: 8px 10px; font-weight: 600; }
+.ev.fin.ok { background: #183b29; color: #9ff0c3; }
+.ev.fin.error { background: #3d1c1c; color: #ffc2c2; }
+.ev.fin pre, .ev.fin ul { font-weight: 400; margin: 6px 0 0; white-space: pre-wrap; }

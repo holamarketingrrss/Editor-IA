@@ -18,3 +18,10 @@ export const api = {
   miniatura: (id, archivo, t) => `/api/p/${id}/miniatura?archivo=${encodeURIComponent(archivo)}&t=${(+t || 0).toFixed(1)}`,
   exportar: (id) => new EventSource(`/api/p/${id}/exportar`),
 };
+
+export const claudeApi = {
+  estado: () => pedir('/api/claude/estado'),
+  iniciar: (modo, p, texto) => post('/api/claude/iniciar', {modo, p, texto}),
+  parar: () => post('/api/claude/parar', {}),
+  eventos: () => new EventSource('/api/claude/eventos'),
+};

@@ -9,12 +9,14 @@
 //   POST /api/p/<id>/subir?tipo=musica|toma&nombre=x   (cuerpo = archivo)
 //   GET  /api/p/<id>/miniatura?archivo=x&t=1.5
 //   GET  /api/p/<id>/exportar                render.sh con el progreso en vivo (text/event-stream)
+//   /api/claude/...                         Claude como motor (server/claude.js)
 //   GET  /media/<id>/<ruta>                  archivos de reel/public (con Range, para el video)
 //   GET  /salida/<id>/<archivo>.mp4          videos exportados (out/)
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFile, spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {claude} from './claude.js';
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PROY = path.join(REPO, 'proyectos');
@@ -122,6 +124,7 @@ function exportar(id, res) {
 }
 
 export function api() {
+  const motor = claude(REPO);
   return async (req, res, next) => {
     const url = new URL(req.url, 'http://x');
     const partes = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
@@ -136,6 +139,13 @@ export function api() {
           && fs.existsSync(path.join(PROY, p, 'reel/src/data.json')) && !fs.existsSync(path.join(PROY, p, 'reel/src/.propia'))) : [];
         return json(lista.map((p) => ({id: p, marca: leer(path.join(PROY, p, 'reel/src/brand.json'), {}).nombre || p,
           cambiado: fs.statSync(path.join(PROY, p, 'reel/src/data.json')).mtimeMs})).sort((a, b) => b.cambiado - a.cambiado));
+      }
+      if (que === 'claude') {
+        if (id === 'estado') return json(await motor.estado());
+        if (id === 'eventos') return motor.eventos(req, res);
+        if (id === 'parar' && req.method === 'POST') return json(motor.parar());
+        if (id === 'iniciar' && req.method === 'POST') return json(motor.iniciar(JSON.parse((await cuerpo(req)).toString() || '{}')));
+        return json({error: 'ruta desconocida'}, 404);
       }
       if (que === 'opciones') return json(JSON.parse(await correr('python3', ['scripts/estilo.py', '--opciones'])));
       if (que !== 'p' || !id) return json({error: 'ruta desconocida'}, 404);
