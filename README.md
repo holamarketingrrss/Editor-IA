@@ -65,3 +65,7 @@ y frena si hay texto fuera de la zona segura 9:16.
 ```bash
 bash tests/smoke.sh
 ```
+
+## Instalación en una compu del equipo
+
+Ver `INSTALAR.md` (Mac y Windows con WSL). Para chequear una instalación: `bash scripts/verificar.sh`.

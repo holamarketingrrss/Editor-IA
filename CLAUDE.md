@@ -60,4 +60,5 @@ con el design system y avisalo en la entrega.
 
 ## Setup de una sesión nueva
 
-`bash scripts/instalar.sh` (FFmpeg, yt-dlp, whisper.cpp, Remotion, HyperFrames). Chromium: `/opt/pw-browsers/chromium`.
+`bash scripts/instalar.sh` (FFmpeg, yt-dlp, Pillow, whisper.cpp, Remotion, app, HyperFrames); `bash scripts/verificar.sh` chequea todo
+sin gastar uso. En la nube, Chromium: `/opt/pw-browsers/chromium`. Compus del equipo (Mac / Windows con WSL): `INSTALAR.md`.
