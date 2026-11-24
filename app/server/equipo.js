@@ -131,7 +131,8 @@ export function entrar(req, res, {usuario, clave}) {
   const ip = req.socket.remoteAddress || '';
   const f = intentos.get(ip);
   if (f && f.hasta > Date.now()) throw new Error('Demasiados intentos. Esperá un minuto.');
-  const m = leerEquipo()?.miembros.find((x) => x.id === String(usuario || '').toLowerCase().trim());
+  const u = String(usuario || '').toLowerCase().trim(), ms = leerEquipo()?.miembros || [];
+  const m = ms.find((x) => x.id === u) || ms.find((x) => x.nombre.toLowerCase() === u);   // usuario o nombre completo
   // se calcula el hash aunque el usuario no exista, para no delatar cuáles existen
   const ok = claveOk(clave, m?.clave || FALSA) && m && m.activo;
   if (!ok) {
