@@ -23,11 +23,20 @@ function pedirClave(texto) {
   });
 }
 
+// acepta el usuario o el nombre completo, sin importar mayúsculas: "hola", "Hola" o "Hola Marketing"
+const quien = (texto) => {
+  const t = String(texto || '').trim().toLowerCase();
+  const ms = eq.leerEquipo()?.miembros || [];
+  const m = ms.find((x) => x.id === t) || ms.find((x) => x.nombre.toLowerCase() === t);
+  if (!m) throw new Error(`no existe "${texto}". Usuarios: ${ms.map((x) => `${x.id} (${x.nombre})`).join(', ') || 'ninguno'}`);
+  return m.id;
+};
+
 const tabla = () => {
   const e = eq.leerEquipo();
   if (!e) return console.log(`Sin equipo: la app funciona sola en esta compu, sin login. Config: ${eq.CONFIG}`);
   const uso = eq.usoDelMes();
-  console.log(`Motor: ${e.motor}   Config: ${eq.CONFIG}`);
+  console.log(`Motor: ${e.motor}   Config: ${eq.CONFIG}\n  USUARIO          ROL     NOMBRE`);
   for (const m of e.miembros) {
     const u = uso[m.id] || {costo: 0, pedidos: 0, cambios: 0};
     console.log(`${m.activo ? ' ' : '✗'} ${m.id.padEnd(16)} ${m.rol.padEnd(7)} ${m.nombre.padEnd(24)} mes: ${u.pedidos} pedidos, ${u.cambios} cambios, US$ ${u.costo.toFixed(2)}${m.limiteUsd != null ? ` / límite ${m.limiteUsd}` : ''}`);
@@ -45,11 +54,15 @@ try {
     const m = eq.agregar({id: usuario || nombre.split(' ')[0], nombre, email: email || '', rol: admin ? 'admin' : 'editor', clave: c1, limiteUsd: limite ? +limite : null});
     console.log(`Listo: ${m.nombre} entra como "${m.id}" (${m.rol}).`);
   } else if (cmd === 'clave') {
-    eq.cambiar(resto[0], {clave: await pedirClave(`Clave nueva para ${resto[0]}: `)}); console.log('Clave cambiada.');
+    const id = quien(resto.join(' '));
+    const c1 = await pedirClave(`Clave nueva para ${id} (6+ caracteres): `);
+    if (!process.env.EDITOR_CLAVE && c1 !== await pedirClave('Repetila: ')) throw new Error('las claves no coinciden');
+    eq.cambiar(id, {clave: c1}); console.log(`Clave cambiada. Entrá con el usuario "${id}".`);
   } else if (cmd === 'activar' || cmd === 'desactivar') {
-    eq.cambiar(resto[0], {activo: cmd === 'activar'}); console.log(`${resto[0]}: ${cmd === 'activar' ? 'activo' : 'desactivado (se cierra su sesión)'}.`);
-  } else if (cmd === 'quitar') { eq.quitar(resto[0]); console.log(`${resto[0]}: quitado.`); }
-  else if (cmd === 'limite') { eq.cambiar(resto[0], {limiteUsd: resto[1] === 'no' ? null : +resto[1]}); tabla(); }
+    const id = quien(resto.join(' '));
+    eq.cambiar(id, {activo: cmd === 'activar'}); console.log(`${id}: ${cmd === 'activar' ? 'activo' : 'desactivado (se cierra su sesión)'}.`);
+  } else if (cmd === 'quitar') { const id = quien(resto.join(' ')); eq.quitar(id); console.log(`${id}: quitado.`); }
+  else if (cmd === 'limite') { const v = resto.pop(); eq.cambiar(quien(resto.join(' ')), {limiteUsd: v === 'no' ? null : +v}); tabla(); }
   else if (cmd === 'motor') { eq.motor(resto[0]); console.log(`Motor: ${resto[0]}.`); }
   else if (cmd === 'uso') tabla();
   else throw new Error(`comando desconocido: ${cmd}`);

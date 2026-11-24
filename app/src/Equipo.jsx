@@ -22,7 +22,7 @@ export function Login({entro}) {
       <form className="caja-login" onSubmit={enviar}>
         <span className="marca-app grande">editor<i>ia</i></span>
         <p className="nota">Hola Marketing · ingresá con tu usuario del equipo</p>
-        <label>Usuario<input value={usuario} onChange={(e) => setUsuario(e.target.value)} autoFocus={!usuario} autoComplete="username" /></label>
+        <label>Usuario o nombre<input value={usuario} onChange={(e) => setUsuario(e.target.value)} autoFocus={!usuario} autoComplete="username" /></label>
         <label>Clave<input type="password" value={clave} onChange={(e) => setClave(e.target.value)} autoFocus={!!usuario} autoComplete="current-password" /></label>
         {error && <div className="aviso error">{error}</div>}
         <button className="primario" disabled={!usuario || !clave || enviando}><Icono n="candado" />{enviando ? 'Entrando…' : 'Entrar'}</button>
