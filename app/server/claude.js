@@ -116,7 +116,7 @@ export function claude(REPO) {
         fs.writeFileSync(path.join(PROY, proy, '.claude.json'), JSON.stringify({sesion: r.session_id || sesionNueva}) + '\n');
       }
       trabajo.fin = {
-        tipo: 'fin', ok: code === 0 && !r.is_error, proyecto: proy, costo: r.total_cost_usd, segundos: Math.round((r.duration_ms || 0) / 1000),
+        tipo: 'fin', ok: code === 0 && !r.is_error, proyecto: proy, costo: r.total_cost_usd, continua: !!sesion, segundos: Math.round((r.duration_ms || 0) / 1000),
         denegados: (r.permission_denials || []).map((d) => `${d.tool_name}${d.tool_input?.command ? ': ' + String(d.tool_input.command).slice(0, 100) : ''}`),
         error: code === 0 && !r.is_error ? '' : (error.trim().split('\n').filter((l) => l.trim() && !RUIDO.test(l)).slice(-6).join('\n') || r.result || `claude terminó con código ${code}`),
       };

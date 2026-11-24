@@ -31,6 +31,10 @@ de claude.ai (Notion, Google Drive, ElevenLabs). Requisitos, una vez por compu:
 2. Abrir `claude` una vez en la carpeta del repo y aceptar el aviso de confianza (así toma `.claude/settings.json`).
 3. Si al pedir algo el registro dice "Sin conectores de claude.ai", revisarlos en claude.ai › Configuración › Conectores.
 
+Uso: cada pedido termina mostrando el costo (en los cambios, acumulado del proyecto). El detalle por proyecto, con
+tokens por modelo: `python3 scripts/uso.py proyectos/<id>` (sin argumento: todos). Es el equivalente en la API: con
+el login de claude.ai no se cobra aparte, pero cuenta para los límites del plan.
+
 Permisos: corre en modo `auto` (aprueba lo seguro; lo que necesite permiso se deniega y la app lo lista al final).
 Variables opcionales al lanzar la app: `EDITOR_CLAUDE_MODELO` (por ej. `sonnet`; vacío = el de la cuenta) y
 `EDITOR_CLAUDE_PERMISOS` (`auto`, `acceptEdits`, `dontAsk`). Las instrucciones extra para Claude están en `server/prompt_app.md`.

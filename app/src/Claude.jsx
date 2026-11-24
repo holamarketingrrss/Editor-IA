@@ -110,7 +110,7 @@ function Evento({ev}) {
   if (ev.tipo === 'fin') {
     return (
       <div className={'ev fin ' + (ev.ok ? 'ok' : 'error')}>
-        {ev.ok ? 'Listo' : 'Terminó con error'}{ev.segundos ? ` · ${ev.segundos} s` : ''}{ev.costo != null ? ` · US$ ${ev.costo.toFixed(2)}` : ''}
+        {ev.ok ? 'Listo' : 'Terminó con error'}{ev.segundos ? ` · ${ev.segundos} s` : ''}{ev.costo != null ? ` · US$ ${ev.costo.toFixed(2)}${ev.continua ? ' acumulado del proyecto' : ''}` : ''}
         {ev.error && <pre>{ev.error}</pre>}
         {ev.denegados?.length > 0 && <div>Acciones que necesitaban permiso y no se hicieron: <ul>{ev.denegados.map((d, i) => <li key={i}><code>{d}</code></li>)}</ul></div>}
       </div>
