@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Cuánto gastó Claude en un proyecto: suma los tokens de su sesión (todos los pedidos y cambios hechos desde la app).
 # uso: python3 scripts/uso.py proyectos/<cliente>-<tema>        (o sin argumentos: todos los proyectos con sesión)
+#      python3 scripts/uso.py --pasos proyectos/<id>         detalle paso a paso: qué cargó el contexto
 # Lee la sesión guardada en proyectos/<id>/.claude.json y su registro en ~/.claude/projects/*/<sesion>.jsonl.
 # El costo es el que calcula Claude Code (equivalente en la API; tabla propia solo si el registro no lo trae): con el login de claude.ai no se cobra aparte,
 # pero ese uso cuenta para los límites del plan de la cuenta.
@@ -73,7 +74,53 @@ def mostrar(P):
     return total
 
 
+def pasos(P):
+    """Detalle por paso: qué hizo Claude y cuánto contexto cargaba (para encontrar lo que más gasta)."""
+    sesion = json.load(open(os.path.join(P, '.claude.json')))['sesion']
+    arch = glob.glob(os.path.expanduser(f'~/.claude/projects/*/{sesion}.jsonl'))[0]
+    herr, filas, vistos = {}, [], set()
+    for linea in open(arch, encoding='utf-8'):
+        try:
+            e = json.loads(linea)
+        except ValueError:
+            continue
+        m = e.get('message') or {}
+        cont = m.get('content') if isinstance(m.get('content'), list) else []
+        if e.get('type') == 'assistant':
+            for c in cont:
+                if c.get('type') == 'tool_use':
+                    i = c.get('input', {})
+                    det = i.get('description') or i.get('command') or i.get('file_path') or i.get('pattern') or json.dumps(i, ensure_ascii=False)
+                    herr[c['id']] = [c['name'].replace('mcp__claude_ai_', '').replace('mcp__', ''), str(det)[:70], 0, False]
+            u = m.get('usage')
+            if u and m.get('id') not in vistos:
+                vistos.add(m['id'])
+                ctx = (u.get('input_tokens') or 0) + (u.get('cache_read_input_tokens') or 0) + (u.get('cache_creation_input_tokens') or 0)
+                filas.append([ctx, u.get('cache_creation_input_tokens') or 0, u.get('output_tokens') or 0, []])
+        if e.get('type') == 'user':
+            for c in cont:
+                if c.get('type') == 'tool_result' and c.get('tool_use_id') in herr:
+                    r = c.get('content')
+                    imgs = sum(1 for x in r if isinstance(x, dict) and x.get('type') == 'image') if isinstance(r, list) else 0
+                    herr[c['tool_use_id']][2] = len(json.dumps(r, ensure_ascii=False)) if not imgs else 0
+                    herr[c['tool_use_id']][3] = imgs > 0
+                    if filas:
+                        filas[-1][3].append(herr[c['tool_use_id']])
+    print(f'{os.path.basename(P)} · {len(filas)} respuestas de Claude')
+    print(f'{"#":>3} {"contexto":>9} {"nuevo":>7} {"salida":>6}  pasos que pidió (tamaño del resultado)')
+    for n, (ctx, nuevo, sal, hs) in enumerate(filas, 1):
+        desc = '; '.join(f"{h[0]} {h[1]} ({'IMAGEN' if h[3] else str(h[2] // 4) + ' tok'})" for h in hs) or '(texto)'
+        print(f'{n:>3} {ctx:>9,} {nuevo:>7,} {sal:>6,}  {desc[:160]}')
+    grandes = sorted((h for h in herr.values()), key=lambda h: -h[2])[:8]
+    print('Resultados más pesados (cada uno se relee en todos los pasos siguientes):')
+    for h in grandes:
+        print(f'  ~{h[2] // 4:,} tok  {h[0]}  {h[1]}')
+    print(f'Imágenes leídas: {sum(1 for h in herr.values() if h[3])}')
+
+
 if __name__ == '__main__':
+    if len(sys.argv) > 2 and sys.argv[1] == '--pasos':
+        pasos(sys.argv[2].rstrip('/')); sys.exit(0)
     raiz = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
     proyectos = [a.rstrip('/') for a in sys.argv[1:]] or sorted(os.path.dirname(f) for f in glob.glob(os.path.join(raiz, 'proyectos/*/.claude.json')))
     total = sum(mostrar(P) for P in proyectos)

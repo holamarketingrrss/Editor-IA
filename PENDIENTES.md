@@ -23,3 +23,9 @@
 - **Fuente script de LUJI'S:** Avallon no viene en el design system → **Kaushan Script** (aprobada 24/11/2026), en `presets/lujis`.
 
 - **Helvetica Now de PAUSA (comercial):** se usa Arimo (libre, mismas métricas que Arial) hasta tener los archivos.
+
+## Ahorro de tokens (24/11/2026)
+
+- App: `claude -p` con `--tools Bash,Read,Edit,Write,Glob,Grep,ToolSearch` y `--exclude-dynamic-system-prompt-sections`: base de ~42k → ~12k tokens por paso (medido).
+- Receta en `app/server/prompt_app.md` + `material.sh` y `armar.sh` de un paso + tiempos de voz en la salida de `voz.sh` + estrategia y Drive madre en cada preset (no se relee Notion).
+- Prueba sin conectores (Sonnet): 11 respuestas, 181k tokens, US$ 0,11. Antes, un reel real con Opus: 28 respuestas, 2,85 M, US$ 1,79. Falta medir un pedido real completo en una compu del equipo y confirmar que los conectores siguen cargando con `--tools`.

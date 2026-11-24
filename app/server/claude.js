@@ -19,7 +19,10 @@ const BIN = process.env.EDITOR_CLAUDE_BIN
 const RUIDO = /^(Ignoring \d+ permissions|Warning: no stdin|.*hasTrustDialogAccepted|trusted\. Run Claude Code)/;
 
 const MODELO = process.env.EDITOR_CLAUDE_MODELO || '';           // default si la app no elige; vacío = el de la cuenta
-const MODELOS = ['sonnet', 'opus', 'haiku', 'cuenta'];          // lo que puede elegir la app ('cuenta' = sin --model)
+const MODELOS = ['sonnet', 'opus', 'haiku', 'cuenta'];
+// Herramientas internas que carga Claude: solo las que usa el editor. Baja el contexto de base de ~42k a ~12k tokens
+// por paso (medido). ToolSearch hace falta para los conectores (Notion, Drive, ElevenLabs se cargan a demanda).
+const HERRAMIENTAS = process.env.EDITOR_CLAUDE_TOOLS || 'Bash,Read,Edit,Write,Glob,Grep,ToolSearch';          // lo que puede elegir la app ('cuenta' = sin --model)
 const PERMISOS = process.env.EDITOR_CLAUDE_PERMISOS || 'auto';   // auto: aprueba solo lo seguro; lo demás se deniega y se avisa
 
 let trabajo = null;   // {id, modo, p, proceso, eventos, fin, clientes, antes}
@@ -67,7 +70,8 @@ export function claude(REPO) {
     const sesion = modo === 'cambios' ? leer(path.join(PROY, p, '.claude.json'), {}).sesion : null;
     if (marca && !/^[a-z0-9-]+$/.test(marca)) throw new Error('marca inválida');
     const args = ['-p', prompt(REPO, modo, p, texto, marca), '--output-format', 'stream-json', '--verbose',
-      '--permission-mode', PERMISOS, '--append-system-prompt', SISTEMA];
+      '--permission-mode', PERMISOS, '--append-system-prompt', SISTEMA,
+      '--tools', HERRAMIENTAS, '--exclude-dynamic-system-prompt-sections'];
     if (modelo && !MODELOS.includes(modelo)) throw new Error('modelo inválido');
     const m = modelo === 'cuenta' ? '' : (modelo || MODELO);
     if (m) args.push('--model', m);

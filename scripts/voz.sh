@@ -67,6 +67,7 @@ pal = [s['text'].strip() for s in tr]
 dur = tr[-1]['offsets']['to'] / 1000 if tr else 0
 print(f'voz.json: {len(pal)} palabras, {dur:.2f} s{nota}')
 print('whisper:', ' '.join(pal))
+print('tiempos:', ' · '.join(f"{p} {s['offsets']['from'] / 1000:.2f}" for p, s in zip(pal, tr)))   # para armar el EDL sin abrir voz.json
 if g:
     print('guion:  ', ' '.join(g))
     if len(g) != len(pal):

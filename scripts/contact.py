@@ -20,8 +20,8 @@ os.makedirs(f'{P}/sheets', exist_ok=True)
 with open(f'{P}/catalogo.tsv', 'w') as f:
     for i, r in enumerate(rows):
         f.write(f"{i}\t{r['title']}\t{r['id']}\t{r['w']}x{r['h']}\trot{r['rot']}\t{r['dur']:.1f}s\t{r['parent']}\n")
-TW, TH, COLS, PER = 300, 200, 6, 36
-font = ImageFont.load_default(size=22)
+TW, TH, COLS, PER = 240, 160, 6, 36   # hojas de 1440 px: alcanzan para elegir tomas y cuestan menos tokens al mirarlas
+font = ImageFont.load_default(size=20)
 for s in range(0, len(rows), PER):
     chunk = rows[s:s+PER]
     sheet = Image.new('RGB', (COLS*TW, ((len(chunk)+COLS-1)//COLS)*TH), 'black')
