@@ -13,7 +13,7 @@ case "$REPO" in /mnt/*) echo "AVISO: el repo está en el disco de Windows ($REPO
 
 echo "== Paquetes del sistema"
 sudo_si apt-get update -qq
-sudo_si apt-get install -y -qq ffmpeg python3 python3-pip python3-pil cmake build-essential git curl ca-certificates
+sudo_si apt-get install -y -qq ffmpeg python3 python3-pip python3-pil cmake build-essential git gh curl ca-certificates
 
 V=$(node -v 2>/dev/null | sed 's/v//;s/\..*//')
 if [ -z "$V" ] || [ "$V" -lt 20 ]; then
@@ -48,8 +48,14 @@ if [ "$WSL" = 1 ] && command -v cmd.exe >/dev/null; then
   fi
 fi
 
+# git pull sin pedir contraseña (el lanzador actualiza el repo cada vez que abre la app)
+command -v gh >/dev/null && gh auth status >/dev/null 2>&1 && gh auth setup-git >/dev/null 2>&1 || true
+
+if ! claude auth status --json 2>/dev/null | grep -q '"loggedIn": *true'; then
+  echo
+  echo "== Último paso: entrá a Claude con la cuenta de la agencia (se abre el navegador; si no, copiá el link que aparece)"
+  claude auth login || echo "No se completó el login: corré  claude auth login  cuando puedas."
+fi
 echo
 bash scripts/verificar.sh || true
-command -v claude >/dev/null && ! claude auth status --json 2>/dev/null | grep -q '"loggedIn": *true' \
-  && echo && echo "Último paso: logueate en Claude Code con la cuenta de la agencia:  claude auth login"
 exit 0

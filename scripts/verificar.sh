@@ -35,8 +35,7 @@ if [ -n "$MARCAS" ]; then ok "presets de marca:$MARCAS"; else ojo "sin presets d
 
 echo
 if [ "$FALTA" = 0 ]; then
-  echo "Todo listo. Abrí la app con el lanzador o: cd app && npm run editor  (http://127.0.0.1:4321)"
-  echo "La primera vez, abrí 'claude' en esta carpeta y aceptá el aviso de confianza."
+  echo "Todo listo. Abrí la app con doble clic en «Editor IA» en el Escritorio (o: cd app && npm run editor → http://127.0.0.1:4321)"
 else
   echo "Falta algo (✗). Arreglalo y volvé a correr: bash scripts/verificar.sh"
 fi

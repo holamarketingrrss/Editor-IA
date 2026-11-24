@@ -18,7 +18,7 @@ fi
 xcode-select -p >/dev/null 2>&1 || { echo "Faltan las herramientas de línea de comandos de Apple: se abre el instalador. Al terminar, volvé a correr esto."; xcode-select --install; exit 1; }
 
 echo "== Paquetes (Homebrew)"
-brew install node@22 ffmpeg python cmake git yt-dlp pillow
+brew install node@22 ffmpeg python cmake git gh yt-dlp pillow
 NODE_BIN="$(brew --prefix node@22)/bin"
 case ":$PATH:" in *":$NODE_BIN:"*) ;; *) export PATH="$NODE_BIN:$PATH"
   grep -q 'node@22/bin' ~/.zshrc 2>/dev/null || echo "export PATH=\"$NODE_BIN:\$PATH\"" >> ~/.zshrc ;; esac
@@ -43,8 +43,14 @@ EOF
 chmod +x "$L"
 echo "  $L (doble clic para abrir la app)"
 
+# git pull sin pedir contraseña (el lanzador actualiza el repo cada vez que abre la app)
+command -v gh >/dev/null && gh auth status >/dev/null 2>&1 && gh auth setup-git >/dev/null 2>&1 || true
+
+if ! claude auth status --json 2>/dev/null | grep -q '"loggedIn": *true'; then
+  echo
+  echo "== Último paso: entrá a Claude con la cuenta de la agencia (se abre el navegador; si no, copiá el link que aparece)"
+  claude auth login || echo "No se completó el login: corré  claude auth login  cuando puedas."
+fi
 echo
 bash scripts/verificar.sh || true
-command -v claude >/dev/null && ! claude auth status --json 2>/dev/null | grep -q '"loggedIn": *true' \
-  && echo && echo "Último paso: logueate en Claude Code con la cuenta de la agencia:  claude auth login"
 exit 0
