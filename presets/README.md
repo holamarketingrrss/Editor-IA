@@ -28,3 +28,12 @@ según el README del design system. Fuentes comerciales que no vienen en el paqu
 | --- | --- | --- |
 | `lujis` | @luji.miami | Avallon (script, sin archivo) → Kaushan Script |
 | `pausa` | @enjoypausa | Helvetica Now (comercial) → Arimo |
+| `tecno` | @tecnomorenooficial | DS propone Poppins; los reels usan DM Sans (como trabaja la agencia). Voz propia (persona a cámara) |
+| `swiss` | @swisssnowexperience | Blur Medium y Helvetica World → Helvetica Bold (cargada en el DS) |
+| `bunbury` | @bunburymiami | Proxima Nova, Sudestada y Stencil Std (Adobe) → Arvo |
+| `marietts` | @mariettsflavors | The Seasons es DEMO (falta licencia comercial) |
+| `holamarketing` | @holamarketing | JetBrains Mono sin archivo (no se usa en reels) |
+| `kaleb` | @kalebresidence | Now → Raleway (como en los posts) |
+
+Voces por defecto (ElevenLabs): Julieta (lujis, pausa, kaleb), Azul (holamarketing), Daniela (swiss, español neutro), Jasper
+(bunbury, inglés), Jade (marietts, inglés). Club HM: pendiente (su design system no está compartido con esta cuenta).

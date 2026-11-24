@@ -1,0 +1,58 @@
+{
+ "nombre": "KALEB",
+ "handle": "@kalebresidence",
+ "logo": "kaleb-logo-oro.png",
+ "colores": {
+  "texto": "#FFFFFF",
+  "oro": "#D6AB56",
+  "mostaza": "#DF9D1B",
+  "ladrillo": "#963B19",
+  "plata": "#ADB3B8",
+  "grafito": "#5B5B5F",
+  "niebla": "#EDEEF0",
+  "terracota": "#D47C55",
+  "terracota-oscuro": "#B35328",
+  "blanco": "#FFFFFF",
+  "negro": "#000000"
+ },
+ "acentos": [
+  "texto"
+ ],
+ "fuentes": {
+  "G": {
+   "familia": "Raleway",
+   "archivo": "raleway-latin-700-normal.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 1.0,
+   "espaciado": 0,
+   "ancho": 0.55,
+   "respaldo": "Arial, sans-serif"
+  },
+  "B": {
+   "familia": "Raleway",
+   "archivo": "raleway-latin-400-normal.woff2",
+   "peso": 400,
+   "mayusculas": false,
+   "interlineado": 1.0,
+   "espaciado": 0,
+   "ancho": 0.5,
+   "respaldo": "Arial, sans-serif"
+  },
+  "S": {
+   "familia": "Raleway",
+   "archivo": "raleway-latin-700-normal.woff2",
+   "peso": 700,
+   "mayusculas": true,
+   "interlineado": 1.0,
+   "espaciado": 2,
+   "ancho": 0.66,
+   "respaldo": "Arial, sans-serif"
+  }
+ },
+ "outro": {
+  "fondo": "niebla",
+  "fuenteHandle": "S",
+  "colorHandle": "terracota-oscuro"
+ }
+}

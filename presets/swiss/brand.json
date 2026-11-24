@@ -1,0 +1,64 @@
+{
+ "nombre": "SWISSSNOW",
+ "handle": "@swisssnowexperience",
+ "logo": "swiss-snow-logo-blanco.png",
+ "colores": {
+  "texto": "#FFFFFF",
+  "rojo": "#C83927",
+  "azul": "#1296FA",
+  "verde-noche": "#042900",
+  "papel": "#F6F6F5",
+  "negro": "#000000",
+  "blanco": "#FFFFFF"
+ },
+ "acentos": [
+  "texto"
+ ],
+ "fuentes": {
+  "G": {
+   "familia": "Helvetica",
+   "archivo": "Helvetica-Bold.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 0.95,
+   "espaciado": -2,
+   "ancho": 0.56,
+   "respaldo": "Arial, sans-serif"
+  },
+  "B": {
+   "familia": "Helvetica",
+   "archivo": "Helvetica-Bold.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 1.0,
+   "espaciado": -1,
+   "ancho": 0.56,
+   "respaldo": "Arial, sans-serif"
+  },
+  "S": {
+   "familia": "Helvetica",
+   "archivo": "Helvetica-Bold.woff2",
+   "peso": 700,
+   "mayusculas": true,
+   "interlineado": 1.0,
+   "espaciado": 1,
+   "ancho": 0.68,
+   "respaldo": "Arial, sans-serif"
+  },
+  "K": {
+   "familia": "Helvetica Oblique",
+   "archivo": "Helvetica-BoldOblique.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 1.0,
+   "espaciado": -1,
+   "ancho": 0.56,
+   "respaldo": "Arial, sans-serif"
+  }
+ },
+ "outro": {
+  "fondo": "rojo",
+  "fuenteHandle": "S",
+  "colorHandle": "texto"
+ }
+}

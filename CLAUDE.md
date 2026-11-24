@@ -22,7 +22,7 @@ con el design system y avisalo en la entrega.
 
 ## Flujo de trabajo
 
-- Si existe `presets/<cliente>/` (hoy: `lujis`, `pausa`), creá el proyecto con `scripts/nuevo_proyecto.sh <cliente> <tema> --preset <cliente>`:
+- Si existe `presets/<cliente>/` (hoy: `lujis`, `pausa`, `tecno`, `swiss`, `bunbury`, `marietts`, `holamarketing`, `kaleb`), creá el proyecto con `scripts/nuevo_proyecto.sh <cliente> <tema> --preset <cliente>`:
   trae brand, fuentes, logos, stickers, voz y estilo por defecto, y sus `notas` resumen el design system (ver `presets/README.md`).
   Lo que pida el brief va en `proyecto.json` → `estilo` y manda sobre el preset.
 - Proyecto nuevo sin preset: `scripts/nuevo_proyecto.sh <cliente> <tema> --tokens <tokens.json del design system> --handle @marca

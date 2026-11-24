@@ -1,16 +1,17 @@
 {
  "marca": "TECNO",
- "designSystem": null,
+ "designSystem": "https://claude.ai/artifact/GVQqbz1M1gidDYtM6tyERn",
  "driveMadre": "https://drive.google.com/drive/folders/1JIbj8GVhH6VadG9cqIQLjOmS_dDmNuYk",
  "voz": {
   "tipo": "propia",
   "nota": "La marca graba su voz (Priscila a cámara): la voz sale de las tomas con scripts/transcribir_tomas.sh y scripts/voz_tomas.sh, no de ElevenLabs."
  },
  "notas": [
-  "PROVISORIO: no hay design system de TECNO en esta cuenta. Colores (negro, azul, cian) y logo (TECNO en DM Sans) son provisorios hasta tener los oficiales; los logos reales están en Drive madre › Logos.",
+  "Design system inicial (solo logos): paleta navy (principal), verde y salvia (acentos). Isotipo (anillos + sonrisa) para esquina o sello; logotipo 'tecno' para cierre. Liquid glass solo sobre fondos claros. El DS propone Poppins, pero la agencia usa DM Sans en los reels.",
   "Tipografía: DM Sans (la que usa la agencia). Subtítulos palabra por palabra; destacadas más grandes (DM Sans Black) con brillo y rebote sutil: estética moderna y tecnológica.",
   "Reels de persona a cámara: elegí tomas con transcribir_tomas.sh (descartá repeticiones y tomas falladas), cortá entre frases y armá la voz con voz_tomas.sh (limpia ruido y realza). Priscila al frente la mayor parte del video; tomas de producto como apoyo.",
-  "Material de cámara 4K horizontal (XAVC): el editor recorta a 9:16; si la persona no queda centrada, usá la 5.ª columna del EDL (objectPosition, ej. '35% 50%')."
+  "Material de cámara 4K horizontal (XAVC): el editor recorta a 9:16; si la persona no queda centrada, usá la 5.ª columna del EDL (objectPosition, ej. '35% 50%').",
+  "Cierre: logotipo blanco sobre navy. Logo en esquina: isotipo blanco (tecno-isotipo-blanco.png)."
  ],
  "estrategia": [
   "Venta de productos Apple nuevos y usados en Moreno (Buenos Aires), con financiamiento y toma de usados como parte de pago (Plan Canje).",

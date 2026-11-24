@@ -1,0 +1,48 @@
+{
+ "marca": "HOLA MARKETING",
+ "designSystem": "https://claude.ai/artifact/Pr9rYUQe6rNQ6Q3tXQ9NzC",
+ "voz": {
+  "voice_id": "gcAd7Z3awwnHdiiMaHsz",
+  "nombre": "Azul",
+  "nota": "rioplatense, cercana y conversacional"
+ },
+ "notas": [
+  "La agencia: creativa, colorida, cálida y profesional. Wordmark editorial 'hola marketing'; paleta de primarios vivos (amarillo, naranja, azul, verde) sobre crema, con tinta.",
+  "Subtítulos en DM Sans Bold; destacados en Vollkorn itálica (la serif editorial) con color de la paleta. Pocos colores por pieza: uno o dos primarios.",
+  "Logo: negro sobre claros (crema, blanco, amarillo, rosa), blanco sobre oscuros o color fuerte; nunca blanco sobre amarillo ni rosa. Cierre: logo blanco sobre azul.",
+  "Tono de voz pendiente de definir en el DS; usar el de la Estrategia (argentino, claro, directo)."
+ ],
+ "estilo": {
+  "subtitulos": {
+   "modo": "palabra",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "K",
+   "color": "blanco",
+   "legibilidad": "sombra",
+   "animacion": "pop",
+   "escalaDestacado": 1.2
+  },
+  "camara": "pushin",
+  "transicion": {
+   "tipo": "corte"
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
+  "animacionLogo": "pop",
+  "look": "original",
+  "vineta": false
+ },
+ "driveMadre": null,
+ "estrategia": [
+  "Hola Marketing traduce el marketing en algo simple, claro y aplicable: no busca viralidad vacía sino atraer a quienes necesitan ordenar su negocio y vender.",
+  "Objetivos: convertir seguidores en clientes, posicionar los packs mensuales e impulsar Club HM (kits, templates, recursos); leads más calificados.",
+  "Pilares: estrategia aplicada (el porqué) · claridad · educación práctica · posicionamiento · conversión.",
+  "Público: dueños de emprendimientos, marcas personales y profesionales de marketing y diseño, sobre todo en Argentina, activos en redes pero sin vender.",
+  "Tono: cercano y humano, claro y directo, empático sin vueltas, confrontativo suave; lenguaje simple, estilo argentino. Evitar sonar a gurú, promesas irreales y tecnicismos.",
+  "Límites: nada sin estrategia, sin resultados irreales, sin marketing solo estético ni contenido sin objetivo."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › HOLAMARKETING › Estrategia (resumen del 24/11/2026)"
+}

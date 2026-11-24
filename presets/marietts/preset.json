@@ -1,0 +1,51 @@
+{
+ "marca": "MARIETT'S",
+ "designSystem": "https://claude.ai/artifact/683gVyXWBnixwwYwqVE4Q2",
+ "voz": {
+  "voice_id": "TOXPlnYC7z5SQSV2Zgc5",
+  "nombre": "Jade",
+  "nota": "inglés americano, elegante, calma y cálida"
+ },
+ "notas": [
+  "Mariett's (antes Mariett's Flavors): Luxury Coffee & Matcha Catering para eventos corporativos, activaciones de marca y bodas en el sur de Florida. Elegante, cálida, ecléctica y de alta gama; nunca de menú ni transaccional.",
+  "Copy en inglés, frases cortas y deliberadas (curated, elevated, bespoke, tailored). CTAs consultivos: 'Inquire about your event', 'Request a tailored proposal'. SIN emojis; listas con rombo ◆.",
+  "Subtítulos en Lexend SemiBold color ivory; destacados en The Seasons. Fleur De Leah (script) solo para una o dos palabras de acento, nunca frases.",
+  "The Seasons es una versión DEMO de Fontspring: para uso comercial hay que comprar la licencia.",
+  "Logo: nunca redibujarlo; conservar la M original. Cierre: monograma secundario ivory sobre moss.",
+  "Drive: 'Contenido Marca' (lo que envía la clienta) y 'Contenido HM' (lo producido por la agencia), dentro del Drive madre."
+ ],
+ "estilo": {
+  "subtitulos": {
+   "modo": "grupo",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "G",
+   "color": "blanco",
+   "legibilidad": "sombra",
+   "animacion": "fade",
+   "escalaDestacado": 1.15
+  },
+  "camara": "pushin",
+  "transicion": {
+   "tipo": "fundido",
+   "dur": 0.5
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
+  "animacionLogo": "fade",
+  "look": "original",
+  "vineta": false
+ },
+ "driveMadre": "https://drive.google.com/drive/folders/1HO5WgWTWd4BSoehO9ITiu8fZTVFGFfQ0",
+ "estrategia": [
+  "Luxury Coffee & Matcha Catering: Coffee/Matcha Catering, Coffee + Matcha Experience, Espresso Martini Bars e Italian Affogato Bars. Vende una experiencia integral de hospitalidad, no bebidas.",
+  "Objetivo: referente de luxury catering para empresas, agencias y eventos premium del sur de Florida; más eventos corporativos, activaciones y bodas, menos clientes que eligen por precio.",
+  "Público: brand, event y office managers, RR. HH., productoras, marcas de lujo; wedding y luxury event planners, venues y hoteles boutique. Miami, Fort Lauderdale, Palm Beach.",
+  "Pilares: The Mariett's Experience (montaje, servicio, invitados) · personalización y diseño (vasos, carritos, menús) · new luxury experiences · proof of excellence (testimonios, casos) · behind the craft (Valery, estilo podcast).",
+  "Tono: refinado, seguro, visual, internacional y profesional; luxury, chic y sobrio con calidez moderada.",
+  "No usar: slang, promos, urgencias falsas, 'precios increíbles', 'corre a reservar', ni nada casual o cute."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › MARIETTS FLAVORS › Estrategia (resumen del 24/11/2026)"
+}

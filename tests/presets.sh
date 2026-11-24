@@ -4,7 +4,7 @@
 # uso: bash tests/presets.sh [marca ...]     (sin argumentos: todos los de presets/)  -> out: proyectos/presets-prueba.jpg
 set -euo pipefail
 cd "$(dirname "$0")/.."
-MARCAS=("$@"); [ ${#MARCAS[@]} -gt 0 ] || MARCAS=($(ls presets))
+MARCAS=("$@"); if [ ${#MARCAS[@]} -eq 0 ]; then for f in presets/*/preset.json; do MARCAS+=("$(basename "$(dirname "$f")")"); done; fi
 CHROME_FLAG=(); [ -x /opt/pw-browsers/chromium ] && CHROME_FLAG=(--browser-executable /opt/pw-browsers/chromium)
 HOJAS=()
 for M in "${MARCAS[@]}"; do
@@ -18,7 +18,10 @@ for i in range(3):   # tomas: degradés con colores de la marca (para ver contra
     subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-f', 'lavfi', '-i',
         f"gradients=s=1080x1920:r=30:d=3:c0={C[(i*2+1) % len(C)]}:c1={C[(i*2+3) % len(C)]}:speed=0.02", '-pix_fmt', 'yuv420p', f'{T}/raw/t{i}.mp4'], check=True)
 open(f'{T}/edl.tsv', 'w').write('0.00\t1.60\tt0.mp4\t0\n1.60\t3.20\tt1.mp4\t0\n3.20\t6.00\tt2.mp4\t0\n')
-frase = {'lujis': 'Hello friend! Come visit us and taste the difference', 'pausa': 'Regalate un momento de pausa en tu día'}.get(b['nombre'].lower(), 'Esta es una frase de prueba para la marca')
+frase = {'lujis': 'Hello friend! Come visit us and taste the difference', 'pausa': 'Regalate un momento de pausa en tu día',
+         'tecno': 'Elegí el iPhone que te sirve y consultanos por el Plan Canje', 'swisssnow': 'POV: tu primera semana de nieve en los Alpes suizos',
+         'bunbury': 'Heartfelt recipes from Granma cookbook in Miami', 'marietts': 'Fresh coffee served anywhere for your next event',
+         'holamarketing': 'Vender no depende de hacer más sino de hacer mejor', 'kaleb': 'Cuidar no es solo asistir. Es dar tranquilidad'}.get(b['nombre'].lower(), 'Esta es una frase de prueba para la marca')
 w = frase.split(); dur = 3.4 / len(w)
 json.dump({'transcription': [{'offsets': {'from': int(i * dur * 1000), 'to': int((i + 1) * dur * 1000)}, 'text': ' ' + x} for i, x in enumerate(w)]},
           open(f'{T}/audio/voz.json', 'w'))

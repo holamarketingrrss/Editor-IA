@@ -1,0 +1,74 @@
+{
+ "nombre": "BUNBURY",
+ "handle": "@bunburymiami",
+ "logo": "bunbury-logo-cream.png",
+ "colores": {
+  "texto": "#F2F2D9",
+  "green-100": "#CFDAAC",
+  "green-300": "#A3B852",
+  "green-500": "#86AC30",
+  "green-700": "#547308",
+  "green-900": "#223406",
+  "wine-100": "#FFCCA6",
+  "wine-300": "#E6804D",
+  "wine-500": "#B8160B",
+  "wine-900": "#4D060D",
+  "brown-100": "#E6D9BF",
+  "brown-300": "#BF8C4D",
+  "brown-700": "#6B3E2D",
+  "brown-900": "#381F14",
+  "black": "#000000",
+  "cream": "#F2F2D9"
+ },
+ "acentos": [
+  "wine-300",
+  "green-300"
+ ],
+ "fuentes": {
+  "G": {
+   "familia": "Arvo",
+   "archivo": "arvo-latin-700-normal.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 1.05,
+   "espaciado": 0,
+   "ancho": 0.6,
+   "respaldo": "Rockwell, Georgia, serif"
+  },
+  "B": {
+   "familia": "Arvo",
+   "archivo": "arvo-latin-700-normal.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 1.05,
+   "espaciado": 0,
+   "ancho": 0.6,
+   "respaldo": "Rockwell, Georgia, serif"
+  },
+  "S": {
+   "familia": "Arvo",
+   "archivo": "arvo-latin-700-normal.woff2",
+   "peso": 700,
+   "mayusculas": true,
+   "interlineado": 1,
+   "espaciado": 2,
+   "ancho": 0.72,
+   "respaldo": "Rockwell, Georgia, serif"
+  },
+  "K": {
+   "familia": "Arvo Italic",
+   "archivo": "arvo-latin-700-italic.woff2",
+   "peso": 700,
+   "mayusculas": false,
+   "interlineado": 1.05,
+   "espaciado": 0,
+   "ancho": 0.58,
+   "respaldo": "Georgia, serif"
+  }
+ },
+ "outro": {
+  "fondo": "green-900",
+  "fuenteHandle": "S",
+  "colorHandle": "texto"
+ }
+}
