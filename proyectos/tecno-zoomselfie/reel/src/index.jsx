@@ -178,39 +178,84 @@ const IntroGraphics = () => {
   );
 };
 
-/* ---------------- Placa final (Pri sin voz + pregunta y CTA) ---------------- */
-const EndCard = () => {
+/* ---------------- Final sin voz: comparativa + CTA tipo encuesta ---------------- */
+const MiniMock = ({x, y, w, src, from, rate = 1, emph, label, tLabel}) => {
   const frame = useCurrentFrame(); const {fps} = useVideoConfig();
-  const q = sp(frame - 3, fps, {damping: 12}); const a = sp(frame - 27, fps, {damping: 11}); const b = sp(frame - 36, fps, {damping: 11});
-  const cta = sp(frame - 63, fps, {damping: 10, stiffness: 200}); const pri = sp(frame, fps, {damping: 16, stiffness: 120});
-  const glow = interpolate(frame - 63, [0, 4, 14], [0.2, 1.25, 0.75], clamp);
-  const card = (t, sub, x, p, icon) => (
-    <div style={{position: 'absolute', left: x, top: 610 + Math.sin((frame + x) / 9) * 8, width: 300, padding: '26px 20px', borderRadius: 34,
-      transform: `translate(-50%,-50%) scale(${p})`, background: 'rgba(255,255,255,.1)', border: `3px solid ${C.glow}`, boxShadow: `0 0 30px rgba(95,242,210,.45)`,
-      textAlign: 'center', fontFamily: FONT, color: '#fff'}}>
-      <div style={{display: 'flex', justifyContent: 'center', marginBottom: 6}}>{icon}</div>
-      <div style={{fontWeight: 900, fontSize: 50, letterSpacing: -1, color: C.glow}}>{t}</div>
-      <div style={{fontWeight: 600, fontSize: 25, opacity: 0.9, marginTop: 6}}>{sub}</div>
+  const h = Math.round(w * 2.174);
+  const lab = sp(frame - tLabel, fps, {damping: 10, stiffness: 220});
+  return (
+    <div style={{position: 'absolute', left: x, top: y, width: w, height: h, zIndex: emph > 0.5 ? 2 : 1,
+      transform: `translate(-50%,-50%) scale(${0.92 + 0.14 * emph})`, filter: `brightness(${0.75 + 0.25 * emph})`}}>
+      <div style={{position: 'absolute', inset: -10, borderRadius: 64, background: 'linear-gradient(145deg,#9aa3ad,#4b535d 40%,#c9d0d6 70%,#5a626c)',
+        boxShadow: `0 30px 70px rgba(0,0,0,.45), 0 0 ${60 * emph}px rgba(95,242,210,${0.6 * emph})`}} />
+      <div style={{position: 'absolute', inset: 0, borderRadius: 55, overflow: 'hidden', background: '#000'}}>
+        <OffthreadVideo src={staticFile(`clips/${src}`)} muted startFrom={f(from)} playbackRate={rate} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+        <div style={{position: 'absolute', top: 12, left: '50%', width: 96, height: 28, borderRadius: 999, background: '#000', transform: 'translateX(-50%)'}} />
+      </div>
+      {lab > 0.01 && <div style={{position: 'absolute', left: '50%', top: -34, transform: `translate(-50%,-50%) scale(${lab})`, padding: '12px 28px',
+        borderRadius: 999, background: C.glow, color: C.navy, fontFamily: FONT, fontWeight: 900, fontSize: 40, whiteSpace: 'nowrap',
+        boxShadow: `0 0 30px ${C.glow}`}}>{label}</div>}
     </div>
   );
+};
+const CompareScene = () => {
+  const frame = useCurrentFrame(); const {fps} = useVideoConfig();
+  const cp = data.compare; const rel = (t) => f(t - cp.start);
+  const pin = sp(frame, fps, {damping: 14, stiffness: 120});
+  const toRight = sp(frame - rel(cp.tSelfie), fps, {damping: 14});
+  const eL = interpolate(frame, [rel(cp.tPro) - 12, rel(cp.tPro)], [0.5, 1], clamp) * (1 - toRight) + 0.25 * toRight;
+  const eR = 0.5 * (1 - toRight) + toRight;
   return (
     <AbsoluteFill>
       <Bg color={C.navy} />
-      <div style={{position: 'absolute', left: 540, top: 330, transform: `translate(-50%,-50%) translateY(${(1 - q) * -60}px)`, opacity: q,
-        fontFamily: FONT, fontWeight: 900, fontSize: 92, color: '#fff', letterSpacing: -2, whiteSpace: 'nowrap',
-        textShadow: `0 0 30px rgba(95,242,210,.6)`}}>¿Con cuál te quedás?</div>
-      {card('ZOOM', 'hasta 8x en el 18 Pro', 190, a, <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21" /></svg>)}
-      {card('SELFIE', 'Center Stage · también en iPhone Air', 890, b, <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><rect x="3" y="6" width="18" height="13" rx="3" /><circle cx="12" cy="12.5" r="3" /></svg>)}
-      {/* Pri recortada delante de los gráficos */}
-      <AbsoluteFill style={{transform: `translateY(${(1 - pri) * 400 + 40}px) scale(0.88)`, transformOrigin: '50% 100%'}}>
-        <OffthreadVideo src={staticFile(`clips/${data.pri1.cut}`)} muted transparent style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-      </AbsoluteFill>
-      <div style={{position: 'absolute', left: 540, top: 1330, transform: `translate(-50%,-50%) scale(${cta})`, opacity: cta, fontFamily: FONT,
-        fontWeight: 800, fontSize: 56, color: '#fff', whiteSpace: 'nowrap', textShadow: '0 4px 16px rgba(11,35,66,.7)'}}>Contanos y consultanos</div>
-      <div style={{position: 'absolute', left: 540, top: 1435, transform: `translate(-50%,-50%) scale(${cta})`, opacity: cta, fontFamily: FONT,
-        fontWeight: 900, fontSize: 118, letterSpacing: -3, color: '#fff', whiteSpace: 'nowrap',
-        textShadow: `0 0 ${10 * glow}px rgba(95,242,210,${0.95 * glow}), 0 0 ${34 * glow}px rgba(44,165,141,${0.9 * glow}), 0 0 ${80 * glow}px rgba(44,165,141,${0.55 * glow}), 0 6px 18px rgba(11,35,66,.6)`}}>
-        por el 18 Pro</div>
+      <div style={{position: 'absolute', inset: 0, transform: `translateY(${(1 - pin) * 300}px)`, opacity: pin}}>
+        <MiniMock x={300} y={850} w={330} src="zoom.mp4" from={16.4} rate={0.6} emph={eL} label="18 PRO · 8x" tLabel={rel(cp.tPro)} />
+        <MiniMock x={780} y={850} w={330} src="selfie.mp4" from={2.6} rate={0.45} emph={eR} label="PRO + AIR" tLabel={rel(cp.tAir)} />
+      </div>
+    </AbsoluteFill>
+  );
+};
+const PollIcon = ({k, color}) => (
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round">
+    {k === 0 ? <><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21" /></> : <><rect x="3" y="6" width="18" height="13" rx="3" /><circle cx="12" cy="12.5" r="3" /></>}
+  </svg>
+);
+const PollScene = () => {
+  const frame = useCurrentFrame(); const {fps} = useVideoConfig();
+  const q = sp(frame - 2, fps, {damping: 12});
+  const tap = f(1.4), fill = sp(frame - tap, fps, {damping: 16, stiffness: 90});
+  const press = interpolate(frame - tap, [-3, 0, 5], [1, 0.94, 1], clamp);
+  const cmt = sp(frame - f(2.3), fps, {damping: 12}); const btn = sp(frame - f(2.9), fps, {damping: 9, stiffness: 200});
+  const glow = interpolate(frame - f(2.9), [0, 4, 14], [0.2, 1.25, 0.75], clamp);
+  const opt = (i, label) => {
+    const p = sp(frame - f(0.5 + i * 0.25), fps, {damping: 11});
+    const chosen = i === 0; const w = chosen ? fill * 100 : fill * 0;
+    return (
+      <div key={i} style={{position: 'absolute', left: 540, top: 830 + i * 185, width: 780, height: 150, borderRadius: 999, overflow: 'hidden',
+        transform: `translate(-50%,-50%) translateX(${(1 - p) * (i ? 900 : -900)}px) scale(${chosen ? press : 1})`,
+        background: 'rgba(255,255,255,.14)', border: `3px solid ${chosen && fill > 0.1 ? C.glow : 'rgba(255,255,255,.35)'}`,
+        boxShadow: chosen && fill > 0.1 ? `0 0 34px rgba(95,242,210,.6)` : 'none'}}>
+        <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${w}%`, background: `linear-gradient(90deg, ${C.verde}, ${C.glow})`}} />
+        <div style={{position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', gap: 28, padding: '0 50px'}}>
+          <PollIcon k={i} color={chosen && fill > 0.5 ? C.navy : '#fff'} />
+          <span style={{fontFamily: FONT, fontWeight: 900, fontSize: 62, letterSpacing: -1, color: chosen && fill > 0.5 ? C.navy : '#fff'}}>{label}</span>
+        </div>
+      </div>
+    );
+  };
+  return (
+    <AbsoluteFill>
+      <Bg color={C.verdeOsc} />
+      <div style={{position: 'absolute', left: 540, top: 540, transform: `translate(-50%,-50%) translateY(${(1 - q) * -60}px) scale(${0.8 + 0.2 * q})`, opacity: q,
+        fontFamily: FONT, fontWeight: 900, fontSize: 96, letterSpacing: -3, color: '#fff', whiteSpace: 'nowrap', textShadow: '0 6px 24px rgba(11,35,66,.45)'}}>
+        ¿Con cuál te quedás?</div>
+      {opt(0, 'ZOOM')}{opt(1, 'SELFIE')}
+      <div style={{position: 'absolute', left: 540, top: 1235, transform: `translate(-50%,-50%) translateY(${(1 - cmt) * 40}px)`, opacity: cmt,
+        fontFamily: FONT, fontWeight: 700, fontSize: 52, color: '#fff', whiteSpace: 'nowrap'}}>Contanos en comentarios</div>
+      <div style={{position: 'absolute', left: 540, top: 1405, transform: `translate(-50%,-50%) scale(${btn})`, opacity: Math.min(1, btn * 2),
+        padding: '26px 56px', borderRadius: 999, background: C.navy, border: `3px solid ${C.glow}`, whiteSpace: 'nowrap',
+        boxShadow: `0 0 ${50 * glow}px rgba(95,242,210,${0.8 * glow})`, fontFamily: FONT, fontWeight: 900, fontSize: 60, letterSpacing: -1, color: '#fff',
+        textShadow: `0 0 ${16 * glow}px rgba(95,242,210,${0.9 * glow})`}}>Consultanos por el 18 Pro</div>
     </AbsoluteFill>
   );
 };
@@ -295,7 +340,7 @@ const Outro = () => {
 
 /* ---------------- Composición ---------------- */
 const Reel = () => {
-  const [s0] = data.segs; const mz = data.mock.zoom, ms = data.mock.selfie, ec = data.endcard;
+  const [s0] = data.segs; const mz = data.mock.zoom, ms = data.mock.selfie, cp = data.compare, pl = data.poll;
   return (
     <AbsoluteFill style={{backgroundColor: C.navy}}>
       <style>{fontFaces}</style>
@@ -304,8 +349,9 @@ const Reel = () => {
         <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(11,35,66,0) 55%, rgba(11,35,66,.4) 80%, rgba(11,35,66,.5) 100%)'}} />
       </Sequence>
       <Sequence from={f(mz.start)} durationInFrames={f(ms.start) - f(mz.start)}><Wipe><ZoomScene /></Wipe></Sequence>
-      <Sequence from={f(ms.start)} durationInFrames={f(ec.start) - f(ms.start)}><Wipe><SelfieScene /></Wipe></Sequence>
-      <Sequence from={f(ec.start)} durationInFrames={f(data.outroAt) - f(ec.start) + 8}><Wipe><EndCard /></Wipe></Sequence>
+      <Sequence from={f(ms.start)} durationInFrames={f(cp.start) - f(ms.start)}><Wipe><SelfieScene /></Wipe></Sequence>
+      <Sequence from={f(cp.start)} durationInFrames={f(pl.start) - f(cp.start)}><Wipe><CompareScene /></Wipe></Sequence>
+      <Sequence from={f(pl.start)} durationInFrames={f(data.outroAt) - f(pl.start) + 8}><Wipe><PollScene /></Wipe></Sequence>
       <Sequence from={0} durationInFrames={f(data.hook.end)}><Hook h={data.hook} /></Sequence>
       {data.words.map((w, i) => {
         const from = f(w.start); const dur = Math.max(4, f(w.end) - from);

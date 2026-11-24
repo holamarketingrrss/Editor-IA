@@ -18,14 +18,32 @@ mock = {
   'selfie': dict(start=vo2['start'], end=round(voice_end + 0.08, 3), shots=[(vo2['start'], 0.0, 0.6), (11.9, 1.25, 1)]),
 }
 zchips = [dict(label=w['text'], t=w['start']) for w in words if w['text'] in ('1x', '4x', '8x')]
-endcard = dict(start=round(voice_end + 0.08, 3), dur=4.4)
-outro = round(endcard['start'] + endcard['dur'], 3)
+# ---- final sin voz: comparativa (texto animado a ritmo de lectura) + CTA tipo encuesta ----
+E = round(voice_end + 0.08, 3)
+TXT = "El *zoom del *Pro es una *diferencia importante. Y ojo: la *selfie con *Center_Stage también está en el *iPhone_Air."
+t = E + 0.4; n = c['vo']; comp_words = []
+for tok in TXT.split():
+    key = tok.startswith('*'); text = tok.lstrip('*').replace('_', ' ')
+    d = 0.44 if key else 0.25
+    sl = SLOT_VO[n % 5]; n += 1
+    comp_words.append(dict(text=text, key=key, seg=9, kind='txt', start=round(t, 3), end=round(t + d, 3),
+                           x=KEY_POS[0] if key else sl[0], y=KEY_POS[1] if key else sl[1], entry=ENTRY[(n * 3) % 8]))
+    t += d
+words += comp_words
+compare = dict(start=E, end=round(t + 0.35, 3),
+               tPro=next(w['start'] for w in comp_words if w['text'] == 'Pro'),
+               tAir=next(w['start'] for w in comp_words if w['text'].startswith('iPhone Air')),
+               tSelfie=next(w['start'] for w in comp_words if w['text'] == 'selfie'))
+poll = dict(start=compare['end'], dur=4.4)
+outro = round(poll['start'] + poll['dur'], 3)
+P = poll['start']
 sfx = [dict(t=w['start'], f='click' if w['kind'] == 'pri' else 'blip', v=0.3) for w in words if w['key']]
 sfx += [dict(t=round(s['start'] - 0.2, 3), f='swoosh', v=0.34) for s in (segs[1], segs[2])]
-E = endcard['start']
-sfx += [dict(t=round(E - 0.15, 3), f='swoosh', v=0.38), dict(t=round(E + 0.25, 3), f='pop', v=0.35), dict(t=round(E + 0.9, 3), f='click', v=0.3),
-        dict(t=round(E + 1.2, 3), f='click', v=0.3), dict(t=round(E + 2.1, 3), f='blip', v=0.3), dict(t=round(outro - 0.15, 3), f='swoosh', v=0.4)]
-data = dict(duration=round(outro + 2.3, 2), outroAt=outro, segs=segs, words=words, mock=mock, zchips=zchips, endcard=endcard,
+sfx += [dict(t=round(E - 0.15, 3), f='swoosh', v=0.38), dict(t=compare['tPro'], f='pop', v=0.3), dict(t=compare['tAir'], f='pop', v=0.3),
+        dict(t=round(P - 0.15, 3), f='swoosh', v=0.38), dict(t=round(P + 0.5, 3), f='pop', v=0.3), dict(t=round(P + 0.75, 3), f='pop', v=0.3),
+        dict(t=round(P + 1.4, 3), f='click', v=0.38), dict(t=round(P + 2.3, 3), f='blip', v=0.3), dict(t=round(P + 2.9, 3), f='click', v=0.3),
+        dict(t=round(outro - 0.15, 3), f='swoosh', v=0.4)]
+data = dict(duration=round(outro + 2.3, 2), outroAt=outro, segs=segs, words=words, mock=mock, zchips=zchips, compare=compare, poll=poll,
             sfx=sorted(sfx, key=lambda e: e['t']), hook=dict(end=2.4, tag='2 PRUEBAS', text='en el parque, sin tecnicismos'),
             pri0=dict(clip='pri0.mp4', cut='pri0_cut.webm', startFrom=5), pri1=dict(clip='pri1.mp4', cut='pri1_cut.webm', startFrom=0))
 json.dump(data, open('reel/src/data.json', 'w'), ensure_ascii=False, indent=1)
