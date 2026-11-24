@@ -3,6 +3,9 @@ import {api, claudeApi} from './api.js';
 
 const PLANTILLA = `Editá el video de esta pieza: [link a la ficha en Notion].
 Material: [link de Drive] (excluir […]). Formato 9:16, 15 s.`;
+const MODELOS = [['sonnet', 'Sonnet (recomendado: rinde más el plan)'], ['opus', 'Opus (el más capaz, gasta más)'],
+  ['haiku', 'Haiku (el más liviano, para cambios chicos)'], ['cuenta', 'El de la cuenta']];
+const leerModelo = () => { try { return localStorage.getItem('editor.modelo') || 'sonnet'; } catch { return 'sonnet'; } };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // Pedido (sin proyecto: brief → reel nuevo) o Cambios (sobre el proyecto abierto, en la misma sesión de Claude)
@@ -15,6 +18,8 @@ export function Claude({p, t, recargar, alTerminar}) {
   const [error, setError] = useState('');
   const [presets, setPresets] = useState([]);
   const [marca, setMarca] = useState('');
+  const [modelo, setModelo] = useState(leerModelo);
+  const elegirModelo = (m) => { setModelo(m); try { localStorage.setItem('editor.modelo', m); } catch { /* sin storage */ } };
   const fuente = useRef(null), caja = useRef(null), area = useRef(null), ultimoRefresco = useRef(0);
 
   const conectar = () => {
@@ -42,7 +47,7 @@ export function Claude({p, t, recargar, alTerminar}) {
 
   const enviar = async () => {
     setError('');
-    try { await claudeApi.iniciar(modo, p?.id, texto, marca || undefined); setTexto(''); conectar(); } catch (e) { setError(e.message); }
+    try { await claudeApi.iniciar(modo, p?.id, texto, marca || undefined, modelo); setTexto(''); conectar(); } catch (e) { setError(e.message); }
   };
   const insertarTiempo = () => {
     const a = area.current, marca = `${mmss(t)} — `;
@@ -81,6 +86,8 @@ export function Claude({p, t, recargar, alTerminar}) {
           {modo === 'pedido' ? 'Editar con Claude' : 'Pedir cambios'}</button>
         {modo === 'cambios' && <button disabled={corriendo} onClick={insertarTiempo}>Insertar tiempo ({mmss(t)})</button>}
         {corriendo && <button onClick={() => claudeApi.parar()}>Parar</button>}
+        <label className="modelo">Modelo <select value={modelo} onChange={(e) => elegirModelo(e.target.value)} disabled={corriendo}>
+          {MODELOS.map(([k, n]) => <option key={k} value={k}>{n}</option>)}</select></label>
         <span className="sub">{estado?.version ? `Claude Code ${estado.version.split(' ')[0]}` : ''}</span>
       </div>
       {error && <div className="aviso error">{error}</div>}
@@ -110,7 +117,7 @@ function Evento({ev}) {
   if (ev.tipo === 'fin') {
     return (
       <div className={'ev fin ' + (ev.ok ? 'ok' : 'error')}>
-        {ev.ok ? 'Listo' : 'Terminó con error'}{ev.segundos ? ` · ${ev.segundos} s` : ''}{ev.costo != null ? ` · US$ ${ev.costo.toFixed(2)}${ev.continua ? ' acumulado del proyecto' : ''}` : ''}
+        {ev.ok ? 'Listo' : 'Terminó con error'}{ev.segundos ? ` · ${ev.segundos} s` : ''}{ev.costo != null ? ` · US$ ${ev.costo.toFixed(2)}${ev.continua ? ' acumulado del proyecto' : ''}` : ''}{ev.modelos?.length ? ` · ${ev.modelos.map((x) => x.replace(/^claude-/, '')).join(', ')}` : ''}
         {ev.error && <pre>{ev.error}</pre>}
         {ev.denegados?.length > 0 && <div>Acciones que necesitaban permiso y no se hicieron: <ul>{ev.denegados.map((d, i) => <li key={i}><code>{d}</code></li>)}</ul></div>}
       </div>

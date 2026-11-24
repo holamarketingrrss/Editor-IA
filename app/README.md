@@ -36,7 +36,10 @@ tokens por modelo: `python3 scripts/uso.py proyectos/<id>` (sin argumento: todos
 el login de claude.ai no se cobra aparte, pero cuenta para los límites del plan.
 
 Permisos: corre en modo `auto` (aprueba lo seguro; lo que necesite permiso se deniega y la app lo lista al final).
-Variables opcionales al lanzar la app: `EDITOR_CLAUDE_MODELO` (por ej. `sonnet`; vacío = el de la cuenta) y
+Modelo: selector en la pestaña Claude (Sonnet por defecto, Opus, Haiku o el de la cuenta); la app recuerda la última
+elección y el registro dice con qué modelo corrió. Sonnet rinde bastante más el plan que Opus. Cambiar de modelo dentro
+de un proyecto hace que el siguiente pedido no aproveche la caché del anterior (la caché es por modelo).
+Variables opcionales al lanzar la app: `EDITOR_CLAUDE_MODELO` (default si la app no manda uno) y
 `EDITOR_CLAUDE_PERMISOS` (`auto`, `acceptEdits`, `dontAsk`). Las instrucciones extra para Claude están en `server/prompt_app.md`.
 
 Lista los proyectos de `proyectos/` hechos con la plantilla (no los marcados con `reel/src/.propia`).

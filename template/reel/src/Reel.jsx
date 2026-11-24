@@ -160,10 +160,18 @@ function armar(data, brand, base) {
     const text = SUB.animacion === 'maquina'
       ? w.text.slice(0, Math.max(1, Math.ceil(w.text.length * interpolate(frame, [0, Math.max(4, Math.min(dur * 0.6, 10))], [0, 1], clamp))))
       : w.text;
+    // destacado "brillo": resplandor del color de la palabra que se enciende y late suave, con un rebote extra al entrar
+    let brillo = {}, extra = 1;
+    if (w.destacado && SUB.efectoDestacado === 'brillo') {
+      const prende = interpolate(frame, [0, 6, 12], [0, 1.25, 1], clamp) * (1 + 0.12 * Math.sin(frame / 3.5));
+      const r = Math.round(w.size * 0.09 * prende), r2 = Math.round(w.size * 0.22 * prende);
+      brillo = {textShadow: `0 0 ${r}px ${color}, 0 0 ${r2}px ${color}, 0 4px 14px rgba(0,0,0,.55)`};
+      extra = 1 + 0.06 * spring({frame: frame - 2, fps, config: {damping: 7, stiffness: 260, mass: 0.5}}) * Math.max(0, 1 - frame / 18);
+    }
     return (
       <div style={{
-        position: 'absolute', left: w.x, top: w.y, transform: `translate(-50%,-50%) translateY(${a.y}px) rotate(${a.r}deg) scale(${a.s})`,
-        opacity: a.o * out, color, fontSize: w.size, whiteSpace: 'nowrap', ...FONT[w.font], ...legible(color, w.size),
+        position: 'absolute', left: w.x, top: w.y, transform: `translate(-50%,-50%) translateY(${a.y}px) rotate(${a.r}deg) scale(${a.s * extra})`,
+        opacity: a.o * out, color, fontSize: w.size, whiteSpace: 'nowrap', ...FONT[w.font], ...legible(color, w.size), ...brillo,
       }}>{text}</div>
     );
   };

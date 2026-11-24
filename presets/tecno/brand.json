@@ -1,0 +1,21 @@
+{
+ "nombre": "TECNO",
+ "handle": "@tecnomorenooficial",
+ "logo": "tecno-logo-provisorio.png",
+ "colores": {
+  "texto": "#FFFFFF",
+  "negro": "#0B0B0F",
+  "grafito": "#1C1C22",
+  "azul": "#3D8BFF",
+  "cian": "#5CE1E6",
+  "blanco": "#FFFFFF"
+ },
+ "acentos": ["cian", "azul"],
+ "fuentes": {
+  "G": {"familia": "DM Sans", "archivo": "dm-sans-latin-900-normal.woff2", "peso": 900, "mayusculas": false, "interlineado": 1, "espaciado": -2, "ancho": 0.55, "respaldo": "Arial, sans-serif"},
+  "B": {"familia": "DM Sans", "archivo": "dm-sans-latin-700-normal.woff2", "peso": 700, "mayusculas": false, "interlineado": 1, "espaciado": -1, "ancho": 0.54, "respaldo": "Arial, sans-serif"},
+  "S": {"familia": "DM Sans", "archivo": "dm-sans-latin-700-normal.woff2", "peso": 700, "mayusculas": true, "interlineado": 1, "espaciado": 2, "ancho": 0.64, "respaldo": "Arial, sans-serif"},
+  "K": {"familia": "DM Sans", "archivo": "dm-sans-latin-500-normal.woff2", "peso": 500, "mayusculas": false, "interlineado": 1, "espaciado": 0, "ancho": 0.51, "respaldo": "Arial, sans-serif"}
+ },
+ "outro": {"fondo": "negro", "fuenteHandle": "S", "colorHandle": "texto"}
+}

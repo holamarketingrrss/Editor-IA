@@ -40,6 +40,9 @@ con el design system y avisalo en la entrega.
   resuelto). Los scripts empujan el texto a la zona segura 9:16 solos. La composición vive en `template/reel/src/Reel.jsx` (la registra `index.jsx` y la usa la app);
   `scripts/sync_reel.sh` (lo corren stills y render) la copia a cada proyecto. `proyectos/lujis-thanksgiving` es el ejemplo
   histórico (scripts y composición propios, marcado con `reel/src/.propia`).
+- Atajos de un paso (menos tokens): `scripts/material.sh <p>` (miniaturas de inventario.tsv o raw/ + hojas + catálogo) y
+  `scripts/armar.sh <p> [--stills]` (baja las tomas del EDL que falten, make_words, make_clips, zona segura y stills).
+  `python3 scripts/uso.py --pasos <p>` muestra qué cargó el contexto en cada paso.
 - Drive: listar con el conector; descargar videos con `scripts/drive_get.sh` (partes de 16 MB).
   No pedir archivos completos en paralelo: Drive bloquea la descarga por cupo. Miniaturas con
   `scripts/thumb_head.sh`, de a 4 en paralelo como máximo.

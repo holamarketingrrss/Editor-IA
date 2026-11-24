@@ -9,4 +9,4 @@ while [ $s -lt $size ]; do
   [ "$(stat -c%s "$out.chunk")" = "$((e-s+1))" ] || { echo "FALLO $id en $s"; rm -f "$out.chunk"; exit 1; }
   cat "$out.chunk" >> "$out.part"; s=$((e+1))
 done
-rm -f "$out.chunk"; mv "$out.part" "$out"; echo "OK $(basename $out)"
+rm -f "$out.chunk"; mv "$out.part" "$out"; echo "OK $(basename "$out")"

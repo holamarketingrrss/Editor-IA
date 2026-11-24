@@ -1,0 +1,49 @@
+{
+ "marca": "TECNO",
+ "designSystem": null,
+ "driveMadre": "https://drive.google.com/drive/folders/1JIbj8GVhH6VadG9cqIQLjOmS_dDmNuYk",
+ "voz": {
+  "tipo": "propia",
+  "nota": "La marca graba su voz (Priscila a cámara): la voz sale de las tomas con scripts/transcribir_tomas.sh y scripts/voz_tomas.sh, no de ElevenLabs."
+ },
+ "notas": [
+  "PROVISORIO: no hay design system de TECNO en esta cuenta. Colores (negro, azul, cian) y logo (TECNO en DM Sans) son provisorios hasta tener los oficiales; los logos reales están en Drive madre › Logos.",
+  "Tipografía: DM Sans (la que usa la agencia). Subtítulos palabra por palabra; destacadas más grandes (DM Sans Black) con brillo y rebote sutil: estética moderna y tecnológica.",
+  "Reels de persona a cámara: elegí tomas con transcribir_tomas.sh (descartá repeticiones y tomas falladas), cortá entre frases y armá la voz con voz_tomas.sh (limpia ruido y realza). Priscila al frente la mayor parte del video; tomas de producto como apoyo.",
+  "Material de cámara 4K horizontal (XAVC): el editor recorta a 9:16; si la persona no queda centrada, usá la 5.ª columna del EDL (objectPosition, ej. '35% 50%')."
+ ],
+ "estrategia": [
+  "Venta de productos Apple nuevos y usados en Moreno (Buenos Aires), con financiamiento y toma de usados como parte de pago (Plan Canje).",
+  "Posicionamiento: la opción local confiable para acceder a Apple; vende acceso, confianza y soluciones, sin endeudarse de forma agresiva. Objetivo: ventas y financiamiento (60% ventas / 40% confianza y educación).",
+  "Pilares: acceso a Apple · nuevos vs. usados · qué conviene según presupuesto · financiamiento claro · parte de pago paso a paso · prueba social local · experiencia en el local · producto protagonista (unboxings, reviews) · atención personalizada.",
+  "Público: 20 a 40 años que necesitan renovar equipo y buscan cuotas o entregar su usado; dolores: no pagar de contado, desconfianza en usados, no entender el financiamiento.",
+  "Tono: cercano, confiable, moderno, claro y sin tecnicismos; explicar como a un amigo y bajar siempre a acción ('te explico', 'consultame').",
+  "No negociables: no prometer cuotas, transparencia total en usados, no ocultar condiciones, priorizar la confianza."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › TECNO › Estrategia (resumen del 24/11/2026)",
+ "estilo": {
+  "subtitulos": {
+   "modo": "palabra",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "G",
+   "color": "blanco",
+   "legibilidad": "sombra",
+   "animacion": "pop",
+   "efectoDestacado": "brillo",
+   "escalaDestacado": 1.15
+  },
+  "camara": "no",
+  "transicion": {
+   "tipo": "corte"
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
+  "animacionLogo": "fade",
+  "look": "original",
+  "vineta": false,
+  "audioOriginal": "mute"
+ }
+}

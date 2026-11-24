@@ -23,7 +23,7 @@ export const api = {
 
 export const claudeApi = {
   estado: () => pedir('/api/claude/estado'),
-  iniciar: (modo, p, texto, marca) => post('/api/claude/iniciar', {modo, p, texto, marca}),
+  iniciar: (modo, p, texto, marca, modelo) => post('/api/claude/iniciar', {modo, p, texto, marca, modelo}),
   parar: () => post('/api/claude/parar', {}),
   eventos: () => new EventSource('/api/claude/eventos'),
 };

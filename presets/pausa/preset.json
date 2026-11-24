@@ -1,7 +1,11 @@
 {
  "marca": "PAUSA",
  "designSystem": "https://claude.ai/artifact/3oRveHBXCUShLi9oDg6YLw",
- "voz": {"voice_id": "YLtqUTaEXb7a9MAYuJu4", "nombre": "Julieta", "nota": "mujer rioplatense, cálida y pausada, sin tono de venta"},
+ "voz": {
+  "voice_id": "YLtqUTaEXb7a9MAYuJu4",
+  "nombre": "Julieta",
+  "nota": "mujer rioplatense, cálida y pausada, sin tono de venta"
+ },
  "notas": [
   "Skincare natural y simple: cada pieza tiene que sentirse tranquila, cercana y luminosa, nunca agresiva ni de oferta.",
   "Español rioplatense con voseo, frases cortas, sin exclamaciones de venta. Sin precios ni promociones en piezas de marca o contenido.",
@@ -11,13 +15,37 @@
   "Helvetica Now (texto) no está: se usa Arimo, equivalente libre de Helvetica/Arial. Titulares en Playfair Display; frases destacadas en Playfair itálica (K)."
  ],
  "estilo": {
-  "subtitulos": {"modo": "grupo", "posicion": "abajo", "tipografias": "texto+destacados", "fuente": "B", "fuenteDestacado": "K",
-                 "color": "blanco", "legibilidad": "sombra", "animacion": "fade"},
+  "subtitulos": {
+   "modo": "grupo",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "K",
+   "color": "blanco",
+   "legibilidad": "sombra",
+   "animacion": "fade"
+  },
   "camara": "pushin",
-  "transicion": {"tipo": "fundido", "dur": 0.4},
-  "cierre": {"tipo": "logo"},
+  "transicion": {
+   "tipo": "fundido",
+   "dur": 0.4
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
   "animacionLogo": "fade",
   "look": "original",
   "vineta": false
- }
+ },
+ "driveMadre": "https://drive.google.com/drive/folders/1cWSwXfws5N4jZNTtZvP85zI_M3zTTTPV",
+ "estrategia": [
+  "Crema hidratante 100% nacional, vegana y no comedogénica (producto central); Box PAUSA como secundario. Mercado: Argentina.",
+  "Posicionamiento: skincare minimalista, sensible y premium humano: 'menos, pero mejor'. Objetivo: consolidar posicionamiento + conversión web (40% marca / 40% ventas / 20% comunidad).",
+  "Pilares: skincare simple y consciente · lifestyle y bienestar (rituales, calma) · prueba social y UGC (reviews, testimonios reales) · ciencia y formulación consciente · identidad y universo PAUSA (producción local, comunidad).",
+  "Público: mujeres de 24 a 45, piel sensible o deshidratada, cansadas de rutinas largas y del exceso de productos; también embarazadas o con cambios hormonales.",
+  "Tono: cercano, claro, premium, humano, elegante, minimalista; educativo, no médico; inspirador sin exageración.",
+  "No negociables: no prometer curas dermatológicas, no compararse agresivamente con otras marcas, no usar el miedo para vender, transparencia total en ingredientes y beneficios.",
+  "Ritmo: 3 posteos por semana (reels y carruseles)."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › PAUSA › Estrategia (resumen del 24/11/2026)"
 }

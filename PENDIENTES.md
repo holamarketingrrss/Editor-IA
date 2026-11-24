@@ -23,3 +23,17 @@
 - **Fuente script de LUJI'S:** Avallon no viene en el design system → **Kaushan Script** (aprobada 24/11/2026), en `presets/lujis`.
 
 - **Helvetica Now de PAUSA (comercial):** se usa Arimo (libre, mismas métricas que Arial) hasta tener los archivos.
+
+## Ahorro de tokens (24/11/2026)
+
+- App: `claude -p` con `--tools Bash,Read,Edit,Write,Glob,Grep,ToolSearch` y `--exclude-dynamic-system-prompt-sections`: base de ~42k → ~12k tokens por paso (medido).
+- Receta en `app/server/prompt_app.md` + `material.sh` y `armar.sh` de un paso + tiempos de voz en la salida de `voz.sh` + estrategia y Drive madre en cada preset (no se relee Notion).
+- Prueba sin conectores (Sonnet): 11 respuestas, 181k tokens, US$ 0,11. Antes, un reel real con Opus: 28 respuestas, 2,85 M, US$ 1,79. Falta medir un pedido real completo en una compu del equipo y confirmar que los conectores siguen cargando con `--tools`.
+
+## Prueba TECNO (24/11/2026, prompt real de la agencia)
+
+- Reel de persona a cámara: `transcribir_tomas.sh` (elige tomas leyendo texto) + `voz_tomas.sh` (voz limpia desde las tomas) + destacados con brillo (`efectoDestacado`, `escalaDestacado`).
+- Miniaturas de archivos XAVC (índice al final) sin bajarlos enteros: `thumb_head.sh` con principio + final del archivo.
+- Costo con Sonnet: 13 respuestas, 307k tokens, US$ 0,21 (sin las llamadas a Notion y Drive, que en la prueba eran archivos). Render: -14,1 LUFS / -1,4 dBTP.
+- Preset `tecno` PROVISORIO: colores y logo inventados (no hay design system en esta cuenta). Faltan los oficiales.
+- Mejorar: tiempos de whisper por frase son gruesos (segundos enteros) para cortar entre frases.
