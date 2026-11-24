@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "preeditor": "node scripts/deps.mjs",
     "editor": "vite --open",
+    "preequipo": "node scripts/deps.mjs",
     "equipo": "vite --host 0.0.0.0",
     "dev": "vite"
   },
