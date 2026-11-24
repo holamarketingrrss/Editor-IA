@@ -1,0 +1,410 @@
+[
+ {
+  "file": "C4730.MP4",
+  "win": [
+   0.0,
+   7.3
+  ],
+  "kind": "pri",
+  "words": [
+   {
+    "text": "voy",
+    "key": false,
+    "start": 0.602,
+    "end": 0.702,
+    "score": 0.33
+   },
+   {
+    "text": "a",
+    "key": false,
+    "start": 0.722,
+    "end": 0.742,
+    "score": 0.89
+   },
+   {
+    "text": "caminar",
+    "key": false,
+    "start": 0.782,
+    "end": 1.103,
+    "score": 0.95
+   },
+   {
+    "text": "un",
+    "key": false,
+    "start": 1.123,
+    "end": 1.183,
+    "score": 0.66
+   },
+   {
+    "text": "poco",
+    "key": false,
+    "start": 1.203,
+    "end": 1.384,
+    "score": 0.77
+   },
+   {
+    "text": "a",
+    "key": false,
+    "start": 1.444,
+    "end": 1.464,
+    "score": 0.61
+   },
+   {
+    "text": "ver",
+    "key": false,
+    "start": 1.564,
+    "end": 1.845,
+    "score": 0.01
+   },
+   {
+    "text": "avísame",
+    "key": false,
+    "start": 3.149,
+    "end": 3.53,
+    "score": 0.85
+   },
+   {
+    "text": "Hagamos",
+    "key": false,
+    "start": 4.633,
+    "end": 4.994,
+    "score": 0.76
+   },
+   {
+    "text": "dos pruebas",
+    "key": true,
+    "start": 5.054,
+    "end": 5.495,
+    "score": 0.56
+   },
+   {
+    "text": "rápidas",
+    "key": false,
+    "start": 5.515,
+    "end": 5.856,
+    "score": 0.44
+   },
+   {
+    "text": "con",
+    "key": false,
+    "start": 5.896,
+    "end": 6.016,
+    "score": 0.53
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 6.037,
+    "end": 6.137,
+    "score": 0.69
+   },
+   {
+    "text": "iPhone 18 Pro.",
+    "key": true,
+    "start": 6.157,
+    "end": 7.039,
+    "score": 0.7
+   }
+  ]
+ },
+ {
+  "file": "VO1.ogg",
+  "win": [
+   0.0,
+   9.87
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "Primero,",
+    "key": true,
+    "start": 0.601,
+    "end": 0.981,
+    "score": 1.0
+   },
+   {
+    "text": "desde",
+    "key": false,
+    "start": 1.122,
+    "end": 1.342,
+    "score": 1.0
+   },
+   {
+    "text": "este",
+    "key": false,
+    "start": 1.402,
+    "end": 1.582,
+    "score": 0.95
+   },
+   {
+    "text": "mismo lugar,",
+    "key": true,
+    "start": 1.622,
+    "end": 2.163,
+    "score": 1.0
+   },
+   {
+    "text": "mirá",
+    "key": false,
+    "start": 2.383,
+    "end": 2.584,
+    "score": 1.0
+   },
+   {
+    "text": "cómo",
+    "key": false,
+    "start": 2.684,
+    "end": 2.884,
+    "score": 1.0
+   },
+   {
+    "text": "se",
+    "key": false,
+    "start": 2.944,
+    "end": 3.044,
+    "score": 1.0
+   },
+   {
+    "text": "ve",
+    "key": false,
+    "start": 3.084,
+    "end": 3.164,
+    "score": 0.77
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 3.204,
+    "end": 3.244,
+    "score": 0.29
+   },
+   {
+    "text": "detalle",
+    "key": true,
+    "start": 3.325,
+    "end": 3.745,
+    "score": 0.91
+   },
+   {
+    "text": "en",
+    "key": false,
+    "start": 4.486,
+    "end": 4.566,
+    "score": 0.93
+   },
+   {
+    "text": "por uno,",
+    "key": true,
+    "start": 4.626,
+    "end": 5.027,
+    "score": 0.49
+   },
+   {
+    "text": "después",
+    "key": false,
+    "start": 6.028,
+    "end": 6.369,
+    "score": 0.61
+   },
+   {
+    "text": "por cuatro",
+    "key": true,
+    "start": 6.529,
+    "end": 7.11,
+    "score": 0.14
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 7.711,
+    "end": 7.731,
+    "score": 0.79
+   },
+   {
+    "text": "en",
+    "key": false,
+    "start": 7.891,
+    "end": 8.031,
+    "score": 0.57
+   },
+   {
+    "text": "por ocho.",
+    "key": true,
+    "start": 8.131,
+    "end": 8.612,
+    "score": 0.38
+   }
+  ]
+ },
+ {
+  "file": "VO2.ogg",
+  "win": [
+   0.0,
+   12.57
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "Ahora",
+    "key": false,
+    "start": 1.081,
+    "end": 1.361,
+    "score": 0.99
+   },
+   {
+    "text": "pasamos",
+    "key": false,
+    "start": 1.502,
+    "end": 1.922,
+    "score": 1.0
+   },
+   {
+    "text": "a",
+    "key": false,
+    "start": 1.962,
+    "end": 1.982,
+    "score": 0.99
+   },
+   {
+    "text": "la",
+    "key": false,
+    "start": 2.022,
+    "end": 2.082,
+    "score": 0.99
+   },
+   {
+    "text": "cámara frontal.",
+    "key": true,
+    "start": 2.122,
+    "end": 2.943,
+    "score": 1.0
+   },
+   {
+    "text": "Con",
+    "key": false,
+    "start": 3.023,
+    "end": 3.183,
+    "score": 0.99
+   },
+   {
+    "text": "Center Stage",
+    "key": true,
+    "start": 3.264,
+    "end": 4.104,
+    "score": 0.32
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 4.104,
+    "end": 4.465,
+    "score": 0.58
+   },
+   {
+    "text": "encuadre",
+    "key": false,
+    "start": 4.505,
+    "end": 5.005,
+    "score": 0.48
+   },
+   {
+    "text": "puede",
+    "key": false,
+    "start": 5.146,
+    "end": 5.326,
+    "score": 0.1
+   },
+   {
+    "text": "adaptarse",
+    "key": false,
+    "start": 5.366,
+    "end": 5.906,
+    "score": 0.05
+   },
+   {
+    "text": "para",
+    "key": false,
+    "start": 6.087,
+    "end": 6.287,
+    "score": 0.03
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 8.369,
+    "end": 8.449,
+    "score": 0.86
+   },
+   {
+    "text": "encuadre",
+    "key": true,
+    "start": 8.489,
+    "end": 8.89,
+    "score": 0.99
+   },
+   {
+    "text": "puede",
+    "key": false,
+    "start": 9.01,
+    "end": 9.15,
+    "score": 0.97
+   },
+   {
+    "text": "adaptarse",
+    "key": true,
+    "start": 9.17,
+    "end": 9.65,
+    "score": 0.98
+   },
+   {
+    "text": "para",
+    "key": false,
+    "start": 9.831,
+    "end": 10.011,
+    "score": 0.99
+   },
+   {
+    "text": "que",
+    "key": false,
+    "start": 10.071,
+    "end": 10.151,
+    "score": 0.97
+   },
+   {
+    "text": "entre",
+    "key": false,
+    "start": 10.231,
+    "end": 10.431,
+    "score": 1.0
+   },
+   {
+    "text": "más gente",
+    "key": true,
+    "start": 10.551,
+    "end": 11.072,
+    "score": 0.99
+   },
+   {
+    "text": "en",
+    "key": false,
+    "start": 11.192,
+    "end": 11.272,
+    "score": 1.0
+   },
+   {
+    "text": "la",
+    "key": false,
+    "start": 11.312,
+    "end": 11.372,
+    "score": 1.0
+   },
+   {
+    "text": "selfie.",
+    "key": true,
+    "start": 11.452,
+    "end": 11.773,
+    "score": 0.92
+   }
+  ]
+ }
+]

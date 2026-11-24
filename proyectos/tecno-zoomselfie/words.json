@@ -1,0 +1,371 @@
+[
+ {
+  "text": "Hagamos",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.03,
+  "wend": 0.391,
+  "end": 0.451
+ },
+ {
+  "text": "dos pruebas",
+  "key": true,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.451,
+  "wend": 0.892,
+  "end": 0.912
+ },
+ {
+  "text": "rápidas",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.912,
+  "wend": 1.253,
+  "end": 1.293
+ },
+ {
+  "text": "con",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.293,
+  "wend": 1.413,
+  "end": 1.434
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.434,
+  "wend": 1.534,
+  "end": 1.554
+ },
+ {
+  "text": "iPhone 18 Pro.",
+  "key": true,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.554,
+  "wend": 2.436,
+  "end": 2.607
+ },
+ {
+  "text": "Primero,",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 2.607,
+  "wend": 2.987,
+  "end": 3.128
+ },
+ {
+  "text": "desde",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 3.128,
+  "wend": 3.348,
+  "end": 3.408
+ },
+ {
+  "text": "este",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 3.408,
+  "wend": 3.588,
+  "end": 3.628
+ },
+ {
+  "text": "mismo lugar,",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 3.628,
+  "wend": 4.169,
+  "end": 4.389
+ },
+ {
+  "text": "mirá",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 4.389,
+  "wend": 4.59,
+  "end": 4.69
+ },
+ {
+  "text": "cómo",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 4.69,
+  "wend": 4.89,
+  "end": 4.95
+ },
+ {
+  "text": "se",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 4.95,
+  "wend": 5.05,
+  "end": 5.09
+ },
+ {
+  "text": "ve",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.09,
+  "wend": 5.17,
+  "end": 5.21
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.21,
+  "wend": 5.25,
+  "end": 5.331
+ },
+ {
+  "text": "detalle",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.331,
+  "wend": 5.751,
+  "end": 6.061
+ },
+ {
+  "text": "en",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.061,
+  "wend": 6.141,
+  "end": 6.201
+ },
+ {
+  "text": "1x",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.201,
+  "wend": 6.602,
+  "end": 6.912
+ },
+ {
+  "text": "después",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.912,
+  "wend": 7.253,
+  "end": 7.413
+ },
+ {
+  "text": "4x",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 7.413,
+  "wend": 7.994,
+  "end": 8.304
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 8.304,
+  "wend": 8.324,
+  "end": 8.484
+ },
+ {
+  "text": "en",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 8.484,
+  "wend": 8.624,
+  "end": 8.724
+ },
+ {
+  "text": "8x",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 8.724,
+  "wend": 9.205,
+  "end": 9.555
+ },
+ {
+  "text": "Ahora",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 9.845,
+  "wend": 10.125,
+  "end": 10.266
+ },
+ {
+  "text": "pasamos",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 10.266,
+  "wend": 10.686,
+  "end": 10.726
+ },
+ {
+  "text": "a",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 10.726,
+  "wend": 10.746,
+  "end": 10.786
+ },
+ {
+  "text": "la",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 10.786,
+  "wend": 10.846,
+  "end": 10.886
+ },
+ {
+  "text": "cámara frontal.",
+  "key": true,
+  "seg": 2,
+  "kind": "vo",
+  "start": 10.886,
+  "wend": 11.707,
+  "end": 11.787
+ },
+ {
+  "text": "Con",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 11.787,
+  "wend": 11.947,
+  "end": 12.028
+ },
+ {
+  "text": "Center Stage",
+  "key": true,
+  "seg": 2,
+  "kind": "vo",
+  "start": 12.028,
+  "wend": 12.868,
+  "end": 13.024
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.024,
+  "wend": 13.104,
+  "end": 13.144
+ },
+ {
+  "text": "encuadre",
+  "key": true,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.144,
+  "wend": 13.545,
+  "end": 13.665
+ },
+ {
+  "text": "puede",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.665,
+  "wend": 13.805,
+  "end": 13.825
+ },
+ {
+  "text": "adaptarse",
+  "key": true,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.825,
+  "wend": 14.305,
+  "end": 14.486
+ },
+ {
+  "text": "para",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 14.486,
+  "wend": 14.666,
+  "end": 14.726
+ },
+ {
+  "text": "que",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 14.726,
+  "wend": 14.806,
+  "end": 14.886
+ },
+ {
+  "text": "entre",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 14.886,
+  "wend": 15.086,
+  "end": 15.206
+ },
+ {
+  "text": "más gente",
+  "key": true,
+  "seg": 3,
+  "kind": "vo",
+  "start": 15.206,
+  "wend": 15.727,
+  "end": 15.847
+ },
+ {
+  "text": "en",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 15.847,
+  "wend": 15.927,
+  "end": 15.967
+ },
+ {
+  "text": "la",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 15.967,
+  "wend": 16.027,
+  "end": 16.107
+ },
+ {
+  "text": "selfie.",
+  "key": true,
+  "seg": 3,
+  "kind": "vo",
+  "start": 16.107,
+  "wend": 16.428,
+  "end": 16.588
+ }
+]

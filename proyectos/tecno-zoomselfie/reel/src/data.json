@@ -1,0 +1,720 @@
+{
+ "duration": 23.29,
+ "outroAt": 20.988,
+ "segs": [
+  {
+   "i": 0,
+   "file": "C4730.MP4",
+   "kind": "pri",
+   "start": 0.0,
+   "end": 2.497,
+   "s0": 4.603,
+   "s1": 7.1
+  },
+  {
+   "i": 1,
+   "file": "VO1.ogg",
+   "kind": "vo",
+   "start": 2.577,
+   "end": 9.285,
+   "s0": 0.571,
+   "s1": null
+  },
+  {
+   "i": 2,
+   "file": "VO2.ogg",
+   "kind": "vo",
+   "start": 9.815,
+   "end": 12.914,
+   "s0": 1.051,
+   "s1": 4.15
+  },
+  {
+   "i": 3,
+   "file": "VO2.ogg",
+   "kind": "vo",
+   "start": 12.994,
+   "end": 16.508,
+   "s0": 8.339,
+   "s1": null
+  }
+ ],
+ "words": [
+  {
+   "text": "Hagamos",
+   "key": false,
+   "seg": 0,
+   "kind": "pri",
+   "start": 0.03,
+   "wend": 0.391,
+   "end": 0.451,
+   "x": 330,
+   "y": 1180,
+   "entry": "left"
+  },
+  {
+   "text": "dos pruebas",
+   "key": true,
+   "seg": 0,
+   "kind": "pri",
+   "start": 0.451,
+   "wend": 0.892,
+   "end": 0.912,
+   "x": 540,
+   "y": 1440,
+   "entry": "down"
+  },
+  {
+   "text": "rápidas",
+   "key": false,
+   "seg": 0,
+   "kind": "pri",
+   "start": 0.912,
+   "wend": 1.253,
+   "end": 1.293,
+   "x": 300,
+   "y": 1330,
+   "entry": "up"
+  },
+  {
+   "text": "con",
+   "key": false,
+   "seg": 0,
+   "kind": "pri",
+   "start": 1.293,
+   "wend": 1.413,
+   "end": 1.434,
+   "x": 780,
+   "y": 1170,
+   "entry": "up"
+  },
+  {
+   "text": "el",
+   "key": false,
+   "seg": 0,
+   "kind": "pri",
+   "start": 1.434,
+   "wend": 1.534,
+   "end": 1.554,
+   "x": 540,
+   "y": 1240,
+   "entry": "zoom"
+  },
+  {
+   "text": "iPhone 18 Pro.",
+   "key": true,
+   "seg": 0,
+   "kind": "pri",
+   "start": 1.554,
+   "wend": 2.436,
+   "end": 2.607,
+   "x": 540,
+   "y": 1440,
+   "entry": "left"
+  },
+  {
+   "text": "Primero,",
+   "key": true,
+   "seg": 1,
+   "kind": "vo",
+   "start": 2.607,
+   "wend": 2.987,
+   "end": 3.128,
+   "x": 540,
+   "y": 1440,
+   "entry": "left"
+  },
+  {
+   "text": "desde",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 3.128,
+   "wend": 3.348,
+   "end": 3.408,
+   "x": 760,
+   "y": 320,
+   "entry": "down"
+  },
+  {
+   "text": "este",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 3.408,
+   "wend": 3.588,
+   "end": 3.628,
+   "x": 540,
+   "y": 290,
+   "entry": "up"
+  },
+  {
+   "text": "mismo lugar,",
+   "key": true,
+   "seg": 1,
+   "kind": "vo",
+   "start": 3.628,
+   "wend": 4.169,
+   "end": 4.389,
+   "x": 540,
+   "y": 1440,
+   "entry": "up"
+  },
+  {
+   "text": "mirá",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 4.389,
+   "wend": 4.59,
+   "end": 4.69,
+   "x": 780,
+   "y": 300,
+   "entry": "zoom"
+  },
+  {
+   "text": "cómo",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 4.69,
+   "wend": 4.89,
+   "end": 4.95,
+   "x": 330,
+   "y": 300,
+   "entry": "left"
+  },
+  {
+   "text": "se",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 4.95,
+   "wend": 5.05,
+   "end": 5.09,
+   "x": 760,
+   "y": 320,
+   "entry": "right"
+  },
+  {
+   "text": "ve",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 5.09,
+   "wend": 5.17,
+   "end": 5.21,
+   "x": 540,
+   "y": 290,
+   "entry": "right"
+  },
+  {
+   "text": "el",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 5.21,
+   "wend": 5.25,
+   "end": 5.331,
+   "x": 300,
+   "y": 330,
+   "entry": "left"
+  },
+  {
+   "text": "detalle",
+   "key": true,
+   "seg": 1,
+   "kind": "vo",
+   "start": 5.331,
+   "wend": 5.751,
+   "end": 6.061,
+   "x": 540,
+   "y": 1440,
+   "entry": "down"
+  },
+  {
+   "text": "en",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 6.061,
+   "wend": 6.141,
+   "end": 6.201,
+   "x": 330,
+   "y": 300,
+   "entry": "up"
+  },
+  {
+   "text": "1x",
+   "key": true,
+   "seg": 1,
+   "kind": "vo",
+   "start": 6.201,
+   "wend": 6.602,
+   "end": 6.912,
+   "x": 540,
+   "y": 1440,
+   "entry": "up"
+  },
+  {
+   "text": "después",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 6.912,
+   "wend": 7.253,
+   "end": 7.413,
+   "x": 540,
+   "y": 290,
+   "entry": "zoom"
+  },
+  {
+   "text": "4x",
+   "key": true,
+   "seg": 1,
+   "kind": "vo",
+   "start": 7.413,
+   "wend": 7.994,
+   "end": 8.304,
+   "x": 540,
+   "y": 1440,
+   "entry": "left"
+  },
+  {
+   "text": "y",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 8.304,
+   "wend": 8.324,
+   "end": 8.484,
+   "x": 780,
+   "y": 300,
+   "entry": "right"
+  },
+  {
+   "text": "en",
+   "key": false,
+   "seg": 1,
+   "kind": "vo",
+   "start": 8.484,
+   "wend": 8.624,
+   "end": 8.724,
+   "x": 330,
+   "y": 300,
+   "entry": "right"
+  },
+  {
+   "text": "8x",
+   "key": true,
+   "seg": 1,
+   "kind": "vo",
+   "start": 8.724,
+   "wend": 9.205,
+   "end": 9.555,
+   "x": 540,
+   "y": 1440,
+   "entry": "left"
+  },
+  {
+   "text": "Ahora",
+   "key": false,
+   "seg": 2,
+   "kind": "vo",
+   "start": 9.845,
+   "wend": 10.125,
+   "end": 10.266,
+   "x": 540,
+   "y": 290,
+   "entry": "down"
+  },
+  {
+   "text": "pasamos",
+   "key": false,
+   "seg": 2,
+   "kind": "vo",
+   "start": 10.266,
+   "wend": 10.686,
+   "end": 10.726,
+   "x": 300,
+   "y": 330,
+   "entry": "up"
+  },
+  {
+   "text": "a",
+   "key": false,
+   "seg": 2,
+   "kind": "vo",
+   "start": 10.726,
+   "wend": 10.746,
+   "end": 10.786,
+   "x": 780,
+   "y": 300,
+   "entry": "up"
+  },
+  {
+   "text": "la",
+   "key": false,
+   "seg": 2,
+   "kind": "vo",
+   "start": 10.786,
+   "wend": 10.846,
+   "end": 10.886,
+   "x": 330,
+   "y": 300,
+   "entry": "zoom"
+  },
+  {
+   "text": "cámara frontal.",
+   "key": true,
+   "seg": 2,
+   "kind": "vo",
+   "start": 10.886,
+   "wend": 11.707,
+   "end": 11.787,
+   "x": 540,
+   "y": 1440,
+   "entry": "left"
+  },
+  {
+   "text": "Con",
+   "key": false,
+   "seg": 2,
+   "kind": "vo",
+   "start": 11.787,
+   "wend": 11.947,
+   "end": 12.028,
+   "x": 540,
+   "y": 290,
+   "entry": "right"
+  },
+  {
+   "text": "Center Stage",
+   "key": true,
+   "seg": 2,
+   "kind": "vo",
+   "start": 12.028,
+   "wend": 12.868,
+   "end": 13.024,
+   "x": 540,
+   "y": 1440,
+   "entry": "right"
+  },
+  {
+   "text": "el",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 13.024,
+   "wend": 13.104,
+   "end": 13.144,
+   "x": 780,
+   "y": 300,
+   "entry": "left"
+  },
+  {
+   "text": "encuadre",
+   "key": true,
+   "seg": 3,
+   "kind": "vo",
+   "start": 13.144,
+   "wend": 13.545,
+   "end": 13.665,
+   "x": 540,
+   "y": 1440,
+   "entry": "down"
+  },
+  {
+   "text": "puede",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 13.665,
+   "wend": 13.805,
+   "end": 13.825,
+   "x": 760,
+   "y": 320,
+   "entry": "up"
+  },
+  {
+   "text": "adaptarse",
+   "key": true,
+   "seg": 3,
+   "kind": "vo",
+   "start": 13.825,
+   "wend": 14.305,
+   "end": 14.486,
+   "x": 540,
+   "y": 1440,
+   "entry": "up"
+  },
+  {
+   "text": "para",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 14.486,
+   "wend": 14.666,
+   "end": 14.726,
+   "x": 300,
+   "y": 330,
+   "entry": "zoom"
+  },
+  {
+   "text": "que",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 14.726,
+   "wend": 14.806,
+   "end": 14.886,
+   "x": 780,
+   "y": 300,
+   "entry": "left"
+  },
+  {
+   "text": "entre",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 14.886,
+   "wend": 15.086,
+   "end": 15.206,
+   "x": 330,
+   "y": 300,
+   "entry": "right"
+  },
+  {
+   "text": "más gente",
+   "key": true,
+   "seg": 3,
+   "kind": "vo",
+   "start": 15.206,
+   "wend": 15.727,
+   "end": 15.847,
+   "x": 540,
+   "y": 1440,
+   "entry": "right"
+  },
+  {
+   "text": "en",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 15.847,
+   "wend": 15.927,
+   "end": 15.967,
+   "x": 540,
+   "y": 290,
+   "entry": "left"
+  },
+  {
+   "text": "la",
+   "key": false,
+   "seg": 3,
+   "kind": "vo",
+   "start": 15.967,
+   "wend": 16.027,
+   "end": 16.107,
+   "x": 300,
+   "y": 330,
+   "entry": "down"
+  },
+  {
+   "text": "selfie.",
+   "key": true,
+   "seg": 3,
+   "kind": "vo",
+   "start": 16.107,
+   "wend": 16.428,
+   "end": 16.588,
+   "x": 540,
+   "y": 1440,
+   "entry": "up"
+  }
+ ],
+ "mock": {
+  "zoom": {
+   "start": 2.577,
+   "end": 9.815,
+   "shots": [
+    [
+     2.577,
+     6.4,
+     1
+    ],
+    [
+     7.35,
+     12.6,
+     1
+    ],
+    [
+     8.66,
+     15.35,
+     1
+    ]
+   ]
+  },
+  "selfie": {
+   "start": 9.815,
+   "end": 16.588,
+   "shots": [
+    [
+     9.815,
+     0.0,
+     0.6
+    ],
+    [
+     11.9,
+     1.25,
+     1
+    ]
+   ]
+  }
+ },
+ "zchips": [
+  {
+   "label": "1x",
+   "t": 6.201
+  },
+  {
+   "label": "4x",
+   "t": 7.413
+  },
+  {
+   "label": "8x",
+   "t": 8.724
+  }
+ ],
+ "endcard": {
+  "start": 16.588,
+  "dur": 4.4
+ },
+ "sfx": [
+  {
+   "t": 0.451,
+   "f": "click",
+   "v": 0.3
+  },
+  {
+   "t": 1.554,
+   "f": "click",
+   "v": 0.3
+  },
+  {
+   "t": 2.377,
+   "f": "swoosh",
+   "v": 0.34
+  },
+  {
+   "t": 2.607,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 3.628,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 5.331,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 6.201,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 7.413,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 8.724,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 9.615,
+   "f": "swoosh",
+   "v": 0.34
+  },
+  {
+   "t": 10.886,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 12.028,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 13.144,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 13.825,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 15.206,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 16.107,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 16.438,
+   "f": "swoosh",
+   "v": 0.38
+  },
+  {
+   "t": 16.838,
+   "f": "pop",
+   "v": 0.35
+  },
+  {
+   "t": 17.488,
+   "f": "click",
+   "v": 0.3
+  },
+  {
+   "t": 17.788,
+   "f": "click",
+   "v": 0.3
+  },
+  {
+   "t": 18.688,
+   "f": "blip",
+   "v": 0.3
+  },
+  {
+   "t": 20.838,
+   "f": "swoosh",
+   "v": 0.4
+  }
+ ],
+ "hook": {
+  "end": 2.4,
+  "tag": "2 PRUEBAS",
+  "text": "en el parque, sin tecnicismos"
+ },
+ "pri0": {
+  "clip": "pri0.mp4",
+  "cut": "pri0_cut.webm",
+  "startFrom": 5
+ },
+ "pri1": {
+  "clip": "pri1.mp4",
+  "cut": "pri1_cut.webm",
+  "startFrom": 0
+ }
+}
