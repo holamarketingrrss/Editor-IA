@@ -117,9 +117,24 @@ const md = (t) => t.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((x, i) => (x.startsWit
 function Evento({ev}) {
   if (ev.tipo === 'inicio') return <div className="ev sub">{ev.modo === 'pedido' ? 'Pedido nuevo' : `Cambios en ${ev.p}`}{ev.continua ? ' · sigue la sesión anterior' : ''}</div>;
   if (ev.tipo === 'conectores') {
-    return ev.lista.length
-      ? <div className="ev sub">Conectores: {ev.lista.join(', ')}</div>
-      : <div className="ev alerta">Sin conectores de claude.ai en esta compu: Notion, Drive y ElevenLabs no van a estar disponibles. Revisá que Claude Code esté logueado con la cuenta de la agencia.</div>;
+    const srv = ev.servidores ?? ev.lista.map((nombre) => ({nombre, estado: 'connected'}));
+    const ESTADO = {connected: 'ok', pending: 'conectando…', 'needs-auth': 'falta autorizar', failed: 'falló'};
+    if (ev.apiKey) {
+      return <div className="ev alerta">Claude Code está usando una clave de API ({ev.apiKey}) en lugar del login de claude.ai: con clave de API no cargan
+        Notion, Drive ni ElevenLabs. Sacá la variable ANTHROPIC_API_KEY de la terminal de esta compu (o pasá el motor a "api" en Equipo si es a propósito).</div>;
+    }
+    if (!srv.length) {
+      return <div className="ev alerta">Claude Code no informó conectores de claude.ai. Puede ser que sigan cargando (si el pedido usa Notion o Drive
+        sin problema, ignorá este aviso), o que la compu no tenga el login de la cuenta de la agencia. Para revisar: en una terminal, <code>claude</code>
+        → <code>/status</code> (qué cuenta está logueada) y <code>/mcp</code> (estado de cada conector).</div>;
+    }
+    const mal = srv.filter((x) => x.estado === 'needs-auth' || x.estado === 'failed');
+    return (
+      <div className={'ev ' + (mal.length ? 'alerta' : 'sub')}>
+        Conectores: {srv.map((x, i) => <span key={x.nombre}>{i ? ', ' : ''}{x.nombre}{x.estado !== 'connected' ? ` (${ESTADO[x.estado] ?? x.estado})` : ''}</span>)}
+        {mal.length > 0 && <> — para {mal.map((x) => x.nombre).join(', ')}: claude.ai › Configuración › Conectores, o <code>claude</code> → <code>/mcp</code> en esta compu.</>}
+      </div>
+    );
   }
   if (ev.tipo === 'paso') return <div className="ev paso"><b>{ev.herramienta}</b> {ev.detalle}</div>;
   if (ev.tipo === 'texto') return <div className="ev texto">{md(ev.texto)}</div>;
@@ -127,6 +142,7 @@ function Evento({ev}) {
     return (
       <div className={'ev fin ' + (ev.ok ? 'ok' : 'error')}>
         {ev.ok ? 'Listo' : 'Terminó con error'}{ev.segundos ? ` · ${ev.segundos} s` : ''}{ev.costo != null ? ` · US$ ${ev.costo.toFixed(2)}${ev.continua ? ' acumulado del proyecto' : ''}` : ''}{ev.modelos?.length ? ` · ${ev.modelos.map((x) => x.replace(/^claude-/, '')).join(', ')}` : ''}
+        {ev.conectoresUsados?.length > 0 && <div className="sub">Usó: {ev.conectoresUsados.join(', ')}</div>}
         {ev.error && <pre>{ev.error}</pre>}
         {ev.denegados?.length > 0 && <div>Acciones que necesitaban permiso y no se hicieron: <ul>{ev.denegados.map((d, i) => <li key={i}><code>{d}</code></li>)}</ul></div>}
       </div>

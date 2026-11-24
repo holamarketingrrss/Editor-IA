@@ -94,7 +94,7 @@ export function claude(REPO) {
     if (m) args.push('--model', m);
     if (sesion) args.push('--resume', sesion);
     const proceso = spawn(BIN, args, {cwd: REPO, stdio: ['ignore', 'pipe', 'pipe'], env: entorno()});
-    trabajo = {id: Date.now(), modo, p, usuario, proceso, eventos: [], fin: null, clientes: new Set(), antes: new Set(proyectos()), pendientes: {}};
+    trabajo = {id: Date.now(), modo, p, usuario, proceso, eventos: [], fin: null, clientes: new Set(), antes: new Set(proyectos()), pendientes: {}, usados: new Set()};
     emitir({tipo: 'inicio', modo, p, continua: !!sesion});
     let buf = '', sesionNueva = null, error = '';
     proceso.stderr.on('data', (b) => { error += b; });
@@ -107,13 +107,17 @@ export function claude(REPO) {
         let e; try { e = JSON.parse(linea); } catch { continue; }
         if (e.type === 'system' && e.subtype === 'init') {
           sesionNueva = e.session_id;
-          const con = (e.mcp_servers || []).filter((s) => s.status === 'connected').map((s) => s.name.replace(/^claude\.ai /, ''));
-          emitir({tipo: 'conectores', lista: con});
+          // los conectores de claude.ai pueden seguir conectándose cuando arranca (pending): se informan todos con su estado
+          const servidores = (e.mcp_servers || []).map((x) => ({nombre: x.name.replace(/^claude\.ai /, ''), estado: x.status}));
+          emitir({tipo: 'conectores', servidores, lista: servidores.filter((x) => x.estado === 'connected').map((x) => x.nombre),
+            apiKey: e.apiKeySource && e.apiKeySource !== 'none' ? e.apiKeySource : null});
         } else if (e.type === 'assistant') {
           for (const c of e.message?.content || []) {
             if (c.type === 'text' && c.text.trim()) emitir({tipo: 'texto', texto: c.text.trim()});
             if (c.type === 'tool_use') {
               trabajo.pendientes[c.id] = c;
+              const mcp = /^mcp__(.+?)__/.exec(c.name);
+              if (mcp) trabajo.usados.add(mcp[1].replace(/^claude_ai_/, '').replace(/_/g, ' '));
               emitir({tipo: 'paso', herramienta: NOMBRES[c.name] || c.name.replace(/^mcp__.*?__/, ''), detalle: detalle(REPO, c.name, c.input)});
             }
           }
@@ -140,7 +144,7 @@ export function claude(REPO) {
         fs.writeFileSync(path.join(PROY, proy, '.claude.json'), JSON.stringify({sesion: r.session_id || sesionNueva}) + '\n');
       }
       trabajo.fin = {
-        tipo: 'fin', ok: code === 0 && !r.is_error, proyecto: proy, costo: r.total_cost_usd, continua: !!sesion, modelos: Object.keys(r.modelUsage || {}), segundos: Math.round((r.duration_ms || 0) / 1000),
+        tipo: 'fin', ok: code === 0 && !r.is_error, proyecto: proy, conectoresUsados: [...trabajo.usados], costo: r.total_cost_usd, continua: !!sesion, modelos: Object.keys(r.modelUsage || {}), segundos: Math.round((r.duration_ms || 0) / 1000),
         denegados: (r.permission_denials || []).map((d) => `${d.tool_name}${d.tool_input?.command ? ': ' + String(d.tool_input.command).slice(0, 100) : ''}`),
         error: code === 0 && !r.is_error ? '' : (error.trim().split('\n').filter((l) => l.trim() && !RUIDO.test(l)).slice(-6).join('\n') || r.result || `claude terminó con código ${code}`),
       };
