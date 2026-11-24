@@ -18,7 +18,11 @@ python3 -c "import PIL" 2>/dev/null && ok "Pillow" || ojo "Pillow (solo para hoj
 [ -d template/reel/node_modules/remotion ] && ok "Remotion (template/reel)" || mal "Remotion (template/reel)" "cd template/reel && npm install"
 [ -d app/node_modules/@remotion/player ] && ok "App (app/)" || mal "dependencias de la app" "cd app && npm install"
 
-if command -v claude >/dev/null; then
+export PATH="$HOME/.local/bin:$PATH"
+CL=$(command -v claude || true)
+if [ -n "$CL" ] && [ "${CL#/mnt/}" != "$CL" ]; then
+  mal "Claude Code de Windows ($CL)" "instalá el de Ubuntu: curl -fsSL https://claude.ai/install.sh | bash  y después  ~/.local/bin/claude auth login"
+elif [ -n "$CL" ]; then
   ok "Claude Code $(claude --version 2>/dev/null | cut -d' ' -f1)"
   ESTADO=$(claude auth status --json 2>/dev/null)
   if echo "$ESTADO" | grep -q '"loggedIn": *true'; then
