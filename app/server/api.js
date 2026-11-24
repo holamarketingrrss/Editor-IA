@@ -7,7 +7,9 @@
 //   POST /api/p/<id>/edl       {edl}         guarda edl.tsv y corre make_clips.py
 //   POST /api/p/<id>/proyecto  {cambios}     mezcla en proyecto.json (estilo, música, volúmenes) y corre los dos scripts
 //   POST /api/p/<id>/guardar-preset         el estilo de la pieza pasa a presets/<marca> (menos lo propio de la pieza)
-//   GET  /api/presets                        marcas con preset
+//   GET  /api/presets                        marcas con preset (color, logo, voz)
+//   GET  /api/p/<id>/portada                 cuadro de la primera toma (galería)
+//   GET  /marca/<preset>/<ruta>              logos y fuentes de un preset
 //   POST /api/p/<id>/subir?tipo=musica|toma&nombre=x   (cuerpo = archivo)
 //   GET  /api/p/<id>/miniatura?archivo=x&t=1.5
 //   GET  /api/p/<id>/exportar                render.sh con el progreso en vivo (text/event-stream)
@@ -30,6 +32,8 @@ const TIPOS = {'.mp4': 'video/mp4', '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '
   '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff',
   '.ttf': 'font/ttf', '.otf': 'font/otf', '.m4a': 'audio/mp4', '.mov': 'video/quicktime'};
 
+// color de la marca para la interfaz: el fondo del cierre (o el primer acento)
+const colorDe = (b) => { const c = b?.colores || {}; const n = b?.outro?.fondo || b?.acentos?.[0]; return (n && (c[n] || (n.startsWith('#') ? n : null))) || '#F9CA12'; };
 const leer = (f, def) => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : def);
 const escribir = (f, v) => fs.writeFileSync(f, JSON.stringify(v, null, 1) + '\n');
 const dir = (id) => {
@@ -136,14 +140,20 @@ export function api() {
     const json = (x, st = 200) => { res.statusCode = st; res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(x)); };
     try {
       if (partes[0] === 'media' && partes.length >= 3) return servirArchivo(req, res, dentro(path.join(dir(partes[1]), 'reel/public'), partes.slice(2).join('/')));
+      if (partes[0] === 'marca' && partes.length >= 3 && ID_OK.test(partes[1])) return servirArchivo(req, res, dentro(path.join(PRESETS, partes[1], 'public'), partes.slice(2).join('/')));
       if (partes[0] === 'salida' && partes.length === 3) return servirArchivo(req, res, dentro(path.join(dir(partes[1]), 'out'), partes[2]));
       if (partes[0] !== 'api') return next();
       const [, que, id, accion] = partes;
       if (que === 'proyectos') {
         const lista = fs.existsSync(PROY) ? fs.readdirSync(PROY).filter((p) => ID_OK.test(p)
           && fs.existsSync(path.join(PROY, p, 'reel/src/data.json')) && !fs.existsSync(path.join(PROY, p, 'reel/src/.propia'))) : [];
-        return json(lista.map((p) => ({id: p, marca: leer(path.join(PROY, p, 'reel/src/brand.json'), {}).nombre || p,
-          cambiado: fs.statSync(path.join(PROY, p, 'reel/src/data.json')).mtimeMs})).sort((a, b) => b.cambiado - a.cambiado));
+        return json(lista.map((p) => {
+          const b = leer(path.join(PROY, p, 'reel/src/brand.json'), {}), d = leer(path.join(PROY, p, 'reel/src/data.json'), {});
+          const pr = leer(path.join(PROY, p, 'proyecto.json'), {});
+          return {id: p, marca: b.nombre || p, preset: pr.preset || null, color: colorDe(b), duracion: d.duration || 0,
+            tomas: (d.clips || []).length, cambiado: fs.statSync(path.join(PROY, p, 'reel/src/data.json')).mtimeMs,
+            videos: archivos(path.join(PROY, p, 'out'), ['.mp4']).filter((f) => !f.startsWith('.')).length};
+        }).sort((a, b) => b.cambiado - a.cambiado));
       }
       if (que === 'claude') {
         if (id === 'estado') return json(await motor.estado());
@@ -154,12 +164,25 @@ export function api() {
       }
       if (que === 'presets') {
         const lista = fs.existsSync(PRESETS) ? fs.readdirSync(PRESETS).filter((m) => fs.existsSync(path.join(PRESETS, m, 'preset.json'))) : [];
-        return json(lista.map((m) => ({id: m, marca: leer(path.join(PRESETS, m, 'preset.json')).marca || m})));
+        return json(lista.map((m) => {
+          const b = leer(path.join(PRESETS, m, 'brand.json'), {}), pr = leer(path.join(PRESETS, m, 'preset.json'));
+          return {id: m, marca: pr.marca || m, handle: b.handle, color: colorDe(b), logo: b.logo ? `/marca/${m}/brand/${b.logo}` : null,
+            voz: pr.voz?.nombre || (pr.voz?.tipo === 'propia' ? 'propia' : null)};
+        }).sort((a, b) => a.marca.localeCompare(b.marca)));
       }
       if (que === 'opciones') return json(JSON.parse(await correr('python3', ['scripts/estilo.py', '--opciones'])));
       if (que !== 'p' || !id) return json({error: 'ruta desconocida'}, 404);
       const d = dir(id);
       if (!accion && req.method === 'GET') return json(todo(id));
+      if (accion === 'portada') {   // un cuadro de la primera toma, para la galería (se rehace si el proyecto cambió)
+        const src = path.join(d, 'reel/public/clips/c00.mp4'), out = path.join(d, 'thumbs/app_portada.jpg');
+        if (!fs.existsSync(src)) { res.statusCode = 404; return res.end(); }
+        if (!fs.existsSync(out) || fs.statSync(out).mtimeMs < fs.statSync(src).mtimeMs) {
+          fs.mkdirSync(path.dirname(out), {recursive: true});
+          await correr('ffmpeg', ['-nostdin', '-v', 'error', '-ss', '0.5', '-i', src, '-frames:v', '1', '-vf', 'scale=-2:480', '-q:v', '4', '-y', out]);
+        }
+        return servirArchivo(req, res, out);
+      }
       if (accion === 'miniatura') {
         const archivo = url.searchParams.get('archivo'), t = Math.max(0, +url.searchParams.get('t') || 0);
         const src = dentro(path.join(d, 'raw'), archivo);

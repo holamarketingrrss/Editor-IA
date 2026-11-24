@@ -1,0 +1,50 @@
+{
+ "marca": "BUNBURY",
+ "designSystem": "https://claude.ai/artifact/BNCee2XsFjwRfBhbbtjNh4",
+ "voz": {
+  "voice_id": "cibGBHebxgbzkwF6iySQ",
+  "nombre": "Jasper",
+  "nota": "inglés, femenina, cálida y real; el copy va en inglés"
+ },
+ "notas": [
+  "Restaurante y wine bar argentino en Miami de la Chef Sommelier Paula Costa: cálido, íntimo, vintage y con historia (corchos, botellas, objetos de familia).",
+  "Copy en inglés, cálido y narrativo ('Heartfelt recipes from Granma's Cookbook'); CTAs cortos en mayúsculas: BOOK A TABLE, CONTACT US. Nada de promo agresiva.",
+  "Texto en crema (cream) sobre el video; destacados en Arvo Bold Italic con acento caramelo. Proxima Nova, Sudestada y Stencil Std (Adobe) no están: todo en Arvo.",
+  "Fotos del Drive 'FOTOS BUNBURY TODAS': elegir las más nuevas y ser selectivo. Penumbra cálida y detalles por sobre fotos planas.",
+  "Logo: no alterarlo de ninguna forma. Cierre: logo crema sobre verde oscuro (green-900)."
+ ],
+ "estilo": {
+  "subtitulos": {
+   "modo": "grupo",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "K",
+   "color": "blanco",
+   "legibilidad": "sombra",
+   "animacion": "fade"
+  },
+  "camara": "pushin",
+  "transicion": {
+   "tipo": "fundido",
+   "dur": 0.4
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
+  "animacionLogo": "fade",
+  "look": "calido",
+  "vineta": true,
+  "grano": true
+ },
+ "driveMadre": "https://drive.google.com/drive/folders/1MTgNo6b5lDqsEx-ygDrGVENo3HeowhEq",
+ "estrategia": [
+  "Bunbury no es solo un restaurante argentino: es el punto de encuentro donde los argentinos vuelven a sentirse en casa y cualquiera vive Buenos Aires sin salir de Miami.",
+  "Objetivo: ser el restaurante argentino referente de Miami; más reservas online, eventos privados y corporativos (prioridad de pauta) y comunidad fiel.",
+  "Pilares: gastronomía argentina (carnes, parrilla, empanadas, vinos) · experiencia Bunbury (ambiente, música, barra) · comunidad (reencuentros, cumpleaños) · cultura argentina · eventos y reservas.",
+  "Público: 25 a 45 años, Miami, medio y medio-alto: argentinos residentes, turistas, jóvenes profesionales y empresas que organizan eventos.",
+  "Tono: cercano, cálido, alegre, familiar, elegante sin ser distante, apasionado y con orgullo argentino. Primero emocionar, después invitar; nunca vender desesperadamente.",
+  "Evitar: política, religión, controversias, comparaciones agresivas, humor ofensivo."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › BUNBURY MIAMI › Estrategia (resumen del 24/11/2026)"
+}

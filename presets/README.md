@@ -15,7 +15,12 @@ Un preset por cliente: lo que hace falta para sacar un reel de la marca sin volv
 - Desde la app: pestaña Estilo → *Guardar como estilo de <marca>* pasa lo que se cambió en la pieza al preset (menos zócalo, títulos y destacados).
 - Prueba visual: `bash tests/presets.sh [marca]` deja `proyectos/presets-prueba.jpg` con 4 frames por marca.
 
-Marca nueva: copiá una carpeta, bajá logos/stickers/fuentes del design system (`Design System – <cliente>`), armá `brand.json`
+Marca nueva desde su design system: bajá del artifact `project/design-system.json`, `tokens.json`, `README.md`, las fuentes
+(`project/fonts/...`) y los assets de logos y stickers (por id), y corré
+`python3 scripts/preset_desde_ds.py <carpeta> --marca <slug> --handle @marca [--logo archivo] [--fondo-outro color] [--voz propia]`:
+arma colores, fuentes con su ancho medido, logos y stickers. Después completá a mano `notas`, `estilo`, `estrategia` y `driveMadre`.
+
+A mano: copiá una carpeta, bajá logos/stickers/fuentes del design system (`Design System – <cliente>`), armá `brand.json`
 (colores del `tokens.json`; el `ancho` de cada fuente se mide con PIL: ancho medio de un glifo / tamaño) y elegí el estilo
 según el README del design system. Fuentes comerciales que no vienen en el paquete: un equivalente libre, anotado en las notas.
 
@@ -23,3 +28,12 @@ según el README del design system. Fuentes comerciales que no vienen en el paqu
 | --- | --- | --- |
 | `lujis` | @luji.miami | Avallon (script, sin archivo) → Kaushan Script |
 | `pausa` | @enjoypausa | Helvetica Now (comercial) → Arimo |
+| `tecno` | @tecnomorenooficial | DS propone Poppins; los reels usan DM Sans (como trabaja la agencia). Voz propia (persona a cámara) |
+| `swiss` | @swisssnowexperience | Blur Medium y Helvetica World → Helvetica Bold (cargada en el DS) |
+| `bunbury` | @bunburymiami | Proxima Nova, Sudestada y Stencil Std (Adobe) → Arvo |
+| `marietts` | @mariettsflavors | The Seasons es DEMO (falta licencia comercial) |
+| `holamarketing` | @holamarketing | JetBrains Mono sin archivo (no se usa en reels) |
+| `kaleb` | @kalebresidence | Now → Raleway (como en los posts) |
+
+Voces por defecto (ElevenLabs): Julieta (lujis, pausa, kaleb), Azul (holamarketing), Daniela (swiss, español neutro), Jasper
+(bunbury, inglés), Jade (marietts, inglés). Club HM: pendiente (su design system no está compartido con esta cuenta).

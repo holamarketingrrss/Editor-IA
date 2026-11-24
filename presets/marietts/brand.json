@@ -1,0 +1,64 @@
+{
+ "nombre": "MARIETTS",
+ "handle": "@mariettsflavors",
+ "logo": "secondary-ivory.png",
+ "colores": {
+  "texto": "#F3F5E7",
+  "moss": "#464704",
+  "sage": "#9CA889",
+  "brown": "#423926",
+  "sand": "#B7A78C",
+  "ivory": "#F3F5E7",
+  "white": "#FFFFFF"
+ },
+ "acentos": [
+  "texto"
+ ],
+ "fuentes": {
+  "G": {
+   "familia": "The Seasons",
+   "archivo": "TheSeasons-Regular.ttf",
+   "peso": 400,
+   "mayusculas": false,
+   "interlineado": 1.05,
+   "espaciado": 0,
+   "ancho": 0.52,
+   "respaldo": "Cormorant Garamond, Georgia, serif"
+  },
+  "B": {
+   "familia": "Lexend",
+   "archivo": "Lexend-SemiBold.ttf",
+   "peso": 600,
+   "mayusculas": false,
+   "interlineado": 1.0,
+   "espaciado": 0,
+   "ancho": 0.58,
+   "respaldo": "Arial, sans-serif"
+  },
+  "S": {
+   "familia": "Lexend",
+   "archivo": "Lexend-Bold.ttf",
+   "peso": 700,
+   "mayusculas": true,
+   "interlineado": 1.0,
+   "espaciado": 4,
+   "ancho": 0.72,
+   "respaldo": "Arial, sans-serif"
+  },
+  "K": {
+   "familia": "Fleur De Leah",
+   "archivo": "FleurDeLeah-Regular.ttf",
+   "peso": 400,
+   "mayusculas": false,
+   "interlineado": 1.2,
+   "espaciado": 0,
+   "ancho": 0.42,
+   "respaldo": "cursive"
+  }
+ },
+ "outro": {
+  "fondo": "moss",
+  "fuenteHandle": "S",
+  "colorHandle": "texto"
+ }
+}

@@ -12,6 +12,7 @@ DEFAULTS = {
         'tipografias': 'alternadas',   # alternadas | una | texto+destacados
         'fuente': 'B',                 # casillero de brand.json para "una" y para el texto de "texto+destacados"
         'fuenteDestacado': 'G',        # para los destacados con "texto+destacados"
+        'colorCaja': None,             # con legibilidad "caja": color de marca de la caja (pastilla); None = negra o blanca
         'efectoDestacado': 'ninguno',  # ninguno | brillo (resplandor del color + rebote sutil en las palabras destacadas)
         'escalaDestacado': 1.0,        # tamaño de las destacadas respecto del resto (ej. 1.3 = 30 % más grandes)
         'rotacion': None,              # casilleros que se alternan con "alternadas" (None = todos los de brand.json)

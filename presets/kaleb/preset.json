@@ -1,0 +1,49 @@
+{
+ "marca": "KALEB RESIDENCE",
+ "designSystem": "https://claude.ai/artifact/Y3QhN6cs3tVtaF9zzE8dsr",
+ "voz": {
+  "voice_id": "YLtqUTaEXb7a9MAYuJu4",
+  "nombre": "Julieta",
+  "nota": "rioplatense, cálida, serena y empática"
+ },
+ "notas": [
+  "Residencia premium para adultos mayores en Zona Oeste: cálida, serena, respetuosa y cercana, con un toque de distinción dorada.",
+  "Español rioplatense con voseo ('Conocé Kaleb.'); se le habla a los hijos y familiares. Frases cortas con punto final; palabras clave en bold: subtítulos en Raleway Regular con destacados en Raleway Bold.",
+  "Mostrar a los residentes con dignidad: activos, sonriendo, acompañados. Nunca fragilidad ni tristeza.",
+  "Logo: no rotarlo, deformarlo, ponerle sombras, contornos ni fondos con degradé o textura. Cierre: logo oro sobre niebla con @kalebresidence en terracota.",
+  "Gráficos dibujados a mano en blanco (flechas curvas, corazones) con mucha moderación. Now (tipografía del manual) no está: se usa Raleway, como en los posts."
+ ],
+ "estilo": {
+  "subtitulos": {
+   "modo": "grupo",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "G",
+   "color": "blanco",
+   "legibilidad": "sombra",
+   "animacion": "fade"
+  },
+  "camara": "pushin",
+  "transicion": {
+   "tipo": "fundido",
+   "dur": 0.4
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
+  "animacionLogo": "fade",
+  "look": "calido",
+  "vineta": false
+ },
+ "driveMadre": "https://drive.google.com/drive/folders/1vLrEJ3LU_7Idfwqq2G9TLGqrmzu_0cwz",
+ "estrategia": [
+  "Kaleb Residence: hogar luxury para adultos mayores en Castelar y Parque Leloir, con atención personalizada, comodidades cinco estrellas y gastronomía gourmet; no es un geriátrico tradicional.",
+  "Objetivo: consultas calificadas y ser la mejor opción premium de Zona Oeste (70% confianza y marca / 30% conversión: visitas y consultas).",
+  "Pilares: bienestar y calidad de vida · lujo, confort y espacios · actividades y estimulación · gastronomía gourmet · prueba social y testimonios · familia y acompañamiento.",
+  "Público: hijos y familiares de 40 a 65 años, nivel medio-alto y alto de la zona; miedo a lugares impersonales, preocupación por seguridad y trato humano.",
+  "Tono: cálido, empático, profesional, familiar, elegante sin ostentación. Hablarle al familiar, mostrar sin exagerar, demostrar en vez de vender, emoción + evidencia.",
+  "Ritmo: 3 posteos semanales (prioridad reels), contenido luminoso y real."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › KALEB › Estrategia (resumen del 24/11/2026)"
+}

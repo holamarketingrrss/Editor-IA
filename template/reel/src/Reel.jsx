@@ -40,7 +40,7 @@ function armar(data, brand, base) {
   // Tipografías de la marca: brand.fuentes tiene 4 casilleros (G, B, S, K). "archivo" es el woff2 en public/fonts.
   const fontFaces = Object.values(brand.fuentes)
     .filter((f) => f.archivo)
-    .map((f) => `@font-face{font-family:'${f.familia}';font-weight:${f.peso ?? 400};src:url(${asset('fonts/' + f.archivo)}) format('woff2');}`)
+    .map((f) => `@font-face{font-family:'${f.familia}';font-weight:${f.peso ?? 400};src:url(${asset('fonts/' + f.archivo)}) format('${{ttf: 'truetype', otf: 'opentype', woff: 'woff'}[f.archivo.split('.').pop().toLowerCase()] ?? 'woff2'}');}`)
     .join('\n');
 
   const FONT = Object.fromEntries(Object.entries(brand.fuentes).map(([k, f]) => [k, {
@@ -64,7 +64,7 @@ function armar(data, brand, base) {
         return {WebkitTextStroke: `${Math.max(4, Math.round(size * 0.07))}px ${NEGRO ? '#FFFFFF' : '#000000'}`, paintOrder: 'stroke fill',
           textShadow: '0 4px 12px rgba(0,0,0,.35)'};
       case 'caja':
-        return {background: NEGRO ? 'rgba(255,255,255,.92)' : 'rgba(0,0,0,.78)', padding: '0.06em 0.22em', borderRadius: '0.14em'};
+        return {background: SUB.colorCaja ? col(SUB.colorCaja) : (NEGRO ? 'rgba(255,255,255,.92)' : 'rgba(0,0,0,.78)'), padding: '0.06em 0.22em', borderRadius: SUB.colorCaja ? '0.5em' : '0.14em'};
       case 'barra':
         return SUB.modo === 'palabra' ? {background: NEGRO ? 'rgba(255,255,255,.88)' : 'rgba(0,0,0,.62)', padding: '0.06em 0.4em', borderRadius: '0.1em'} : {};
       default:

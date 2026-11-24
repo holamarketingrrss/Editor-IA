@@ -4,11 +4,22 @@ import {Reel, FPS, duracionEnFrames} from '../../template/reel/src/Reel.jsx';
 import {api} from './api.js';
 import {Textos, Tomas, Audio, Estilo, Exportar} from './Paneles.jsx';
 import {Claude} from './Claude.jsx';
+import {Icono, Linea, fmt, useAviso} from './ui.jsx';
 
+export {fmt};
 const PANELES = [['claude', 'Claude'], ['textos', 'Textos'], ['tomas', 'Tomas'], ['audio', 'Audio'], ['estilo', 'Estilo'], ['exportar', 'Exportar']];
-export const fmt = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`;
+const nombreProyecto = (id) => id.replace(/-/g, ' ');
+const hace = (ms) => {
+  if (!ms) return '';
+  const m = Math.round((Date.now() - ms) / 60000);
+  if (m < 1) return 'recién'; if (m < 60) return `hace ${m} min`;
+  const h = Math.round(m / 60); if (h < 24) return `hace ${h} h`;
+  const d = Math.round(h / 24); return d === 1 ? 'ayer' : `hace ${d} días`;
+};
+const escribiendo = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable;
 
 export function App() {
+  const avisar = useAviso();
   const [lista, setLista] = useState([]);
   const [id, setId] = useState(() => new URLSearchParams(location.search).get('p') || '');
   const [p, setP] = useState(null);          // lo que dice el disco
@@ -16,98 +27,209 @@ export function App() {
   const [opciones, setOpciones] = useState(null);
   const [panel, setPanel] = useState('claude');
   const [ocupado, setOcupado] = useState('');
-  const [aviso, setAviso] = useState(null);  // {tipo: 'ok'|'error', texto}
   const [frame, setFrame] = useState(0);
-  const [mover, setMover] = useState(null);  // índice de palabra a reubicar con un clic en la vista previa
+  const [sonando, setSonando] = useState(false);
+  const [sel, setSel] = useState(null);      // palabra elegida en Textos: se arrastra en la vista previa
+  const [atajos, setAtajos] = useState(false);
   const player = useRef(null);
 
-  const listar = () => api.proyectos().then(setLista).catch((e) => setAviso({tipo: 'error', texto: e.message}));
-  useEffect(() => { listar(); api.opciones().then(setOpciones); }, []);
+  const listar = () => api.proyectos().then(setLista).catch((e) => avisar('error', 'No se pudo leer la lista de proyectos', e.message));
+  useEffect(() => { listar(); api.opciones().then(setOpciones).catch(() => {}); }, []);
   const recargar = () => id && api.proyecto(id).then((x) => { setP(x); setData(x.data); }).catch(() => {});
   useEffect(() => {
     history.replaceState(null, '', id ? `?p=${id}` : location.pathname);
-    if (!id) { setP(null); setData(null); return; }
-    api.proyecto(id).then((x) => { setP(x); setData(x.data); setAviso(null); }).catch((e) => setAviso({tipo: 'error', texto: e.message}));
+    setSel(null); setFrame(0); setSonando(false);
+    if (!id) { setP(null); setData(null); listar(); return; }
+    api.proyecto(id).then((x) => { setP(x); setData(x.data); })
+      .catch((e) => { avisar('error', 'No se pudo abrir el proyecto', e.message); setId(''); });
   }, [id]);
   // cuando Claude termina un pedido, se abre el proyecto que armó
   const alTerminar = (proy) => { listar(); if (proy && proy !== id) { setId(proy); setPanel('claude'); } else recargar(); };
+
+  const listo = !!(p && data);
   useEffect(() => {
     const pl = player.current; if (!pl) return;
-    const f = (e) => setFrame(e.detail.frame);
-    pl.addEventListener('frameupdate', f);
-    return () => pl.removeEventListener('frameupdate', f);
-  }, [data !== null]);
+    const f = (e) => setFrame(e.detail.frame), on = () => setSonando(true), off = () => setSonando(false);
+    pl.addEventListener('frameupdate', f); pl.addEventListener('play', on); pl.addEventListener('pause', off); pl.addEventListener('ended', off);
+    return () => { pl.removeEventListener('frameupdate', f); pl.removeEventListener('play', on); pl.removeEventListener('pause', off); pl.removeEventListener('ended', off); };
+  }, [listo, id]);
 
-  // guarda en disco con un script del repo y deja la vista previa igual a lo que quedó
-  const aplicar = async (que, fn) => {
-    setOcupado(que); setAviso(null);
-    try {
-      const x = await fn();
-      setP(x); setData(x.data);
-      const zona = (x.log || '').split('\n').filter((l) => /FUERA DE ZONA|CONTRASTE/.test(l));
-      setAviso(zona.length ? {tipo: 'error', texto: zona.join('\n')} : {tipo: 'ok', texto: `${que}: listo`});
-    } catch (e) { setAviso({tipo: 'error', texto: e.message}); }
-    setOcupado('');
-  };
   const irA = (seg) => player.current?.seekTo(Math.round(seg * FPS));
   const t = frame / FPS;
 
-  const props = useMemo(() => data && p && ({data, brand: p.brand, base: `/media/${p.id}/`}), [data, p]);
+  // atajos: espacio reproduce, flechas mueven 1 s (con Shift, un cuadro), Inicio vuelve al principio, ? muestra la ayuda
+  useEffect(() => {
+    const tecla = (e) => {
+      if (escribiendo(e)) return;
+      if (e.key === '?') { setAtajos((a) => !a); return; }
+      if (e.key === 'Escape') { setAtajos(false); setSel(null); return; }
+      const pl = player.current;
+      if (!pl || !data) return;
+      if (e.code === 'Space') { e.preventDefault(); pl.toggle(); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const paso = e.shiftKey ? 1 : FPS, dir = e.key === 'ArrowLeft' ? -1 : 1;
+        pl.seekTo(Math.max(0, Math.min(duracionEnFrames(data) - 1, pl.getCurrentFrame() + dir * paso)));
+      }
+      if (e.key === 'Home') pl.seekTo(0);
+    };
+    window.addEventListener('keydown', tecla);
+    return () => window.removeEventListener('keydown', tecla);
+  }, [data]);
 
-  const clicVista = (e) => {
-    if (mover === null) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    const x = Math.round((e.clientX - r.left) / r.width * 1080), y = Math.round((e.clientY - r.top) / r.height * 1920);
-    setData((d) => ({...d, words: d.words.map((w, i) => (i === mover ? {...w, x, y, _editada: [...new Set([...(w._editada || []), 'x', 'y'])]} : w))}));
-    setMover(null);
+  // guarda en disco con un script del repo y deja la vista previa igual a lo que quedó
+  const aplicar = async (que, fn) => {
+    setOcupado(que);
+    try {
+      const x = await fn();
+      setP(x); setData(x.data);
+      const zona = (x.log || '').split('\n').filter((l) => /FUERA DE ZONA|CONTRASTE|SUPERPUESTO/.test(l)).map((l) => l.trim());
+      if (zona.length) avisar('alerta', `${que}: aplicado, pero revisá`, zona.join('\n'));
+      else avisar('ok', `${que}: aplicado`);
+    } catch (e) { avisar('error', `${que}: no se pudo aplicar`, e.message); }
+    setOcupado('');
   };
 
+  const props = useMemo(() => data && p && ({data, brand: p.brand, base: `/media/${p.id}/`}), [data, p]);
+  const modoPalabra = (data?.estilo?.subtitulos?.modo ?? 'palabra') === 'palabra';
+  const palabra = panel === 'textos' && modoPalabra && sel !== null ? data?.words[sel] : null;
+
+  const arrastrar = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const caja = e.currentTarget.parentElement.getBoundingClientRect();
+    const mover = (ev) => {
+      const x = Math.round(Math.max(0, Math.min(1, (ev.clientX - caja.left) / caja.width)) * 1080);
+      const y = Math.round(Math.max(0, Math.min(1, (ev.clientY - caja.top) / caja.height)) * 1920);
+      setData((d) => ({...d, words: d.words.map((w, i) => (i === sel ? {...w, x, y, _editada: [...new Set([...(w._editada || []), 'x', 'y'])]} : w))}));
+    };
+    const soltar = () => { window.removeEventListener('pointermove', mover); window.removeEventListener('pointerup', soltar); };
+    window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar);
+  };
+
+  if (!id) return <Inicio lista={lista} abrir={setId} alTerminar={alTerminar} />;
+  if (!p || !props) return <div className="app"><Barra /><main className="cargando"><span className="pulso" />Abriendo {nombreProyecto(id)}…</main></div>;
+
+  const info = lista.find((x) => x.id === id);
   return (
-    <div className="app">
-      <header>
-        <b className="logo">Editor IA</b>
-        <select value={id} onChange={(e) => setId(e.target.value)}>
-          <option value="">Elegí un proyecto…</option>
-          {lista.map((x) => <option key={x.id} value={x.id}>{x.id}</option>)}
-        </select>
-        {p && <span className="sub">{p.brand.nombre} · {p.data.clips.length} tomas · {p.data.duration.toFixed(1)} s</span>}
-        <button onClick={() => setId('')} disabled={!id}>+ Pedido nuevo</button>
+    <div className="app" style={{'--marca': info?.color || 'var(--amarillo)'}}>
+      <Barra>
+        <button className="volver" onClick={() => setId('')}><Icono n="atras" /> Proyectos</button>
+        <span className="sep">/</span>
+        <span className="chip-marca"><i />{p.brand.nombre}</span>
+        <h1 className="titulo-proyecto">{nombreProyecto(p.id)}</h1>
         <span className="espacio" />
-        {ocupado && <span className="ocupado">{ocupado}…</span>}
-      </header>
-      {!id ? <main className="pedido"><div><h2>Pedido nuevo</h2><Claude p={null} t={0} alTerminar={alTerminar} />
-        <p className="nota">O elegí un proyecto arriba para retocarlo.</p></div></main>
-        : !p || !props ? <main className="vacio">Cargando…</main> : (
-        <main>
-          <section className="vista">
-            <div className={'marco' + (mover !== null ? ' moviendo' : '')}>
-              <Player ref={player} component={Reel} inputProps={props} durationInFrames={duracionEnFrames(data)} fps={FPS}
-                compositionWidth={1080} compositionHeight={1920} controls clickToPlay={mover === null}
-                style={{width: '100%', height: '100%'}} acknowledgeRemotionLicense />
-              {mover !== null && <div className="capa" onClick={clicVista}>Hacé clic donde va «{data.words[mover]?.text}»</div>}
-            </div>
-            <div className="tiempo">{fmt(t)} <span>/ {fmt(data.duration)}</span></div>
-          </section>
-          <section className="panel">
-            <nav>{PANELES.map(([k, n]) => <button key={k} className={panel === k ? 'activo' : ''} onClick={() => setPanel(k)}>{n}</button>)}</nav>
-            {aviso && <pre className={'aviso ' + aviso.tipo} onClick={() => setAviso(null)}>{aviso.texto}</pre>}
-            <div className="contenido">
-              {panel === 'claude' && <Claude key={p.id} p={p} t={t} recargar={recargar} alTerminar={alTerminar} />}
-              {panel === 'textos' && <Textos p={p} data={data} setData={setData} t={t} irA={irA} mover={mover} setMover={setMover}
-                aplicar={(guion) => aplicar('Textos', () => api.guardarGuion(p.id, guion))} ocupado={!!ocupado} />}
-              {panel === 'tomas' && <Tomas p={p} irA={irA} aplicar={(edl) => aplicar('Tomas', () => api.guardarEdl(p.id, edl))}
-                subir={(f) => aplicar('Subir toma', () => api.subir(p.id, 'toma', f))} ocupado={!!ocupado} />}
-              {panel === 'audio' && <Audio p={p} data={data} setData={setData} opciones={opciones}
-                aplicar={(c) => aplicar('Audio', () => api.guardarProyecto(p.id, c))}
-                subir={(f) => aplicar('Subir música', () => api.subir(p.id, 'musica', f))} ocupado={!!ocupado} />}
-              {panel === 'estilo' && opciones && <Estilo p={p} data={data} setData={setData} opciones={opciones}
-                aplicar={(estilo) => aplicar('Estilo', () => api.guardarProyecto(p.id, {estilo}))}
-                guardarPreset={() => aplicar('Estilo de la marca', () => api.guardarPreset(p.id))} ocupado={!!ocupado} />}
-              {panel === 'exportar' && <Exportar p={p} recargar={() => api.proyecto(p.id).then(setP)} />}
-            </div>
-          </section>
-        </main>
-      )}
+        {ocupado && <span className="ocupado"><span className="pulso" />{ocupado}…</span>}
+        <button className="icono" onClick={() => setAtajos(true)} title="Atajos de teclado (?)" aria-label="Atajos de teclado"><Icono n="teclado" /></button>
+      </Barra>
+      <main className="editor">
+        <section className="vista">
+          <div className="marco">
+            <Player ref={player} component={Reel} inputProps={props} durationInFrames={duracionEnFrames(data)} fps={FPS}
+              compositionWidth={1080} compositionHeight={1920} controls={false} clickToPlay={!palabra}
+              style={{width: '100%', height: '100%'}} acknowledgeRemotionLicense />
+            {palabra && (
+              <div className="capa-arrastre">
+                <div className="asa" style={{left: `${(palabra.x ?? 540) / 10.8}%`, top: `${(palabra.y ?? 960) / 19.2}%`}}
+                  onPointerDown={arrastrar} title="Arrastrá para mover la palabra">
+                  <span>{palabra.text}</span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="transporte">
+            <button className="play" onClick={() => player.current?.toggle()} aria-label={sonando ? 'Pausa' : 'Reproducir'}>
+              <Icono n={sonando ? 'pausa' : 'play'} t={18} />
+            </button>
+            <span className="reloj"><b>{fmt(t)}</b> / {fmt(data.duration)}</span>
+            <span className="espacio" />
+            <span className="dato">{data.clips.length} tomas · {data.words.length} palabras</span>
+          </div>
+          <Linea data={data} t={t} irA={irA} miniatura={(f, s) => api.miniatura(p.id, f, s)} />
+        </section>
+        <section className="panel">
+          <nav className="pestanas">
+            {PANELES.map(([k, n], i) => (
+              <button key={k} className={panel === k ? 'activo' : ''} onClick={() => setPanel(k)}>
+                <small>{String(i + 1).padStart(2, '0')}</small>{n}
+              </button>
+            ))}
+          </nav>
+          <div className="contenido" key={panel}>
+            {panel === 'claude' && <Claude key={p.id} p={p} t={t} recargar={recargar} alTerminar={alTerminar} />}
+            {panel === 'textos' && <Textos p={p} data={data} setData={setData} t={t} irA={irA} sel={sel} setSel={setSel}
+              aplicar={(guion) => aplicar('Textos', () => api.guardarGuion(p.id, guion))} ocupado={!!ocupado} />}
+            {panel === 'tomas' && <Tomas p={p} irA={irA} aplicar={(edl) => aplicar('Tomas', () => api.guardarEdl(p.id, edl))}
+              subir={(f) => aplicar('Subir toma', () => api.subir(p.id, 'toma', f))} ocupado={!!ocupado} />}
+            {panel === 'audio' && <Audio p={p} data={data} setData={setData} opciones={opciones}
+              aplicar={(c) => aplicar('Audio', () => api.guardarProyecto(p.id, c))}
+              subir={(f) => aplicar('Subir música', () => api.subir(p.id, 'musica', f))} ocupado={!!ocupado} />}
+            {panel === 'estilo' && opciones && <Estilo p={p} data={data} setData={setData} opciones={opciones}
+              aplicar={(estilo) => aplicar('Estilo', () => api.guardarProyecto(p.id, {estilo}))}
+              guardarPreset={() => aplicar('Estilo de la marca', () => api.guardarPreset(p.id))} ocupado={!!ocupado} />}
+            {panel === 'exportar' && <Exportar p={p} recargar={() => api.proyecto(p.id).then(setP)} />}
+          </div>
+        </section>
+      </main>
+      {atajos && <Atajos cerrar={() => setAtajos(false)} />}
+    </div>
+  );
+}
+
+function Barra({children}) {
+  return <header className="barra"><span className="marca-app">editor<i>ia</i></span>{children}</header>;
+}
+
+function Inicio({lista, abrir, alTerminar}) {
+  const [q, setQ] = useState('');
+  const filtrados = lista.filter((x) => (x.id + ' ' + x.marca).toLowerCase().includes(q.toLowerCase()));
+  return (
+    <div className="app inicio">
+      <Barra><span className="espacio" /><span className="dato">Hola Marketing · {lista.length} proyectos</span></Barra>
+      <main className="inicio-grilla">
+        <section className="bloque pedido">
+          <h2><small>01</small>Pedido <em>nuevo</em></h2>
+          <Claude p={null} t={0} alTerminar={alTerminar} />
+        </section>
+        <section className="bloque proyectos">
+          <div className="encabezado">
+            <h2><small>02</small>Proyectos</h2>
+            <label className="buscar"><Icono n="buscar" /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar por marca o tema" /></label>
+          </div>
+          {!lista.length && <p className="nota">Todavía no hay proyectos. Hacé un pedido y aparecen acá.</p>}
+          <div className="galeria">
+            {filtrados.map((x, i) => (
+              <button key={x.id} className="tarjeta" onClick={() => abrir(x.id)} style={{'--marca': x.color, animationDelay: `${Math.min(i, 12) * 35}ms`}}>
+                <div className="portada">
+                  <img src={`/api/p/${x.id}/portada`} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
+                  <span className="duracion">{x.duracion ? `${x.duracion.toFixed(0)} s` : '—'}</span>
+                  {x.videos > 0 && <span className="exportado" title={`${x.videos} versiones exportadas`}><Icono n="ok" t={12} /></span>}
+                </div>
+                <div className="pie">
+                  <span className="chip-marca"><i />{x.marca}</span>
+                  <b>{nombreProyecto(x.id)}</b>
+                  <span className="dato">{x.tomas} tomas · {hace(x.cambiado)}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+          {lista.length > 0 && !filtrados.length && <p className="nota">Nada coincide con «{q}».</p>}
+        </section>
+      </main>
+    </div>
+  );
+}
+
+function Atajos({cerrar}) {
+  const filas = [['Espacio', 'reproducir / pausa'], ['← →', 'mover 1 segundo'], ['Shift + ← →', 'mover 1 cuadro'], ['Inicio', 'volver al principio'],
+    ['Clic en la línea', 'ir a ese momento'], ['Textos: clic en una fila', 'elegir la palabra y arrastrarla en la vista previa'],
+    ['Ctrl/⌘ + Enter', 'mandar el pedido a Claude'], ['Esc', 'cerrar / soltar la palabra'], ['?', 'esta ayuda']];
+  return (
+    <div className="modal" onClick={cerrar}>
+      <div className="caja" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Atajos de teclado">
+        <h3>Atajos de teclado</h3>
+        <dl>{filas.map(([k, v]) => <React.Fragment key={k}><dt><kbd>{k}</kbd></dt><dd>{v}</dd></React.Fragment>)}</dl>
+        <button className="primario" onClick={cerrar}>Listo</button>
+      </div>
     </div>
   );
 }

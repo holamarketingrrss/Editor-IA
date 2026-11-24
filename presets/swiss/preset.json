@@ -1,0 +1,52 @@
+{
+ "marca": "SWISS SNOW EXPERIENCE",
+ "designSystem": "https://claude.ai/artifact/Bi9qhCu9gxZms8MH67urGh",
+ "voz": {
+  "voice_id": "2aDqA8lxxUgkAZpuP7vg",
+  "nombre": "Daniela",
+  "nota": "español neutro latino con tú, dinámica y cercana"
+ },
+ "notas": [
+  "Viajes de esquí y snowboard en grupo en los Alpes suizos (Snowtrip 1 week). Joven, aventurera y social, con estética de redes: fotos reales de nieve, tipografía bold apretada, pastillas y stickers.",
+  "Español neutro con tú ('Recibe toda la información, escríbenos.'), con palabras del mundo snow en inglés (snowtrip, after ski, POV). Humor de redes y emojis puntuales (❄️ 🤔).",
+  "Subtítulos en pastillas rojas con texto blanco (Helvetica Bold), destacados en Helvetica Bold Oblique. Blur Medium (titulares del DS) no está cargada: se usa Helvetica Bold apretada.",
+  "Gráficos: flechas blancas dibujadas a mano ('haz zoom') y emojis ❄️ 🤔 con moderación. Cierre: logo blanco sobre rojo.",
+  "Siempre invitar a DM: el objetivo del contenido es abrir conversación."
+ ],
+ "estilo": {
+  "subtitulos": {
+   "modo": "grupo",
+   "posicion": "abajo",
+   "tipografias": "texto+destacados",
+   "fuente": "B",
+   "fuenteDestacado": "K",
+   "color": "blanco",
+   "legibilidad": "caja",
+   "colorCaja": "rojo",
+   "animacion": "pop"
+  },
+  "camara": "pushin",
+  "transicion": {
+   "tipo": "corte"
+  },
+  "cierre": {
+   "tipo": "logo"
+  },
+  "animacionLogo": "pop",
+  "look": "vibrante",
+  "vineta": false,
+  "grano": true
+ },
+ "driveMadre": "https://drive.google.com/drive/folders/1Z_0xLsQuUTUmLEoqRUb7KaUZmDbF73yH",
+ "estrategia": [
+  "Vende la experiencia emocional de vivir la nieve en Suiza (Andermatt); el diferencial es la curaduría, personalización y acompañamiento humano: José vivió la experiencia y la conoce 24/7.",
+  "Servicios: clases de ski y snowboard para todos los niveles, powder (solo experimentados, mostrarlo poco), experiencias locales y tours privados.",
+  "Objetivo: leads de Latinoamérica y ventas (no viralidad por branding). Instalar: 'Ir a la nieve en Suiza es posible para vos'.",
+  "Público: hispanos de 25 a 30 años y +40 que quieren 'que les organicen todo'; se le habla sobre todo a intermedios y expertos.",
+  "Pilares: deseo aspiracional alcanzable · educación que elimina objeciones (miedos, logística, nivel, idioma) · experiencia humana (grupos, historias) · autoridad sin rigidez · conversión directa (CTA a DM).",
+  "Tono en orden: aventurero, confrontativo, divertido. Nunca elitista, técnico ni lejano; siempre cercano y posible.",
+  "No comunicar: accidentes, lujo extremo, precios desorbitantes. Sí: seguridad, accesibilidad emocional, experiencia premium humana, personalización.",
+  "Ritmo: 8 reels por mes entregados en Drive (en bloque, sin programación)."
+ ],
+ "estrategiaFuente": "Notion › Portal del cliente › SWISS SNOW EXPERIENCE › Estrategia (resumen del 24/11/2026)"
+}
