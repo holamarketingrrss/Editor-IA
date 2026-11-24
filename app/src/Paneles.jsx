@@ -82,7 +82,9 @@ export function Tomas({p, irA, aplicar, subir, ocupado}) {
       <div className="tomas">
         {conTiempos.map((f, i) => (
           <div key={i} className="toma">
-            <img src={api.miniatura(p.id, f.file, f.inPoint)} alt="" onClick={() => irA(f.start + 0.05)} title="Ir a esta toma" />
+            {String(f.file).startsWith('escena:')
+              ? <button className="muestra-escena" onClick={() => irA(f.start + 0.05)} title="Escena de motion graphics: se edita abajo">{f.file.slice(7)}</button>
+              : <img src={api.miniatura(p.id, f.file, f.inPoint)} alt="" onClick={() => irA(f.start + 0.05)} title="Ir a esta toma" />}
             <div className="campos">
               <div className="fila"><b>{i + 1}</b><span className="sub">{fmt(f.start)} → {fmt(f.end)}</span></div>
               <select value={f.file} onChange={(e) => cambiar(i, 'file', e.target.value)}>
@@ -254,5 +256,90 @@ export function Exportar({p, recargar}) {
       {p.videos.length > 0 && <><h4>Versiones exportadas</h4><ul className="videos">
         {p.videos.map((v) => <li key={v}><a href={`/salida/${p.id}/${v}`} target="_blank" rel="noreferrer">{v}</a></li>)}</ul></>}
     </>
+  );
+}
+
+// ---------- Escenas de motion graphics (proyecto.json "escenas"): textos, tipo, fondo, duración y orden ----------
+const TIPOS_ESCENA = [['titulo', 'Título'], ['lista', 'Lista'], ['numero', 'Número'], ['imagen', 'Imagen'], ['frase', 'Frase']];
+const DECOR = [['formas', 'Formas'], ['lineas', 'Líneas'], ['puntos', 'Puntos'], ['ninguno', 'Liso']];
+// clips del video solo de escenas, como los arma make_clips.py (para ver los cambios al instante)
+const clipsDeEscenas = (escenas) => {
+  let t = 0;
+  return escenas.map((e, i) => { const d = Math.max(0.5, +e.dur || 2.5); const c = {tipo: 'escena', start: +t.toFixed(2), end: +(t + d).toFixed(2), escena: {id: e.id ?? String(i + 1), ...e}}; t += d; return c; });
+};
+
+export function Escenas({p, data, setData, irA, aplicar, ocupado}) {
+  const inicial = () => (p.proyecto.escenas || []).map((e) => ({...e}));
+  const [lista, setLista] = useState(inicial);
+  useEffect(() => setLista(inicial()), [p]);
+  const sucias = JSON.stringify(lista) !== JSON.stringify(inicial());
+  const soloEscenas = !p.edl.length;
+  const colores = Object.keys(p.brand.colores);
+  // vista previa: con video solo de escenas se rearma la línea de tiempo; si no, se actualiza cada escena en su lugar
+  const ver = (nueva) => {
+    setLista(nueva);
+    setData((d) => {
+      if (soloEscenas) {
+        const clips = clipsDeEscenas(nueva), fin = clips.length ? clips[clips.length - 1].end : 0;
+        const outro = Math.max(0.5, d.duration - d.outroAt);
+        return {...d, clips, outroAt: fin, duration: +(fin + outro).toFixed(2)};
+      }
+      const porId = Object.fromEntries(nueva.map((e, i) => [String(e.id ?? i + 1), e]));
+      return {...d, clips: d.clips.map((c) => (c.tipo === 'escena' && porId[String(c.escena.id)] ? {...c, escena: {...c.escena, ...porId[String(c.escena.id)]}} : c))};
+    });
+  };
+  const cambiar = (i, campo, v) => ver(lista.map((e, j) => (j === i ? {...e, [campo]: v} : e)));
+  const mover = (i, d) => { const g = [...lista]; [g[i], g[i + d]] = [g[i + d], g[i]]; ver(g); };
+  const nuevaId = () => { let n = lista.length + 1; while (lista.some((e) => String(e.id) === 'e' + n)) n++; return 'e' + n; };
+  let t = 0;
+  return (
+    <div className="escenas">
+      <p className="nota">Escenas de motion graphics: texto con <code>*palabra*</code> para destacar. Los textos, colores y duraciones se ven al instante;
+        <b> Aplicar</b> los guarda en <code>proyecto.json</code>.{!soloEscenas && ' Este video mezcla tomas y escenas: el orden y los tiempos se cambian en Tomas (filas escena:<id>).'}</p>
+      {lista.map((e, i) => {
+        const desde = t; t += +e.dur || 2.5;
+        const tipo = e.tipo || 'titulo';
+        return (
+          <div key={i} className="escena-tarjeta" style={{'--fondo': p.brand.colores[Array.isArray(e.fondo) ? e.fondo[0] : e.fondo] ?? e.fondo ?? 'var(--tinta-3)'}}>
+            <button className="muestra" onClick={() => irA(desde + Math.min(1.5, (+e.dur || 2.5) * 0.7))} title="Ir a esta escena">
+              <b>{String(i + 1).padStart(2, '0')}</b><span>{TIPOS_ESCENA.find(([k]) => k === tipo)?.[1]}</span></button>
+            <div className="campos">
+              <div className="form dos">
+                <label>Tipo<select value={tipo} onChange={(x) => cambiar(i, 'tipo', x.target.value)}>{TIPOS_ESCENA.map(([k, n]) => <option key={k} value={k}>{n}</option>)}</select></label>
+                <label>Fondo<select value={Array.isArray(e.fondo) ? e.fondo[0] : e.fondo ?? ''} onChange={(x) => cambiar(i, 'fondo', x.target.value || undefined)}>
+                  <option value="">El de la marca</option>{colores.map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
+                <label>Decoración<select value={e.decor ?? 'formas'} onChange={(x) => cambiar(i, 'decor', x.target.value)}>{DECOR.map(([k, n]) => <option key={k} value={k}>{n}</option>)}</select></label>
+                <label>Dura (s)<input type="number" step="0.1" min="0.5" value={e.dur ?? 2.5} onChange={(x) => cambiar(i, 'dur', num(x.target.value))} /></label>
+              </div>
+              <label className="largo">{tipo === 'lista' ? 'Título de la lista' : tipo === 'numero' ? 'Texto debajo del número' : 'Texto'}
+                <textarea rows={2} value={e.texto ?? ''} onChange={(x) => cambiar(i, 'texto', x.target.value)} /></label>
+              {tipo === 'lista' && <label className="largo">Ítems (uno por renglón)
+                <textarea rows={3} value={(e.items ?? []).join('\n')} onChange={(x) => cambiar(i, 'items', x.target.value.split('\n'))} /></label>}
+              {tipo === 'numero' && <div className="form dos">
+                <label>Número<input value={e.numero ?? ''} onChange={(x) => cambiar(i, 'numero', x.target.value)} /></label>
+                <label>Antes<input value={e.prefijo ?? ''} placeholder="+ / $" onChange={(x) => cambiar(i, 'prefijo', x.target.value)} /></label>
+                <label>Después<input value={e.sufijo ?? ''} placeholder="% / k" onChange={(x) => cambiar(i, 'sufijo', x.target.value)} /></label>
+              </div>}
+              {tipo === 'frase' && <label className="largo">Autor<input value={e.autor ?? ''} onChange={(x) => cambiar(i, 'autor', x.target.value)} /></label>}
+              {tipo === 'imagen' && <label className="largo">Imagen (archivo en raw/)
+                <select value={e.img ?? ''} onChange={(x) => cambiar(i, 'img', x.target.value)}><option value="">Elegí…</option>
+                  {[...new Set([...(p.imagenes || []), e.img].filter(Boolean))].map((f) => <option key={f}>{f}</option>)}</select></label>}
+              {['titulo', 'numero'].includes(tipo) && <label className="largo">Bajada (opcional)<input value={e.sub ?? ''} onChange={(x) => cambiar(i, 'sub', x.target.value)} /></label>}
+              <label className="check"><input type="checkbox" checked={!!e.logo} onChange={(x) => cambiar(i, 'logo', x.target.checked)} /> Logo arriba</label>
+            </div>
+            <div className="botones">
+              <button disabled={i === 0} onClick={() => mover(i, -1)} title="Subir">↑</button>
+              <button disabled={i === lista.length - 1} onClick={() => mover(i, 1)} title="Bajar">↓</button>
+              <button disabled={lista.length === 1} onClick={() => ver(lista.filter((_, j) => j !== i))} title="Quitar">✕</button>
+            </div>
+          </div>
+        );
+      })}
+      <div className="acciones">
+        <button className="primario" disabled={!sucias || ocupado} onClick={() => aplicar(lista)}>Aplicar escenas</button>
+        <button disabled={ocupado} onClick={() => ver([...lista, {id: nuevaId(), tipo: 'titulo', texto: 'Texto *nuevo*', dur: 2.5}])}>+ Agregar escena</button>
+        <button disabled={!sucias || ocupado} onClick={() => { setLista(inicial()); setData(p.data); }}>Descartar</button>
+      </div>
+    </div>
   );
 }

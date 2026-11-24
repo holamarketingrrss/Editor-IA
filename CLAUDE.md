@@ -35,6 +35,7 @@ con el design system y avisalo en la entrega.
   dibujan solas `{"tipo": "flecha", "forma": "curva"|"recta", "start", "end", "x", "y", "w", "rot", "color"}` y emojis
   `{"tipo": "emoji", "emoji": "🔥", "start", "end", "x", "y", "size", "rot"}`; pocos y con sentido (señalar producto, acompañar una
   palabra). Los subtítulos van encima: si `zona_segura.py` dice SUPERPUESTO, mové el sticker o gráfico.
+  Motion graphics (sin material o placas entre tomas): `proyecto.json` → `escenas` (titulo, lista, numero, imagen, frase; ver `docs/escenas.md`).
   `estilo` lleva las opciones del brief (subtítulos, cámara, transición, entrada, cierre, look, audio original, SFX,
   zócalo, logo en esquina): nombres y defaults en `scripts/estilo.py` (`python3 scripts/estilo.py <proyecto>` muestra el
   resuelto). Los scripts empujan el texto a la zona segura 9:16 solos. La composición vive en `template/reel/src/Reel.jsx` (la registra `index.jsx` y la usa la app);

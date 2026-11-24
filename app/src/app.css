@@ -368,3 +368,23 @@ button.peligro:hover:not(:disabled) { border-color: var(--mal); color: var(--mal
 .registro-eq li { display: grid; grid-template-columns: 110px 160px 1fr auto; gap: 12px; padding: 8px 4px; border-bottom: 1px solid rgba(52, 48, 43, .6); font-size: 13px; align-items: baseline; }
 .registro-eq li.mal b, .registro-eq li.mal span:nth-child(3) { color: var(--mal); }
 @media (max-width: 1000px) { .equipo { padding: 22px 16px 40px; } .registro-eq li { grid-template-columns: 1fr; gap: 2px; } }
+
+/* ---------- escenas de motion graphics */
+.escenas { display: flex; flex-direction: column; gap: 12px; }
+.escena-tarjeta { display: grid; grid-template-columns: 74px 1fr auto; gap: 14px; padding: 12px; background: var(--tinta-2); border: 1px solid var(--linea);
+  border-radius: var(--r); animation: entrar .3s var(--ease) both; }
+.escena-tarjeta:hover { border-color: var(--linea-2); }
+.escena-tarjeta .muestra { width: 74px; height: 132px; padding: 8px; border-radius: 8px; background: var(--fondo); border: 1px solid rgba(255, 255, 255, .12);
+  flex-direction: column; justify-content: space-between; align-items: flex-start; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); white-space: normal; }
+.escena-tarjeta .muestra b { font: 700 13px var(--mono); }
+.escena-tarjeta .muestra span { font-size: 11px; }
+.escena-tarjeta .campos { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.escena-tarjeta .form.dos { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.escena-tarjeta label.largo { display: flex; flex-direction: column; gap: 5px; font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--crema-3); }
+.escena-tarjeta label.largo > * { font: 14px 'DM Sans'; text-transform: none; letter-spacing: 0; color: var(--crema); }
+.escena-tarjeta textarea { resize: vertical; line-height: 1.4; }
+.escena-tarjeta label.check { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--crema-2); }
+.escena-tarjeta .botones { display: flex; flex-direction: column; gap: 4px; }
+.escena-tarjeta .botones button { padding: 4px 9px; background: none; }
+.muestra-escena { width: 64px; height: 114px; border-radius: 7px; justify-content: center; font: 600 11px var(--mono); background: var(--tinta-3); white-space: normal; }
+.toma-bloque.escena span { text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }

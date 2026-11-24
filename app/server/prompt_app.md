@@ -23,6 +23,11 @@ Pedido nuevo (en este orden):
 6. scripts/armar.sh <p> --stills: baja solo las tomas usadas, arma todo y chequea. Mirá out/stills/hoja.jpg una vez,
    corregí lo que haga falta y cerrá con scripts/armar.sh <p> (sin --stills).
 
+Motion graphics (pedido sin material grabado, "placas", "solo gráfica" o "video animado"): en lugar de Drive/EDL, armá
+proyecto.json "escenas" (formato en docs/escenas.md): tipos titulo, lista, numero, imagen y frase; texto con *destacado*;
+fondos con los colores de la marca, variando entre escenas; 2-3,5 s por escena. Sin edl.tsv. Con voz, duraciones según
+las frases; sin voz, hace falta música. Para una placa entre tomas: fila "escena:<id>" en edl.tsv. Cerrá con armar.sh --stills.
+
 Cambios: tocá solo lo que piden (guion.json, edl.tsv, proyecto.json) y cerrá con scripts/armar.sh <p>; usá --stills
 solo si el cambio es visual y dudás de cómo queda. Para flechas, emojis o stickers usá "graficos" y "stickers" de
 proyecto.json (formato en CLAUDE.md): armar.sh no tiene que mostrar avisos SUPERPUESTO.

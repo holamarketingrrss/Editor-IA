@@ -60,7 +60,7 @@ const correr = (cmd, args) => new Promise((ok, mal) => {
   });
 });
 
-const leerEdl = (d) => fs.readFileSync(path.join(d, 'edl.tsv'), 'utf8').split('\n').filter((l) => l.trim()).map((l) => {
+const leerEdl = (d) => (fs.existsSync(path.join(d, 'edl.tsv')) ? fs.readFileSync(path.join(d, 'edl.tsv'), 'utf8') : '').split('\n').filter((l) => l.trim()).map((l) => {
   const [start, end, file, inPoint, pos] = l.split('\t');
   return {start: +start, end: +end, file, inPoint: +inPoint, pos: pos || ''};
 });
@@ -78,6 +78,7 @@ function todo(id) {
     guion: leer(path.join(d, 'guion.json'), []),
     edl: leerEdl(d),
     tomas: archivos(path.join(d, 'raw'), ['.mp4', '.mov', '.m4v', '.webm']),
+    imagenes: archivos(path.join(d, 'raw'), ['.png', '.jpg', '.jpeg', '.webp', '.svg']),
     musicas: archivos(path.join(d, 'reel/public/musica'), ['.mp3', '.wav', '.m4a']).map((f) => 'musica/' + f),
     videos: archivos(path.join(d, 'out'), ['.mp4']).filter((f) => !f.startsWith('.')),
   };

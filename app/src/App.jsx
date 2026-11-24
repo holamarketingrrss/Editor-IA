@@ -3,7 +3,7 @@ import {Player} from '@remotion/player';
 import {Reel, FPS, duracionEnFrames} from '../../template/reel/src/Reel.jsx';
 import {api, sesionApi} from './api.js';
 import {Login, Equipo} from './Equipo.jsx';
-import {Textos, Tomas, Audio, Estilo, Exportar} from './Paneles.jsx';
+import {Textos, Tomas, Escenas, Audio, Estilo, Exportar} from './Paneles.jsx';
 import {Claude} from './Claude.jsx';
 import {Icono, Linea, fmt, useAviso} from './ui.jsx';
 
@@ -162,13 +162,14 @@ export function App({usuario, equipo, salir}) {
             </button>
             <span className="reloj"><b>{fmt(t)}</b> / {fmt(data.duration)}</span>
             <span className="espacio" />
-            <span className="dato">{data.clips.length} tomas · {data.words.length} palabras</span>
+            <span className="dato">{((e) => [data.clips.length - e && `${data.clips.length - e} tomas`, e && `${e} escenas`].filter(Boolean).join(' + '))(data.clips.filter((c) => c.tipo === 'escena').length)} · {data.words.length} palabras</span>
           </div>
-          <Linea data={data} t={t} irA={irA} miniatura={(f, s) => api.miniatura(p.id, f, s)} />
+          <Linea data={data} t={t} irA={irA} miniatura={(f, s) => api.miniatura(p.id, f, s)}
+            colorEscena={(f) => (f ? p.brand.colores[f] ?? f : 'var(--tinta-4)')} />
         </section>
         <section className="panel">
           <nav className="pestanas">
-            {PANELES.map(([k, n], i) => (
+            {PANELES.map(([k, n0], i) => [k, k === 'tomas' && !p.edl.length && p.proyecto.escenas?.length ? 'Escenas' : n0, i]).map(([k, n, i]) => (
               <button key={k} className={panel === k ? 'activo' : ''} onClick={() => setPanel(k)}>
                 <small>{String(i + 1).padStart(2, '0')}</small>{n}
               </button>
@@ -178,8 +179,10 @@ export function App({usuario, equipo, salir}) {
             {panel === 'claude' && <Claude key={p.id} p={p} t={t} recargar={recargar} alTerminar={alTerminar} />}
             {panel === 'textos' && <Textos p={p} data={data} setData={setData} t={t} irA={irA} sel={sel} setSel={setSel}
               aplicar={(guion) => aplicar('Textos', () => api.guardarGuion(p.id, guion))} ocupado={!!ocupado} />}
-            {panel === 'tomas' && <Tomas p={p} irA={irA} aplicar={(edl) => aplicar('Tomas', () => api.guardarEdl(p.id, edl))}
+            {panel === 'tomas' && p.edl.length > 0 && <Tomas p={p} irA={irA} aplicar={(edl) => aplicar('Tomas', () => api.guardarEdl(p.id, edl))}
               subir={(f) => aplicar('Subir toma', () => api.subir(p.id, 'toma', f))} ocupado={!!ocupado} />}
+            {panel === 'tomas' && p.proyecto.escenas?.length > 0 && <Escenas p={p} data={data} setData={setData} irA={irA}
+              aplicar={(escenas) => aplicar('Escenas', () => api.guardarProyecto(p.id, {escenas}))} ocupado={!!ocupado} />}
             {panel === 'audio' && <Audio p={p} data={data} setData={setData} opciones={opciones}
               aplicar={(c) => aplicar('Audio', () => api.guardarProyecto(p.id, c))}
               subir={(f) => aplicar('Subir música', () => api.subir(p.id, 'musica', f))} ocupado={!!ocupado} />}
