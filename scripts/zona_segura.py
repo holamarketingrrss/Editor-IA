@@ -163,6 +163,21 @@ for s in data['stickers']:
     if y0 < Y_MIN - 5 or y1 > Y_MAX + 5 or x0 < X_STICKERS[0] - 5 or x1 > X_STICKERS[1] + 5:
         zona.append(f"sticker {s['img']} ({s['start']:.2f} s): ocupa x {x0:.0f}-{x1:.0f}, y {y0:.0f}-{y1:.0f}; fuera de x {X_STICKERS[0]}-{X_STICKERS[1]} / y {Y_MIN}-{Y_MAX}")
 
+for g in data.get('graficos', []):   # flechas y emojis: caja cuadrada de su tamaño
+    lado = g.get('w', 260) if g.get('tipo') == 'flecha' else g.get('size', 150) * 1.15
+    x0, y0, x1, y1 = caja(g['x'], g['y'], lado, lado, g.get('rot', 0))
+    if y0 < Y_MIN - 5 or y1 > Y_MAX + 5 or x0 < X_STICKERS[0] - 5 or x1 > X_STICKERS[1] + 5:
+        zona.append(f"{g.get('tipo', 'gráfico')} ({g['start']:.2f} s): ocupa x {x0:.0f}-{x1:.0f}, y {y0:.0f}-{y1:.0f}; fuera de x {X_STICKERS[0]}-{X_STICKERS[1]} / y {Y_MIN}-{Y_MAX}")
+# superposiciones: un sticker, flecha o emoji que coincide en tiempo y lugar con un texto (el texto queda encima y lo tapa)
+choques = []
+elementos = [(f"sticker {x['img']}", x['start'], x['end'], caja_sticker(x)) for x in data['stickers']]
+for g in data.get('graficos', []):
+    lado = g.get('w', 260) if g.get('tipo') == 'flecha' else g.get('size', 150) * 1.15
+    elementos.append((g.get('tipo', 'gráfico') + (' ' + g['emoji'] if g.get('emoji') else ''), g['start'], g['end'], caja(g['x'], g['y'], lado, lado, g.get('rot', 0))))
+for nom, a0, b0, c in elementos:
+    for texto, a1, b1, t, _ in revisar:
+        if a1 < b0 and a0 < b1 and c[0] < t[2] - 10 and t[0] < c[2] - 10 and c[1] < t[3] - 10 and t[1] < c[3] - 10:
+            choques.append(f"{nom} ({a0:.2f} s) se superpone con «{texto}» ({a1:.2f} s): movelo o cambiá su tiempo")
 print(f"Zona segura 9:16 (subtítulos: {MODO}): {len(revisar)} textos y {len(data['stickers'])} stickers revisados; contraste medido en {medidas}" + (' (con contorno, caja o barra no se mide)' if CON_CAJA else '') + ".")
 for m in zona:
     print('  FUERA DE ZONA:', m)
@@ -171,7 +186,9 @@ for m in aviso[:5]:
     print('  CONTRASTE:', m)
 if len(aviso) > 5:
     print(f'  CONTRASTE: ... y {len(aviso) - 5} palabras más con contraste bajo (aviso orientativo: no cuenta la sombra del texto)')
-if not zona and not aviso:
+for m in choques[:6]:
+    print('  SUPERPUESTO:', m)
+if not zona and not aviso and not choques:
     print('  OK: todo dentro de la zona segura y con contraste suficiente.')
 print('  (las caras tapadas no se detectan acá: mirá los stills)')
 sys.exit(1 if zona else 0)

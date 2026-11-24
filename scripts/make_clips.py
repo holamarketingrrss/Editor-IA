@@ -46,7 +46,7 @@ words = json.load(open(f'{P}/words.json')) if os.path.exists(f'{P}/words.json') 
 data = dict(
     duration=duration, outroAt=outro_at, voiceOffset=cfg.get('voiceOffset', 0.3 + INTRO.get(E['entrada']['tipo'], 0)),
     voz=cfg.get('voz', os.path.exists(f'{P}/audio/voz.mp3') or os.path.exists(f'{P}/reel/public/voz.mp3')),
-    clips=clips, words=words, stickers=cfg.get('stickers', []), estilo=E,
+    clips=clips, words=words, stickers=cfg.get('stickers', []), graficos=cfg.get('graficos', []), estilo=E,
 )
 if cfg.get('music'):
     data['music'] = cfg['music']
