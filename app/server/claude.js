@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {spawn, execFile} from 'node:child_process';
 import os from 'node:os';
+import * as eq from './equipo.js';
 
 // El Claude Code instalado para este usuario (~/.local/bin) va primero: en WSL el PATH también trae el de Windows,
 // que usa otra configuración y otro login. EDITOR_CLAUDE_BIN lo fija a mano.
@@ -25,7 +26,21 @@ const MODELOS = ['sonnet', 'opus', 'haiku', 'cuenta'];
 const HERRAMIENTAS = process.env.EDITOR_CLAUDE_TOOLS || 'Bash,Read,Edit,Write,Glob,Grep,ToolSearch';          // lo que puede elegir la app ('cuenta' = sin --model)
 const PERMISOS = process.env.EDITOR_CLAUDE_PERMISOS || 'auto';   // auto: aprueba solo lo seguro; lo demás se deniega y se avisa
 
-let trabajo = null;   // {id, modo, p, proceso, eventos, fin, clientes, antes}
+let trabajo = null;   // {id, modo, p, usuario, proceso, eventos, fin, clientes, antes}
+
+// Motor: "cuenta" = el login de claude.ai de esta compu (plan y conectores de esa cuenta);
+// "api" = clave de API de la agencia (se cobra por uso; los conectores de claude.ai no cargan con API key).
+// La clave sale de ANTHROPIC_API_KEY o de <config>/anthropic.key (fuera del repo); nunca de la app.
+function entorno() {
+  const env = {...process.env};
+  const m = eq.leerEquipo()?.motor || 'cuenta';
+  if (m === 'cuenta') { delete env.ANTHROPIC_API_KEY; return env; }
+  if (!env.ANTHROPIC_API_KEY) {
+    try { env.ANTHROPIC_API_KEY = fs.readFileSync(path.join(eq.CONFIG, 'anthropic.key'), 'utf8').trim(); } catch { /* sin clave */ }
+  }
+  if (!env.ANTHROPIC_API_KEY) throw new Error(`El motor está en "api" pero no hay clave: guardala en ${path.join(eq.CONFIG, 'anthropic.key')} o en ANTHROPIC_API_KEY.`);
+  return env;
+}
 
 const leer = (f, def) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return def; } };
 
@@ -63,8 +78,10 @@ export function claude(REPO) {
   const PROY = path.join(REPO, 'proyectos');
   const proyectos = () => (fs.existsSync(PROY) ? fs.readdirSync(PROY) : []);
 
-  function iniciar({modo, p, texto, marca, modelo}) {
-    if (trabajo && !trabajo.fin) throw new Error('Claude ya está trabajando en otro pedido');
+  function iniciar({modo, p, texto, marca, modelo, usuario}) {
+    if (trabajo && !trabajo.fin) throw new Error(`Claude ya está trabajando${trabajo.usuario?.nombre && trabajo.usuario.id !== usuario?.id ? ` para ${trabajo.usuario.nombre}` : ''} en ${trabajo.p || 'un pedido nuevo'}. Esperá a que termine.`);
+    const permiso = eq.puedeUsarClaude(usuario?.id);
+    if (!permiso.ok) throw new Error(permiso.motivo);
     if (!texto?.trim()) throw new Error('falta el texto');
     if (modo === 'cambios' && !/^[a-z0-9][a-z0-9-]*$/.test(p || '')) throw new Error('falta el proyecto');
     const sesion = modo === 'cambios' ? leer(path.join(PROY, p, '.claude.json'), {}).sesion : null;
@@ -76,8 +93,8 @@ export function claude(REPO) {
     const m = modelo === 'cuenta' ? '' : (modelo || MODELO);
     if (m) args.push('--model', m);
     if (sesion) args.push('--resume', sesion);
-    const proceso = spawn(BIN, args, {cwd: REPO, stdio: ['ignore', 'pipe', 'pipe']});
-    trabajo = {id: Date.now(), modo, p, proceso, eventos: [], fin: null, clientes: new Set(), antes: new Set(proyectos()), pendientes: {}};
+    const proceso = spawn(BIN, args, {cwd: REPO, stdio: ['ignore', 'pipe', 'pipe'], env: entorno()});
+    trabajo = {id: Date.now(), modo, p, usuario, proceso, eventos: [], fin: null, clientes: new Set(), antes: new Set(proyectos()), pendientes: {}};
     emitir({tipo: 'inicio', modo, p, continua: !!sesion});
     let buf = '', sesionNueva = null, error = '';
     proceso.stderr.on('data', (b) => { error += b; });
@@ -127,6 +144,11 @@ export function claude(REPO) {
         denegados: (r.permission_denials || []).map((d) => `${d.tool_name}${d.tool_input?.command ? ': ' + String(d.tool_input.command).slice(0, 100) : ''}`),
         error: code === 0 && !r.is_error ? '' : (error.trim().split('\n').filter((l) => l.trim() && !RUIDO.test(l)).slice(-6).join('\n') || r.result || `claude terminó con código ${code}`),
       };
+      // costo de esta corrida: con --resume, total_cost_usd es el acumulado de la sesión; se descuenta lo ya registrado
+      const previo = sesion ? eq.leerRegistro().filter((x) => x.sesion === sesion || x.sesion === (r.session_id || sesionNueva)).reduce((a, x) => a + (+x.costo || 0), 0) : 0;
+      eq.registrar({usuario: usuario?.id, accion: modo, proyecto: proy, ok: trabajo.fin.ok, sesion: r.session_id || sesionNueva,
+        costo: Math.max(0, +((r.total_cost_usd || 0) - previo).toFixed(4)), modelo: trabajo.fin.modelos.join(','), segundos: trabajo.fin.segundos,
+        motor: eq.leerEquipo()?.motor || 'cuenta'});
       emitir(trabajo.fin);
       for (const res of trabajo.clientes) res.end();
       trabajo.clientes.clear();
@@ -136,7 +158,7 @@ export function claude(REPO) {
 
   return {
     estado: () => new Promise((ok) => execFile(BIN, ['--version'], (err, out) => ok({
-      disponible: !err, version: err ? null : out.trim(), corriendo: !!(trabajo && !trabajo.fin), modo: trabajo?.modo, p: trabajo?.p,
+      disponible: !err, version: err ? null : out.trim(), corriendo: !!(trabajo && !trabajo.fin), modo: trabajo?.modo, p: trabajo?.p, de: trabajo?.usuario?.nombre, motor: eq.leerEquipo()?.motor || 'cuenta',
     }))),
     iniciar,
     parar: () => { if (trabajo && !trabajo.fin) trabajo.proceso.kill('SIGINT'); return {ok: true}; },

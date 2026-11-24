@@ -35,7 +35,8 @@ const P = {
   play: 'M7 5l12 7-12 7z', pausa: 'M7 5h3v14H7zM14 5h3v14h-3z', ok: 'M5 12l4 4 10-10', x: 'M6 6l12 12M18 6L6 18',
   alerta: 'M12 4l9 16H3zM12 10v4M12 17v.5', mas: 'M12 5v14M5 12h14', atras: 'M15 5l-7 7 7 7', buscar: 'M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14zM16 16l4 4',
   chispa: 'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6', teclado: 'M3 7h18v10H3zM7 11h.01M11 11h.01M15 11h.01M8 14h8',
-  descarga: 'M12 4v11M7 10l5 5 5-5M5 20h14', reloj: 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM12 7v5l3 2',
+  descarga: 'M12 4v11M7 10l5 5 5-5M5 20h14', usuarios: 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 12 0v1M16 3.5a4 4 0 0 1 0 7.5M22 21v-1a6 6 0 0 0-4-5.6',
+  salir: 'M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11', candado: 'M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4', reloj: 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM12 7v5l3 2',
 };
 export const Icono = ({n, t = 16}) => (
   <svg width={t} height={t} viewBox="0 0 24 24" fill={n === 'play' || n === 'pausa' ? 'currentColor' : 'none'} stroke="currentColor"

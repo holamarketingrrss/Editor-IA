@@ -5,14 +5,18 @@ Interfaz para revisar y retocar un reel sin tocar archivos a mano. Usa la misma 
 
 ```bash
 cd app && npm install      # una vez (scripts/instalar.sh ya lo hace)
-npm run editor             # abre http://127.0.0.1:4321
+npm run editor             # abre http://127.0.0.1:4321 (solo esta compu)
+npm run equipo             # abierta a la red, con usuario y clave: ver EQUIPO.md
 ```
+
+**Equipo:** usuarios con clave, roles, límite mensual de Claude por persona, registro de quién hizo qué y motor de
+Claude (cuenta o clave de API). Todo en [EQUIPO.md](EQUIPO.md).
 
 - **Claude** (el motor): sin proyecto abierto, *Pedido nuevo* (con selector de marca: usa su preset) recibe el brief y Claude arma el reel completo
   (Notion, design system, Drive, voz con ElevenLabs, corte, subtítulos, cierre). Con un proyecto abierto, *Cambios*:
   un cambio por línea con el segundo del reel (*Insertar tiempo* pone el actual). Claude sigue la misma sesión del
   pedido (`proyectos/<id>/.claude.json`), se ve su progreso en vivo y la vista previa se actualiza sola.
-- **Textos:** corregir palabras, color, fuente, tamaño, tiempos y posición (botón *Mover* + clic en la vista previa).
+- **Textos:** corregir palabras, color, fuente, tamaño, tiempos y posición (clic en la fila y arrastrar la palabra en la vista previa).
   Guarda solo lo tocado en `guion.json` y corre `make_words.py`.
 - **Tomas:** cambiar archivo de `raw/`, punto de entrada y duración, reordenar, quitar, agregar, subir videos.
   Guarda `edl.tsv` y corre `make_clips.py` (recorta solo las tomas que cambiaron).
@@ -43,6 +47,7 @@ Variables opcionales al lanzar la app: `EDITOR_CLAUDE_MODELO` (default si la app
 `EDITOR_CLAUDE_PERMISOS` (`auto`, `acceptEdits`, `dontAsk`). Las instrucciones extra para Claude están en `server/prompt_app.md`.
 
 Lista los proyectos de `proyectos/` hechos con la plantilla (no los marcados con `reel/src/.propia`).
-La API (`server/api.js`) corre dentro del servidor de Vite y solo escucha en 127.0.0.1.
+La API (`server/api.js`) corre dentro del servidor de Vite. Con `npm run editor` solo escucha en 127.0.0.1; `npm run equipo`
+la abre a la red y solo arranca si hay equipo configurado (`server/equipo.js`). Prueba: `bash tests/equipo.sh`.
 
 Remotion es gratis para personas y empresas de hasta 3 personas; con más, necesita licencia de empresa (remotion.pro).

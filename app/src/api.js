@@ -2,6 +2,7 @@
 const pedir = async (url, opts) => {
   const r = await fetch(url, opts);
   const x = await r.json().catch(() => ({error: `respuesta inválida (${r.status})`}));
+  if (r.status === 401 && !url.startsWith('/api/sesion')) window.dispatchEvent(new Event('sin-sesion'));   // venció la sesión: vuelve al login
   if (!r.ok || x.error) throw new Error(x.error || `error ${r.status}`);
   return x;
 };
@@ -19,6 +20,20 @@ export const api = {
   subir: (id, tipo, archivo) => pedir(`/api/p/${id}/subir?tipo=${tipo}&nombre=${encodeURIComponent(archivo.name)}`, {method: 'POST', body: archivo}),
   miniatura: (id, archivo, t) => `/api/p/${id}/miniatura?archivo=${encodeURIComponent(archivo)}&t=${(+t || 0).toFixed(1)}`,
   exportar: (id) => new EventSource(`/api/p/${id}/exportar`),
+};
+
+const borrar = (url) => pedir(url, {method: 'DELETE'});
+export const sesionApi = {
+  estado: () => pedir('/api/sesion'),
+  entrar: (usuario, clave) => post('/api/sesion', {usuario, clave}),
+  salir: () => borrar('/api/sesion'),
+};
+export const equipoApi = {
+  ver: () => pedir('/api/equipo'),
+  agregar: (m) => post('/api/equipo', m),
+  cambiar: (id, cambios) => post(`/api/equipo/${encodeURIComponent(id)}`, cambios),
+  quitar: (id) => borrar(`/api/equipo/${encodeURIComponent(id)}`),
+  motor: (motor) => post('/api/equipo/motor', {motor}),
 };
 
 export const claudeApi = {

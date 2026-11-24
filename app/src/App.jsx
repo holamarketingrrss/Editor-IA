@@ -1,12 +1,28 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Player} from '@remotion/player';
 import {Reel, FPS, duracionEnFrames} from '../../template/reel/src/Reel.jsx';
-import {api} from './api.js';
+import {api, sesionApi} from './api.js';
+import {Login, Equipo} from './Equipo.jsx';
 import {Textos, Tomas, Audio, Estilo, Exportar} from './Paneles.jsx';
 import {Claude} from './Claude.jsx';
 import {Icono, Linea, fmt, useAviso} from './ui.jsx';
 
 export {fmt};
+
+// Con equipo configurado pide usuario y clave; sin equipo (una persona en su compu) entra directo.
+export function Puerta() {
+  const [s, setS] = useState(null);   // {usuario, equipo, motor}
+  const ver = () => sesionApi.estado().then(setS).catch(() => setS({usuario: null, equipo: true}));
+  useEffect(() => {
+    ver();
+    const fuera = () => setS((x) => (x ? {...x, usuario: null} : x));
+    window.addEventListener('sin-sesion', fuera);
+    return () => window.removeEventListener('sin-sesion', fuera);
+  }, []);
+  if (!s) return <div className="app"><main className="cargando"><span className="pulso" /></main></div>;
+  if (!s.usuario) return <Login entro={(u) => setS({...s, usuario: u})} />;
+  return <App usuario={s.usuario} equipo={s.equipo} salir={() => sesionApi.salir().finally(() => setS({...s, usuario: null}))} />;
+}
 const PANELES = [['claude', 'Claude'], ['textos', 'Textos'], ['tomas', 'Tomas'], ['audio', 'Audio'], ['estilo', 'Estilo'], ['exportar', 'Exportar']];
 const nombreProyecto = (id) => id.replace(/-/g, ' ');
 const hace = (ms) => {
@@ -18,7 +34,7 @@ const hace = (ms) => {
 };
 const escribiendo = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable;
 
-export function App() {
+export function App({usuario, equipo, salir}) {
   const avisar = useAviso();
   const [lista, setLista] = useState([]);
   const [id, setId] = useState(() => new URLSearchParams(location.search).get('p') || '');
@@ -31,7 +47,9 @@ export function App() {
   const [sonando, setSonando] = useState(false);
   const [sel, setSel] = useState(null);      // palabra elegida en Textos: se arrastra en la vista previa
   const [atajos, setAtajos] = useState(false);
+  const [verEquipo, setVerEquipo] = useState(false);
   const player = useRef(null);
+  const yoBarra = <Usuario u={usuario} equipo={equipo} salir={salir} abrirEquipo={() => { setId(''); setVerEquipo(true); }} />;
 
   const listar = () => api.proyectos().then(setLista).catch((e) => avisar('error', 'No se pudo leer la lista de proyectos', e.message));
   useEffect(() => { listar(); api.opciones().then(setOpciones).catch(() => {}); }, []);
@@ -106,8 +124,9 @@ export function App() {
     window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar);
   };
 
-  if (!id) return <Inicio lista={lista} abrir={setId} alTerminar={alTerminar} />;
-  if (!p || !props) return <div className="app"><Barra /><main className="cargando"><span className="pulso" />Abriendo {nombreProyecto(id)}…</main></div>;
+  if (verEquipo) return <div className="app"><Barra><span className="espacio" />{yoBarra}</Barra><Equipo yo={usuario} volver={() => setVerEquipo(false)} /></div>;
+  if (!id) return <Inicio lista={lista} abrir={setId} alTerminar={alTerminar} yoBarra={yoBarra} />;
+  if (!p || !props) return <div className="app"><Barra><span className="espacio" />{yoBarra}</Barra><main className="cargando"><span className="pulso" />Abriendo {nombreProyecto(id)}…</main></div>;
 
   const info = lista.find((x) => x.id === id);
   return (
@@ -120,6 +139,7 @@ export function App() {
         <span className="espacio" />
         {ocupado && <span className="ocupado"><span className="pulso" />{ocupado}…</span>}
         <button className="icono" onClick={() => setAtajos(true)} title="Atajos de teclado (?)" aria-label="Atajos de teclado"><Icono n="teclado" /></button>
+        {yoBarra}
       </Barra>
       <main className="editor">
         <section className="vista">
@@ -179,12 +199,23 @@ function Barra({children}) {
   return <header className="barra"><span className="marca-app">editor<i>ia</i></span>{children}</header>;
 }
 
-function Inicio({lista, abrir, alTerminar}) {
+function Usuario({u, equipo, salir, abrirEquipo}) {
+  if (!equipo) return u.rol === 'admin' ? <button className="icono" onClick={abrirEquipo} title="Equipo: activar el acceso con usuarios" aria-label="Equipo"><Icono n="usuarios" /></button> : null;
+  return (
+    <span className="usuario">
+      {u.rol === 'admin' && <button className="icono" onClick={abrirEquipo} title="Equipo" aria-label="Equipo"><Icono n="usuarios" /></button>}
+      <span className="avatar" title={`${u.nombre} · ${u.rol}`}>{u.nombre.split(' ').map((x) => x[0]).slice(0, 2).join('').toUpperCase()}</span>
+      <button className="icono" onClick={salir} title="Salir" aria-label="Salir"><Icono n="salir" /></button>
+    </span>
+  );
+}
+
+function Inicio({lista, abrir, alTerminar, yoBarra}) {
   const [q, setQ] = useState('');
   const filtrados = lista.filter((x) => (x.id + ' ' + x.marca).toLowerCase().includes(q.toLowerCase()));
   return (
     <div className="app inicio">
-      <Barra><span className="espacio" /><span className="dato">Hola Marketing · {lista.length} proyectos</span></Barra>
+      <Barra><span className="espacio" /><span className="dato">Hola Marketing · {lista.length} proyectos</span>{yoBarra}</Barra>
       <main className="inicio-grilla">
         <section className="bloque pedido">
           <h2><small>01</small>Pedido <em>nuevo</em></h2>
