@@ -20,20 +20,8 @@ mock = {
 zchips = [dict(label=w['text'], t=w['start']) for w in words if w['text'] in ('1x', '4x', '8x')]
 # ---- final sin voz: comparativa (texto animado a ritmo de lectura) + CTA tipo encuesta ----
 E = round(voice_end + 0.08, 3)
-TXT = "El *zoom del *Pro es una *diferencia importante. Y ojo: la *selfie con *Center_Stage también está en el *iPhone_Air."
-t = E + 0.4; n = c['vo']; comp_words = []
-for tok in TXT.split():
-    key = tok.startswith('*'); text = tok.lstrip('*').replace('_', ' ')
-    d = 0.44 if key else 0.25
-    sl = SLOT_VO[n % 5]; n += 1
-    comp_words.append(dict(text=text, key=key, seg=9, kind='txt', start=round(t, 3), end=round(t + d, 3),
-                           x=KEY_POS[0] if key else sl[0], y=KEY_POS[1] if key else sl[1], entry=ENTRY[(n * 3) % 8]))
-    t += d
-words += comp_words
-compare = dict(start=E, end=round(t + 0.35, 3),
-               tPro=next(w['start'] for w in comp_words if w['text'] == 'Pro'),
-               tAir=next(w['start'] for w in comp_words if w['text'].startswith('iPhone Air')),
-               tSelfie=next(w['start'] for w in comp_words if w['text'] == 'selfie'))
+# comparativa sin texto: resalta primero el zoom y después la selfie
+compare = dict(start=E, end=round(E + 3.6, 3), tPro=round(E + 0.55, 3), tSelfie=round(E + 1.85, 3), tAir=round(E + 2.0, 3))
 poll = dict(start=compare['end'], dur=4.4)
 outro = round(poll['start'] + poll['dur'], 3)
 P = poll['start']
