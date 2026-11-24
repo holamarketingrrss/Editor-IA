@@ -1,10 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {api, claudeApi} from './api.js';
+import {Icono} from './ui.jsx';
 
 const PLANTILLA = `Editá el video de esta pieza: [link a la ficha en Notion].
 Material: [link de Drive] (excluir […]). Formato 9:16, 15 s.`;
-const MODELOS = [['sonnet', 'Sonnet (recomendado: rinde más el plan)'], ['opus', 'Opus (el más capaz, gasta más)'],
-  ['haiku', 'Haiku (el más liviano, para cambios chicos)'], ['cuenta', 'El de la cuenta']];
+const MODELOS = [['sonnet', 'Sonnet · recomendado'], ['opus', 'Opus · más capaz, gasta más'],
+  ['haiku', 'Haiku · cambios chicos'], ['cuenta', 'El de la cuenta']];
 const leerModelo = () => { try { return localStorage.getItem('editor.modelo') || 'sonnet'; } catch { return 'sonnet'; } };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -73,9 +74,17 @@ export function Claude({p, t, recargar, alTerminar}) {
         : <p className="nota">Un cambio por línea, con el segundo del reel. Pausá donde querés el cambio y tocá <b>Insertar tiempo</b>.
             Claude sigue la misma sesión del pedido y reusa lo que ya armó.</p>}
       {modo === 'pedido' && presets.length > 0 && (
-        <label className="marca">Marca <select value={marca} onChange={(e) => setMarca(e.target.value)} disabled={corriendo}>
-          <option value="">La que diga el pedido</option>{presets.map((x) => <option key={x.id} value={x.id}>{x.marca}</option>)}</select>
-          <span className="sub">usa su preset: logo, fuentes, voz y estilo de edición</span></label>
+        <div className="marcas" role="radiogroup" aria-label="Marca">
+          <button role="radio" aria-checked={!marca} className={'marca-op' + (!marca ? ' activo' : '')} onClick={() => setMarca('')} disabled={corriendo}>
+            <span className="logo-marca auto"><Icono n="chispa" /></span><b>Según el pedido</b></button>
+          {presets.map((x) => (
+            <button key={x.id} role="radio" aria-checked={marca === x.id} className={'marca-op' + (marca === x.id ? ' activo' : '')}
+              style={{'--marca': x.color}} onClick={() => setMarca(x.id)} disabled={corriendo} title={`${x.marca} · ${x.handle || ''}`}>
+              <span className="logo-marca"><img src={x.logo} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} /></span>
+              <b>{x.marca}</b>
+            </button>
+          ))}
+        </div>
       )}
       <textarea ref={area} value={texto} onChange={(e) => setTexto(e.target.value)} disabled={corriendo}
         placeholder={modo === 'pedido' ? PLANTILLA : '0:04 — "argentina" se lee poco: pasala a blanco\n0:06–0:07 — cambiá la toma por una de clientes comiendo'}
@@ -83,18 +92,18 @@ export function Claude({p, t, recargar, alTerminar}) {
         onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && texto.trim() && !corriendo) enviar(); }} />
       <div className="acciones">
         <button className="primario" disabled={!texto.trim() || corriendo || !estado} onClick={enviar}>
-          {modo === 'pedido' ? 'Editar con Claude' : 'Pedir cambios'}</button>
-        {modo === 'cambios' && <button disabled={corriendo} onClick={insertarTiempo}>Insertar tiempo ({mmss(t)})</button>}
+          <Icono n="chispa" />{modo === 'pedido' ? 'Editar con Claude' : 'Pedir cambios'}<kbd>⌘↵</kbd></button>
+        {modo === 'cambios' && <button disabled={corriendo} onClick={insertarTiempo}><Icono n="reloj" />Insertar {mmss(t)}</button>}
         {corriendo && <button onClick={() => claudeApi.parar()}>Parar</button>}
-        <label className="modelo">Modelo <select value={modelo} onChange={(e) => elegirModelo(e.target.value)} disabled={corriendo}>
+        <label className="modelo"><span>Modelo</span><select value={modelo} onChange={(e) => elegirModelo(e.target.value)} disabled={corriendo}>
           {MODELOS.map(([k, n]) => <option key={k} value={k}>{n}</option>)}</select></label>
-        <span className="sub">{estado?.version ? `Claude Code ${estado.version.split(' ')[0]}` : ''}</span>
+        
       </div>
       {error && <div className="aviso error">{error}</div>}
       {eventos.length > 0 && (
         <div className="registro" ref={caja}>
           {eventos.map((ev, i) => <Evento key={i} ev={ev} />)}
-          {corriendo && <div className="ev pensando">Claude está trabajando…</div>}
+          {corriendo && <div className="ev pensando"><span className="pulso" />Claude está trabajando…</div>}
         </div>
       )}
     </div>

@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {api} from './api.js';
 
-const fmt = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`;
+import {fmt, Icono} from './ui.jsx';
 const num = (v) => (v === '' || isNaN(+v) ? 0 : +v);
 
 // ---------- Textos: corregir palabras, color, fuente, tamaño, tiempos y posición ----------
-export function Textos({p, data, setData, t, irA, mover, setMover, aplicar, ocupado}) {
+export function Textos({p, data, setData, t, irA, sel, setSel, aplicar, ocupado}) {
   const words = data.words;
   const off = data.voiceOffset;
   const colores = Object.keys(p.brand.colores);
@@ -30,14 +30,16 @@ export function Textos({p, data, setData, t, irA, mover, setMover, aplicar, ocup
   const modo = data.estilo?.subtitulos?.modo ?? 'palabra';
   return (
     <>
-      <p className="nota">Clic en el tiempo para ir a la palabra. Los cambios se ven al instante; <b>Aplicar</b> los guarda (y los vuelve a ubicar dentro de la zona segura).
-        {modo !== 'palabra' && ' En este modo de subtítulos la posición la decide el bloque: mover no aplica.'}</p>
+      <p className="nota">Clic en una fila para ir a esa palabra{modo === 'palabra' ? ' y arrastrarla en la vista previa' : ''}. Los cambios se ven al instante;
+        <b> Aplicar</b> los guarda (y los vuelve a ubicar dentro de la zona segura).
+        {modo !== 'palabra' && ' En este modo de subtítulos la posición la decide el bloque.'}</p>
       <table className="tabla">
-        <thead><tr><th>Tiempo</th><th>Texto</th><th>Color</th><th>Fuente</th><th>Tam.</th><th>Inicio</th><th>Fin</th><th /></tr></thead>
+        <thead><tr><th>Tiempo</th><th>Texto</th><th>Color</th><th>Fuente</th><th>Tam.</th><th>Inicio</th><th>Fin</th></tr></thead>
         <tbody>
           {words.map((w, i) => (
-            <tr key={i} ref={(el) => { fila.current[i] = el; }} className={(i === actual ? 'actual ' : '') + (w._editada ? 'editada' : '')}>
-              <td><button className="link" onClick={() => irA(w.start + off + 0.05)}>{fmt(w.start + off)}</button></td>
+            <tr key={i} ref={(el) => { fila.current[i] = el; }} onClick={() => { if (sel !== i) { setSel(i); irA(w.start + off + 0.08); } }}
+              className={(i === actual ? 'actual ' : '') + (i === sel ? 'elegida ' : '') + (w._editada ? 'editada' : '')}>
+              <td className="tiempo-celda">{fmt(w.start + off)}{w.destacado && <i className="punto" title="destacada" />}</td>
               <td><input value={w.text} onChange={(e) => editar(i, 'text', e.target.value)} /></td>
               <td>
                 <select value={w.color} onChange={(e) => editar(i, 'color', e.target.value)} style={{borderLeft: `14px solid ${p.brand.colores[w.color] ?? w.color}`}}>
@@ -49,15 +51,14 @@ export function Textos({p, data, setData, t, irA, mover, setMover, aplicar, ocup
               <td><input type="number" className="corto" value={w.size} onChange={(e) => editar(i, 'size', num(e.target.value))} /></td>
               <td><input type="number" step="0.05" className="corto" value={w.start} onChange={(e) => editar(i, 'start', num(e.target.value))} /></td>
               <td><input type="number" step="0.05" className="corto" value={w.end} onChange={(e) => editar(i, 'end', num(e.target.value))} /></td>
-              <td>{modo === 'palabra' && <button title="Ubicar con un clic en la vista previa" className={mover === i ? 'activo' : ''}
-                onClick={() => { irA(w.start + off + 0.1); setMover(mover === i ? null : i); }}>Mover</button>}</td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="acciones">
         <button className="primario" disabled={!sucias || ocupado} onClick={guardar}>Aplicar textos</button>
-        <button disabled={!sucias || ocupado} onClick={() => setData(p.data)}>Descartar</button>
+        <button disabled={!sucias || ocupado} onClick={() => { setData(p.data); setSel(null); }}>Descartar</button>
+        {sucias && <span className="sub">{((n) => `${n} ${n === 1 ? 'palabra' : 'palabras'} con cambios sin aplicar`)(words.filter((w) => w._editada).length)}</span>}
       </div>
     </>
   );
@@ -215,27 +216,41 @@ export function Estilo({p, data, setData, opciones, aplicar, guardarPreset, ocup
 export function Exportar({p, recargar}) {
   const [log, setLog] = useState([]);
   const [estado, setEstado] = useState(null);   // null | 'corriendo' | {ok, revisar, video}
+  const [verLog, setVerLog] = useState(false);
   const caja = useRef(null);
+  // Remotion escribe "Rendered 120/450"; después viene el audio (loudnorm) y el chequeo
+  const progreso = (() => {
+    for (let i = log.length - 1; i >= 0; i--) {
+      const m = /Rendered (\d+)\/(\d+)/.exec(log[i]) || /(\d+)\/(\d+)\s*(frames|cuadros)/i.exec(log[i]);
+      if (m) return {pct: Math.round((+m[1] / +m[2]) * 90), fase: `Video: cuadro ${m[1]} de ${m[2]}`};
+      if (/loudnorm|LUFS|audio/i.test(log[i])) return {pct: 94, fase: 'Normalizando el audio'};
+    }
+    return {pct: 3, fase: 'Preparando'};
+  })();
   useEffect(() => { caja.current && (caja.current.scrollTop = caja.current.scrollHeight); }, [log]);
   const empezar = () => {
     setLog([]); setEstado('corriendo');
     const es = api.exportar(p.id);
     es.addEventListener('log', (e) => setLog((l) => [...l.slice(-300), JSON.parse(e.data)]));
-    es.addEventListener('fin', (e) => { setEstado(JSON.parse(e.data)); es.close(); recargar(); });
-    es.onerror = () => { es.close(); setEstado((s) => (s === 'corriendo' ? {ok: false} : s)); };
+    es.addEventListener('fin', (e) => { const r = JSON.parse(e.data); setEstado(r); setVerLog(!r.ok || !!r.revisar); es.close(); recargar(); });
+    es.onerror = () => { es.close(); setVerLog(true); setEstado((s) => (s === 'corriendo' ? {ok: false} : s)); };
   };
   return (
     <>
       <p className="nota">Renderiza con Remotion, normaliza a -14 LUFS / -1,5 dBTP y chequea H.264 1080x1920 30 fps. Si dice REVISAR, no se entrega.
         El archivo queda en <code>out/</code> con el nombre MARCA_Tema_Formato_vN.mp4.</p>
-      <div className="acciones"><button className="primario" disabled={estado === 'corriendo'} onClick={empezar}>{estado === 'corriendo' ? 'Exportando…' : 'Exportar video'}</button></div>
+      <div className="acciones"><button className="primario" disabled={estado === 'corriendo'} onClick={empezar}><Icono n="descarga" />{estado === 'corriendo' ? 'Exportando…' : 'Exportar video'}</button>
+        {log.length > 0 && <button onClick={() => setVerLog((v) => !v)}>{verLog ? 'Ocultar detalle' : 'Ver detalle'}</button>}</div>
+      {estado === 'corriendo' && (
+        <div className="progreso"><div className="barra-prog"><i style={{width: `${progreso.pct}%`}} /></div><span>{progreso.fase}</span></div>
+      )}
       {estado && estado !== 'corriendo' && (
         <div className={'aviso ' + (estado.ok && !estado.revisar ? 'ok' : 'error')}>
-          {estado.ok && !estado.revisar ? 'Listo para entregar.' : estado.revisar ? 'Exportado, pero REVISAR (ver abajo).' : 'Falló el render (ver abajo).'}
+          {estado.ok && !estado.revisar ? 'Listo para entregar.' : estado.revisar ? 'Exportado, pero REVISAR (mirá el detalle).' : 'Falló el render (mirá el detalle).'}
           {estado.video && <> <a href={`/salida/${p.id}/${estado.video}`} download>Descargar {estado.video}</a></>}
         </div>
       )}
-      {log.length > 0 && <pre className="log" ref={caja}>{log.join('\n')}</pre>}
+      {log.length > 0 && verLog && <pre className="log" ref={caja}>{log.join('\n')}</pre>}
       {p.videos.length > 0 && <><h4>Versiones exportadas</h4><ul className="videos">
         {p.videos.map((v) => <li key={v}><a href={`/salida/${p.id}/${v}`} target="_blank" rel="noreferrer">{v}</a></li>)}</ul></>}
     </>
