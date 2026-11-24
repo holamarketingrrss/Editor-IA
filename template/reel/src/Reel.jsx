@@ -98,6 +98,196 @@ function armar(data, brand, base) {
   const SOLAPA = ['fundido', 'zoom', 'deslizar'].includes(E.transicion?.tipo);
   const DESTACADAS = data.words.filter((w) => w.destacado).map((w) => [w.start + data.voiceOffset, Math.min(w.end, w.start + 0.6) + data.voiceOffset]);
 
+
+  // ---------- Escenas de motion graphics (proyecto.json "escenas"): reemplazan una toma o arman un video sin material.
+  // Toman colores, fuentes y logo de la marca. Todo el texto queda dentro de la zona segura (y 260 a 1460, x 90 a 990).
+  // Texto con *palabra* = destacada (color de acento). Tipos: titulo · lista · numero · imagen · frase.
+  const hex = (v) => { const c = String(col(v) || '').trim(); return /^#[0-9a-f]{6}$/i.test(c) ? c : /^#[0-9a-f]{3}$/i.test(c) ? '#' + c.slice(1).split('').map((x) => x + x).join('') : null; };
+  const lum = (v) => {
+    const h = hex(v); if (!h) return 0;
+    const f = (x) => { x /= 255; return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4; };
+    return 0.2126 * f(parseInt(h.slice(1, 3), 16)) + 0.7152 * f(parseInt(h.slice(3, 5), 16)) + 0.0722 * f(parseInt(h.slice(5, 7), 16));
+  };
+  const contraste = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+  const PALETA = Object.keys(C);
+  const OSCURO = PALETA.filter((k) => hex(k)).sort((a, b) => lum(a) - lum(b))[0] ?? '#111111';
+  // color de texto legible sobre el fondo: el pedido, o blanco / el más oscuro de la marca
+  const textoSobre = (fondo, pedido) => pedido ? col(pedido) : (contraste('#FFFFFF', fondo) >= contraste(OSCURO, fondo) ? '#FFFFFF' : col(OSCURO));
+  // acento para destacar: el primero de la marca que se lea sobre el fondo y no sea el fondo
+  const acentoSobre = (fondo, texto) => {
+    const cand = [...(brand.acentos ?? []), ...PALETA].map(col).filter((c) => hex(c) && hex(c) !== hex(fondo));
+    return cand.find((c) => contraste(c, fondo) >= 2.2) ?? texto;
+  };
+  const FG = FONT.G ?? FONT[Object.keys(FONT)[0]], FB = FONT.B ?? FG;
+  const ANCHO_G = brand.fuentes.G?.ancho ?? 0.56, ANCHO_B = brand.fuentes.B?.ancho ?? 0.55;
+  const marcas = (t) => String(t ?? '').split(/(\*[^*]+\*)/).filter(Boolean).map((x) => (x.startsWith('*') ? {t: x.slice(1, -1), d: true} : {t: x, d: false}));
+  // reparte el texto en renglones y elige el tamaño más grande que entra en el ancho y el alto
+  const acomodar = (texto, {max = 170, min = 64, ancho = 880, alto = 640, prop = ANCHO_G, inter = 1.05} = {}) => {
+    // una destacada de varias palabras no se corta entre renglones (espacio duro adentro de *...*)
+    const partes = String(texto ?? '').replace(/\*[^*]+\*/g, (m) => m.replace(/ /g, '\u00a0')).split('\n');
+    for (let size = max; size >= min; size -= 6) {
+      const porRenglon = Math.max(4, Math.floor(ancho / (size * prop)));
+      const lineas = [];
+      for (const p of partes) {
+        let l = '';
+        for (const w of p.split(/ +/).filter(Boolean)) {
+          const largo = (l ? l + ' ' + w : w).replace(/\*/g, '').length;
+          if (l && largo > porRenglon) { lineas.push(l); l = w; } else l = l ? l + ' ' + w : w;
+        }
+        lineas.push(l);
+      }
+      if (lineas.length * size * inter <= alto || size - 6 < min) return {size, lineas};
+    }
+    return {size: min, lineas: partes};
+  };
+
+  const Fondo = ({e, dur}) => {
+    const frame = useCurrentFrame();
+    const f = e.fondo ?? brand.outro?.fondo ?? brand.acentos?.[0] ?? OSCURO;
+    const bg = Array.isArray(f) ? `linear-gradient(160deg, ${col(f[0])}, ${col(f[1] ?? f[0])})` : col(f);
+    const base = Array.isArray(f) ? f[0] : f;
+    const deco = e.decor ?? 'formas';
+    const otros = [...(brand.acentos ?? []), ...PALETA].map(col).filter((c) => hex(c) && hex(c) !== hex(base) && c !== '#FFFFFF');
+    const a1 = otros[0] ?? '#FFFFFF', a2 = otros[1] ?? a1;
+    const t = frame / Math.max(1, dur);
+    const en = spring({frame, fps: FPS, config: {damping: 16, stiffness: 90}});
+    return (
+      <AbsoluteFill style={{background: bg, overflow: 'hidden'}}>
+        {deco === 'formas' && <>
+          <div style={{position: 'absolute', width: 900, height: 900, borderRadius: '50%', background: a1, opacity: 0.9,
+            left: 520 + t * 60, top: -380 - t * 40, transform: `scale(${en})`}} />
+          <div style={{position: 'absolute', width: 520, height: 520, borderRadius: '50%', border: `46px solid ${a2}`, opacity: 0.85,
+            left: -260 - t * 50, top: 1480 + t * 30, transform: `scale(${en}) rotate(${t * 40}deg)`}} />
+          <div style={{position: 'absolute', width: 70, height: 70, borderRadius: '50%', background: a2, left: 120, top: 300 - t * 60, transform: `scale(${en})`}} />
+        </>}
+        {deco === 'lineas' && Array.from({length: 7}, (_, i) => (
+          <div key={i} style={{position: 'absolute', left: -200, right: -200, top: 140 + i * 280, height: 18, background: a1, opacity: 0.18,
+            transform: `translateX(${((i % 2 ? 1 : -1) * (1 - en) * 100) + (i % 2 ? t : -t) * 80}px) rotate(-8deg)`}} />
+        ))}
+        {deco === 'puntos' && <AbsoluteFill style={{backgroundImage: `radial-gradient(${a1} 5px, transparent 6px)`, backgroundSize: '64px 64px',
+          opacity: 0.22 * en, transform: `translateY(${-t * 64}px)`}} />}
+      </AbsoluteFill>
+    );
+  };
+
+  // texto con destacadas; "barrido" pinta una franja de acento detrás de la destacada
+  const Marcado = ({texto, acento, sobre, desde = 0, barrido = true}) => {
+    const frame = useCurrentFrame();
+    return marcas(texto).map((p, i) => (p.d
+      ? <span key={i} style={{position: 'relative', color: barrido ? sobre : acento, whiteSpace: 'nowrap', zIndex: 0}}>
+          {barrido && <span style={{position: 'absolute', left: '-0.08em', right: '-0.08em', top: '0.12em', bottom: '0.02em', background: acento, zIndex: -1,
+            borderRadius: '0.08em', transformOrigin: 'left', transform: `scaleX(${interpolate(frame - desde, [0, 9], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)})})`}} />}
+          {p.t}
+        </span>
+      : <span key={i}>{p.t}</span>));
+  };
+
+  const Escena = ({e, dur}) => {
+    const frame = useCurrentFrame();
+    const {fps} = useVideoConfig();
+    const f = e.fondo ?? brand.outro?.fondo ?? brand.acentos?.[0] ?? OSCURO;
+    const base = Array.isArray(f) ? f[0] : f;
+    const tc = textoSobre(base, e.color);
+    const acc = e.acento ? col(e.acento) : acentoSobre(base, tc);
+    // con barrido, la destacada va con el color de texto que se lea sobre el acento
+    const tcAcc = contraste('#FFFFFF', acc) >= contraste(col(OSCURO), acc) ? '#FFFFFF' : col(OSCURO);
+    const salida = interpolate(frame, [dur - 7, dur], [0, 1], {...clamp, easing: Easing.in(Easing.cubic)});
+    const izq = e.alineacion === 'izquierda';
+    const caja = {position: 'absolute', left: 90, right: 90, top: 260, bottom: 460, display: 'flex', flexDirection: 'column',
+      justifyContent: 'center', alignItems: izq ? 'flex-start' : 'center', textAlign: izq ? 'left' : 'center', gap: 34, color: tc,
+      transform: `translateY(${-salida * 60}px)`, opacity: 1 - salida};
+    const sube = (desde) => { const p = spring({frame: frame - desde, fps, config: {damping: 15, stiffness: 160}}); return {opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 50}px)`}; };
+    const Sub = ({desde}) => e.sub ? <div style={{...FB, fontSize: 54, lineHeight: 1.2, opacity: 0.9, maxWidth: 860, ...sube(desde)}}>{e.sub}</div> : null;
+    const tipo = e.tipo ?? 'titulo';
+
+    let cuerpo = null;
+    if (tipo === 'titulo') {
+      const {size, lineas} = acomodar(e.texto, {alto: e.sub ? 520 : 700});
+      cuerpo = <>
+        <div style={{...FG, fontSize: size, lineHeight: 1.05}}>
+          {lineas.map((l, i) => {
+            const p = interpolate(frame - i * 4, [0, 10], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+            return <div key={i} style={{overflow: 'hidden', paddingBottom: '0.08em'}}>
+              <div style={{transform: `translateY(${(1 - p) * 110}%)`}}><Marcado texto={l} acento={acc} sobre={tcAcc} desde={8 + i * 4} /></div>
+            </div>;
+          })}
+        </div>
+        <Sub desde={6 + lineas.length * 4} />
+      </>;
+    }
+    if (tipo === 'lista') {
+      const items = e.items ?? [];
+      const ventana = Math.max(1, dur * 0.6 - 10);
+      const {size} = acomodar(items.reduce((a, b) => (a.length > b.length ? a : b), ''), {max: 78, min: 44, ancho: 720, alto: 9999, prop: ANCHO_B});
+      cuerpo = <>
+        {e.texto && <div style={{...FG, fontSize: acomodar(e.texto, {max: 110, alto: 260}).size, lineHeight: 1.05, ...sube(0)}}><Marcado texto={e.texto} acento={acc} sobre={tcAcc} desde={8} /></div>}
+        <div style={{display: 'flex', flexDirection: 'column', gap: 26, alignSelf: 'stretch'}}>
+          {items.map((it, i) => {
+            const desde = 8 + Math.round((i * ventana) / Math.max(1, items.length));
+            const p = spring({frame: frame - desde, fps, config: {damping: 14, stiffness: 170}});
+            return <div key={i} style={{display: 'flex', alignItems: 'center', gap: 28, opacity: Math.min(1, p * 1.4), transform: `translateX(${(1 - p) * -80}px)`,
+              textAlign: 'left'}}>
+              <span style={{...FG, flex: 'none', width: size * 1.35, height: size * 1.35, borderRadius: '50%', background: acc, color: tcAcc,
+                display: 'grid', placeItems: 'center', fontSize: size * 0.7, transform: `scale(${p})`}}>{e.numerada === false ? '✓' : i + 1}</span>
+              <span style={{...FB, fontSize: size, lineHeight: 1.15}}><Marcado texto={it} acento={acc} barrido={false} /></span>
+            </div>;
+          })}
+        </div>
+      </>;
+    }
+    if (tipo === 'numero') {
+      const hasta = +e.numero || 0, desdeN = +e.desde || 0;
+      const p = interpolate(frame, [4, Math.max(5, dur * 0.55)], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+      const dec = String(e.numero).includes('.') ? String(e.numero).split('.')[1].length : 0;
+      const n = (desdeN + (hasta - desdeN) * p).toLocaleString('es-AR', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+      const txt = `${e.prefijo ?? ''}${(desdeN + (hasta - desdeN)).toLocaleString('es-AR', {minimumFractionDigits: dec, maximumFractionDigits: dec})}${e.sufijo ?? ''}`;
+      const {size} = acomodar(txt, {max: 330, min: 120, alto: 400, inter: 1});
+      const latido = frame > dur * 0.55 ? 1 + 0.04 * Math.sin((frame - dur * 0.55) / 3) * Math.exp(-(frame - dur * 0.55) / 12) : 1;
+      cuerpo = <>
+        <div style={{...FG, fontSize: size, lineHeight: 1, color: acc, fontVariantNumeric: 'tabular-nums', transform: `scale(${latido})`, ...sube(0)}}>
+          {e.prefijo}{n}{e.sufijo}</div>
+        {e.texto && <div style={{...FG, fontSize: acomodar(e.texto, {max: 96, alto: 300}).size, lineHeight: 1.08, ...sube(8)}}><Marcado texto={e.texto} acento={acc} sobre={tcAcc} desde={16} /></div>}
+        <Sub desde={14} />
+      </>;
+    }
+    if (tipo === 'imagen') {
+      const p = spring({frame: frame - 2, fps, config: {damping: 14, stiffness: 120}});
+      const zoom = interpolate(frame, [0, dur], [1, 1.08]);
+      const alto = e.texto ? 760 : 1060;
+      cuerpo = <>
+        {e.img && <div style={{width: e.ajuste === 'contain' ? 'auto' : 820, height: alto, borderRadius: 36, overflow: 'hidden', alignSelf: 'center',
+          boxShadow: '0 40px 80px rgba(0,0,0,.35)', transform: `scale(${0.8 + 0.2 * p}) rotate(${(1 - p) * -6 + (e.rot ?? 0)}deg)`, opacity: Math.min(1, p * 1.5),
+          background: e.ajuste === 'contain' ? 'transparent' : 'rgba(0,0,0,.15)'}}>
+          <Img src={asset(e.img)} style={{width: '100%', height: '100%', objectFit: e.ajuste ?? 'cover', transform: `scale(${zoom})`}} />
+        </div>}
+        {e.texto && <div style={{...FG, fontSize: acomodar(e.texto, {max: 110, alto: 300}).size, lineHeight: 1.05, ...sube(10)}}><Marcado texto={e.texto} acento={acc} sobre={tcAcc} desde={18} /></div>}
+      </>;
+    }
+    if (tipo === 'frase') {
+      const {size, lineas} = acomodar(e.texto, {max: 110, min: 56, alto: 600, prop: ANCHO_B, inter: 1.2});
+      const palabras = lineas.join('\n').split(/( +|\n)/);
+      let k = 0;
+      cuerpo = <>
+        <div style={{...FG, fontSize: 280, lineHeight: 0.6, color: acc, height: 120, ...sube(0)}}>“</div>
+        <div style={{...FB, fontSize: size, lineHeight: 1.2, whiteSpace: 'pre-wrap'}}>
+          {palabras.map((w, i) => {
+            if (!w.trim()) return w;
+            const o = interpolate(frame - 6 - (k++) * 1.6, [0, 6], [0, 1], clamp);
+            return <span key={i} style={{opacity: o}}><Marcado texto={w} acento={acc} barrido={false} /></span>;
+          })}
+        </div>
+        {e.autor && <div style={{...FB, fontSize: 46, opacity: 0.85, ...sube(10 + k * 1.6)}}>— {e.autor}</div>}
+      </>;
+    }
+    return (
+      <AbsoluteFill>
+        <Fondo e={e} dur={dur} />
+        {e.logo && <Img src={asset(`brand/${brand.logo}`)} style={{position: 'absolute', top: 250, left: '50%', width: 220, transform: 'translateX(-50%)', ...sube(0)}} />}
+        <div style={caja}>{cuerpo}</div>
+      </AbsoluteFill>
+    );
+  };
+
   const Clip = ({clip, idx}) => {
     const frame = useCurrentFrame();
     const durationInFrames = Math.round((clip.end - clip.start) * FPS);
@@ -107,12 +297,19 @@ function armar(data, brand, base) {
       const t = clip.start + frame / FPS;
       scale = DESTACADAS.some(([a, b]) => t >= a && t < b) ? 1.16 : 1.04;
     }
-    let opacity = 1, ty = 0;
+    let opacity = 1, ty = 0, zoomT = 1;
     if (SOLAPA && idx > 0) {
       const p = interpolate(frame, [0, T_FR], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
       if (E.transicion.tipo === 'fundido') opacity = p;
-      if (E.transicion.tipo === 'zoom') { opacity = p; scale *= interpolate(p, [0, 1], [1.3, 1]); }
+      if (E.transicion.tipo === 'zoom') { opacity = p; zoomT = interpolate(p, [0, 1], [1.3, 1]); scale *= zoomT; }
       if (E.transicion.tipo === 'deslizar') ty = (1 - p) * 100;
+    }
+    if (clip.tipo === 'escena') {
+      return (
+        <AbsoluteFill style={{overflow: 'hidden', opacity, transform: `translateY(${ty}%) scale(${zoomT})`}}>
+          <Escena e={clip.escena} dur={durationInFrames} />
+        </AbsoluteFill>
+      );
     }
     const vol = E.audioOriginal === 'alto' ? 1 : E.audioOriginal === 'bajo' ? 0.15 : 0;
     return (
@@ -324,7 +521,7 @@ function armar(data, brand, base) {
     const cta = tipo === 'cta' && E.cierre?.texto;
     return (
       <AbsoluteFill>
-        <AbsoluteFill style={{backgroundColor: fondo, opacity: bg * 0.92}} />
+        <AbsoluteFill style={{backgroundColor: fondo, opacity: bg * (data.clips[data.clips.length - 1].end <= data.outroAt + 0.01 ? 1 : 0.92)}} />
         <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: cta ? 44 : 60}}>
           {cta && <CTA texto={E.cierre.texto} />}
           <Logo w={cta ? 380 : 620} demora={cta ? 10 : 4} />
@@ -381,6 +578,9 @@ function armar(data, brand, base) {
     });
   }
 
+  // las escenas traen su propio texto: los subtítulos de la voz no se muestran encima (salvo escena "subtitulos": true)
+  const enEscena = (fr) => data.clips.some((c) => c.tipo === 'escena' && !c.escena?.subtitulos && fr >= c.start * FPS && fr < c.end * FPS);
+
   const Reel = () => {
     const outroStart = Math.round(data.outroAt * FPS);
     const sfx = E.sfx ?? {};
@@ -412,7 +612,11 @@ function armar(data, brand, base) {
         ))}
         {E.look === 'cine' && <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,110,125,.55), rgba(255,140,40,.45))', mixBlendMode: 'soft-light'}} />}
         {/* viñeta suave para que se lean las palabras, sin fondo por palabra */}
-        {E.vineta !== false && <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,.35) 100%)'}} />}
+        {E.vineta !== false && data.clips.filter((c) => c.tipo !== 'escena').map((c, i) => (
+          <Sequence key={'v' + i} from={Math.round(c.start * FPS)} durationInFrames={Math.max(1, Math.round((c.end - c.start) * FPS))}>
+            <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,.35) 100%)'}} />
+          </Sequence>
+        ))}
         {E.grano && <Grano />}
         {E.logoEsquina && (
           <Sequence durationInFrames={outroStart}>
@@ -435,7 +639,7 @@ function armar(data, brand, base) {
             <Zocalo z={E.zocalo} />
           </Sequence>
         )}
-        {textos.filter((x) => x.from + x.dur > introDur).map((x, i) => (
+        {textos.filter((x) => x.from + x.dur > introDur && !enEscena(x.from)).map((x, i) => (
           <Sequence key={'w' + i} from={Math.max(x.from, introDur)} durationInFrames={x.dur - Math.max(0, introDur - x.from)}>
             {x.w ? <Word w={x.w} dur={x.dur} /> : <Bloque ws={x.b.ws} desde={x.from / FPS} dur={x.dur} />}
           </Sequence>
@@ -455,7 +659,7 @@ function armar(data, brand, base) {
         {sfx.whoosh && cortes.map((f, i) => (
           <Sequence key={'wh' + i} from={Math.max(0, f - 6)} durationInFrames={20}><Audio src={asset('sfx/whoosh.wav')} volume={0.55} /></Sequence>
         ))}
-        {sfx.pop && textos.map((x, i) => (
+        {sfx.pop && textos.filter((x) => !enEscena(x.from)).map((x, i) => (
           <Sequence key={'pp' + i} from={x.from} durationInFrames={8}><Audio src={asset('sfx/pop.wav')} volume={0.4} /></Sequence>
         ))}
       </AbsoluteFill>

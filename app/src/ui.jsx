@@ -44,7 +44,7 @@ export const Icono = ({n, t = 16}) => (
 );
 
 // ---------- Línea de tiempo: tomas (con miniatura), palabras y cierre; clic o arrastre para moverse
-export function Linea({data, t, irA, miniatura}) {
+export function Linea({data, t, irA, miniatura, colorEscena}) {
   const ref = useRef(null);
   const dur = data.duration || 1, off = data.voiceOffset || 0;
   const pct = (s) => `${Math.max(0, Math.min(100, (s / dur) * 100))}%`;
@@ -61,7 +61,8 @@ export function Linea({data, t, irA, miniatura}) {
     <div className="linea" ref={ref} onPointerDown={arrastrar} role="slider" aria-label="Línea de tiempo" aria-valuemin={0} aria-valuemax={dur} aria-valuenow={t}>
       <div className="pista tomas">
         {data.clips.map((c, i) => (
-          <div key={i} className="toma-bloque" style={{left: pct(c.start), width: pct(c.end - c.start)}} title={`Toma ${i + 1} · ${c.src || c.file}`}>
+          <div key={i} className={'toma-bloque' + (c.tipo === 'escena' ? ' escena' : '')} title={c.tipo === 'escena' ? `Escena ${i + 1} · ${c.escena.tipo || 'titulo'}` : `Toma ${i + 1} · ${c.src || c.file}`}
+            style={{left: pct(c.start), width: pct(c.end - c.start), background: c.tipo === 'escena' && colorEscena ? colorEscena(Array.isArray(c.escena.fondo) ? c.escena.fondo[0] : c.escena.fondo) : undefined}}>
             {miniatura && c.src && <img src={miniatura(c.src, c.inPoint)} alt="" draggable={false} />}
             <span>{String(i + 1).padStart(2, '0')}</span>
           </div>

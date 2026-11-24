@@ -35,4 +35,21 @@ d['stickers'] = [dict(img='x.png', start=1, end=2, x=500, y=60, w=200, rot=0, wh
 PY
 if python3 scripts/zona_segura.py "$T" >/dev/null; then fallo "no detectó un sticker en los 220 px de arriba"; fi
 python3 scripts/zona_segura.py "$T" --frames >/dev/null || fallo "--frames"
-echo "OK: flujo nuevo_proyecto -> make_words -> make_clips -> zona_segura"
+# motion graphics: una escena en lugar de una toma (edl "escena:<id>") y un video solo de escenas (sin edl.tsv)
+python3 - "$T" <<'PY'
+import json, sys
+p = f'{sys.argv[1]}/proyecto.json'
+try: c = json.load(open(p))
+except Exception: c = {}
+c['escenas'] = [{'id': 'dato', 'tipo': 'numero', 'numero': 50, 'sufijo': '%', 'dur': 2},
+                {'id': 'fin', 'tipo': 'titulo', 'texto': 'Hola *mundo*', 'dur': 3}]
+json.dump(c, open(p, 'w'))
+PY
+printf '0.00\t4.00\tt.mp4\t0\n4.00\t6.00\tescena:dato\t0\n' > "$T/edl.tsv"
+python3 scripts/make_clips.py "$T" >/dev/null || fallo "make_clips con una escena en el EDL"
+python3 -c "import json,sys; d=json.load(open(sys.argv[1])); c=d['clips']; assert c[1]['tipo']=='escena' and c[1]['escena']['numero']==50, c" "$T/reel/src/data.json" || fallo "la escena del EDL no llegó a data.json"
+rm "$T/edl.tsv"
+python3 scripts/make_clips.py "$T" >/dev/null || fallo "make_clips solo con escenas"
+python3 -c "import json,sys; d=json.load(open(sys.argv[1])); assert [c['start'] for c in d['clips']]==[0,2] and (d['outroAt'], d['duration'])==(5.0, 6.94), (d['outroAt'], d['duration'])" "$T/reel/src/data.json" || fallo "tiempos del video solo de escenas"
+python3 scripts/zona_segura.py "$T" --frames | grep -q escena-fin || fallo "--frames no incluye las escenas"
+echo "OK: flujo nuevo_proyecto -> make_words -> make_clips -> zona_segura (y escenas de motion graphics)"

@@ -58,7 +58,7 @@ def tiempo_palabra(w):
 def fondo_luminancia(t, c4):
     """Luminancia media del clip en el instante t, dentro de la caja c4 (x0,y0,x1,y1). None si no se puede medir."""
     clip = next((c for c in data['clips'] if c['start'] <= t < c['end']), None)
-    if not clip:
+    if not clip or not clip.get('file'):   # escena de motion graphics: sin video para medir
         return None, None
     ruta = f'{P}/reel/public/clips/{clip["file"]}'
     if not os.path.exists(ruta):
@@ -80,7 +80,10 @@ def fondo_luminancia(t, c4):
 
 def frames_clave(maximo):
     fr = lambda t: round(t * FPS)
-    obl = [(fr(data['outroAt'] + 0.7), 'cierre')] + [(fr((s['start'] + s['end']) / 2), 'sticker-' + os.path.splitext(s['img'])[0]) for s in data['stickers']]
+    # escenas de motion graphics: un cuadro cuando ya entró todo (70 % de la escena, antes de la salida)
+    esc = [(fr(c['start'] + (c['end'] - c['start']) * 0.7), 'escena-' + str(c['escena'].get('id', i + 1)))
+           for i, c in enumerate(data['clips']) if c.get('tipo') == 'escena']
+    obl = esc + [(fr(data['outroAt'] + 0.7), 'cierre')] + [(fr((s['start'] + s['end']) / 2), 'sticker-' + os.path.splitext(s['img'])[0]) for s in data['stickers']]
     acentos = [w for w in data['words'] if col(w['color']).lower() != col('texto').lower()]
     grandes = [w for w in data['words'] if w['size'] >= 250 and w not in acentos]
     resto = [data['words'][0], data['words'][-1]] if data['words'] else []

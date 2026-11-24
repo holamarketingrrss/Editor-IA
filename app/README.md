@@ -20,6 +20,8 @@ Claude (cuenta o clave de API). Todo en [EQUIPO.md](EQUIPO.md).
   Guarda solo lo tocado en `guion.json` y corre `make_words.py`.
 - **Tomas:** cambiar archivo de `raw/`, punto de entrada y duración, reordenar, quitar, agregar, subir videos.
   Guarda `edl.tsv` y corre `make_clips.py` (recorta solo las tomas que cambiaron).
+- **Escenas** (videos de motion graphics, `docs/escenas.md`): la pestaña Tomas pasa a Escenas: tipo, textos, fondo, duración y orden,
+  con vista previa al instante. Guarda en `proyecto.json` → `escenas`.
 - **Audio:** volumen de voz y música, elegir o subir música, audio original. Guarda en `proyecto.json`.
 - **Estilo:** las opciones del brief (`scripts/estilo.py`). Guarda solo lo que cambió en `proyecto.json` → `estilo`.
   *Guardar como estilo de <marca>* lo pasa al preset de la marca (`presets/`).
