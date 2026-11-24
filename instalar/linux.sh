@@ -13,7 +13,7 @@ case "$REPO" in /mnt/*) echo "AVISO: el repo está en el disco de Windows ($REPO
 
 echo "== Paquetes del sistema"
 sudo_si apt-get update -qq
-sudo_si apt-get install -y -qq ffmpeg python3 python3-pip python3-pil cmake build-essential git gh curl ca-certificates
+sudo_si apt-get install -y -qq ffmpeg python3 python3-pip python3-pil cmake build-essential git gh curl ca-certificates fonts-noto-color-emoji
 
 V=$(node -v 2>/dev/null | sed 's/v//;s/\..*//')
 if [ -z "$V" ] || [ "$V" -lt 20 ]; then

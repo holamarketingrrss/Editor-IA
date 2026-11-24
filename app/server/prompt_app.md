@@ -9,3 +9,5 @@ contestarte a mitad de camino.
   dato que contradice el brief), no te quedes esperando: hacé lo posible, dejalo anotado y decilo al final.
 - Respuesta final corta, en español rioplatense: qué hiciste, qué decidiste por tu cuenta y qué quedó pendiente.
   Si creaste un proyecto, la última línea es exactamente `PROYECTO: proyectos/<id>`.
+- Para pedidos de motion graphics (flechas, emojis, stickers animados) usá `graficos` y `stickers` de proyecto.json
+  (formato en CLAUDE.md) y corré scripts/zona_segura.py: no dejes avisos SUPERPUESTO.

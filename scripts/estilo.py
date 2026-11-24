@@ -23,6 +23,7 @@ DEFAULTS = {
     'entrada': {'tipo': 'gancho', 'texto': ''},                   # gancho | logo | titulo
     'cierre': {'tipo': 'logo', 'texto': ''},                      # logo | cta | congelada | loop
     'animacionLogo': 'pop',            # pop | fade | deslizar | sello | estatico
+    'animacionStickers': 'pop',        # pop | trazo (el garabato aparece como pintado); por sticker: "anim"
     'look': 'original',                # original | calido | vibrante | bn | vintage | cine
     'vineta': True,
     'grano': False,
@@ -44,6 +45,7 @@ OPCIONES = {
     ('entrada', 'tipo'): ['gancho', 'logo', 'titulo'],
     ('cierre', 'tipo'): ['logo', 'cta', 'congelada', 'loop'],
     ('animacionLogo',): ['pop', 'fade', 'deslizar', 'sello', 'estatico'],
+    ('animacionStickers',): ['pop', 'trazo'],
     ('look',): ['original', 'calido', 'vibrante', 'bn', 'vintage', 'cine'],
     ('audioOriginal',): ['mute', 'bajo', 'alto'],
 }

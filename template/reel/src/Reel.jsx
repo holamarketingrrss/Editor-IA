@@ -199,17 +199,55 @@ function armar(data, brand, base) {
     );
   };
 
+  // Stickers: "pop" (rebote) o "trazo" (el garabato aparece como pintado, de un lado al otro). Por sticker: s.anim
   const Sticker = ({s}) => {
     const frame = useCurrentFrame();
     const {fps} = useVideoConfig();
-    const pop = spring({frame, fps, config: {damping: 9, stiffness: 160}});
+    const anim = s.anim ?? E.animacionStickers ?? 'pop';
     const wiggle = Math.sin(frame / 4) * 3;
+    let scale = spring({frame, fps, config: {damping: 9, stiffness: 160}}), clip = 'none';
+    if (anim === 'trazo') {
+      const p = interpolate(frame, [0, 14], [0, 1], {...clamp, easing: Easing.out(Easing.quad)});
+      scale = interpolate(p, [0, 1], [0.92, 1]);
+      clip = `inset(0 ${(1 - p) * 100}% 0 0 round 6%)`;   // se revela de izquierda a derecha
+    }
     return (
       <Img src={asset(`brand/${s.img}`)} style={{
-        position: 'absolute', left: s.x, top: s.y, width: s.w,
-        transform: `translate(-50%,-50%) scale(${pop}) rotate(${s.rot + wiggle}deg)`,
+        position: 'absolute', left: s.x, top: s.y, width: s.w, clipPath: clip,
+        transform: `translate(-50%,-50%) scale(${scale}) rotate(${s.rot + wiggle}deg)`,
         filter: s.white ? 'brightness(0) invert(1) drop-shadow(0 6px 16px rgba(0,0,0,.5))' : 'drop-shadow(0 6px 16px rgba(0,0,0,.5))',
       }} />
+    );
+  };
+
+  // Gráficos animados (proyecto.json "graficos"): flechas dibujadas a mano que se trazan solas, y emojis con rebote.
+  //   {"tipo": "flecha", "start": 2, "end": 3.5, "x": 700, "y": 900, "w": 260, "rot": 20, "forma": "curva"|"recta", "color": "amarillo"}
+  //   {"tipo": "emoji", "emoji": "🔥", "start": 1, "end": 2.5, "x": 300, "y": 700, "size": 160, "rot": -8}
+  const FLECHAS = {
+    curva: {cuerpo: 'M 30 250 C 60 120, 150 60, 250 70', punta: 'M 205 35 L 255 70 L 210 112'},
+    recta: {cuerpo: 'M 40 260 L 250 60', punta: 'M 185 55 L 252 58 L 248 125'},
+  };
+  const Grafico = ({g}) => {
+    const frame = useCurrentFrame();
+    const {fps} = useVideoConfig();
+    if (g.tipo === 'emoji') {
+      const pop = spring({frame, fps, config: {damping: 8, stiffness: 170}});
+      const flota = Math.sin(frame / 7) * 8;
+      return <div style={{position: 'absolute', left: g.x, top: g.y, fontSize: g.size ?? 150, lineHeight: 1,
+        transform: `translate(-50%,-50%) translateY(${flota}px) scale(${pop}) rotate(${(g.rot ?? 0) + Math.sin(frame / 9) * 4}deg)`,
+        filter: 'drop-shadow(0 8px 18px rgba(0,0,0,.4))'}}>{g.emoji}</div>;
+    }
+    const f = FLECHAS[g.forma] ?? FLECHAS.curva;
+    const cuerpo = interpolate(frame, [0, 12], [1, 0], {...clamp, easing: Easing.out(Easing.cubic)});
+    const punta = interpolate(frame, [10, 16], [1, 0], clamp);
+    const w = g.w ?? 260, color = col(g.color ?? 'texto');
+    const trazo = {fill: 'none', stroke: color, strokeWidth: 16, strokeLinecap: 'round', strokeLinejoin: 'round', pathLength: 1, strokeDasharray: 1};
+    return (
+      <svg viewBox="0 0 300 300" width={w} height={w} style={{position: 'absolute', left: g.x, top: g.y, overflow: 'visible',
+        transform: `translate(-50%,-50%) rotate(${g.rot ?? 0}deg)`, filter: 'drop-shadow(0 6px 14px rgba(0,0,0,.45))'}}>
+        <path d={f.cuerpo} {...trazo} strokeDashoffset={cuerpo} />
+        <path d={f.punta} {...trazo} strokeDashoffset={punta} />
+      </svg>
     );
   };
 
@@ -377,6 +415,11 @@ function armar(data, brand, base) {
         {data.stickers.map((s, i) => (
           <Sequence key={'s' + i} from={Math.round(s.start * FPS)} durationInFrames={Math.round((s.end - s.start) * FPS)}>
             <Sticker s={s} />
+          </Sequence>
+        ))}
+        {(data.graficos ?? []).map((g, i) => (
+          <Sequence key={'g' + i} from={Math.round(g.start * FPS)} durationInFrames={Math.max(1, Math.round((g.end - g.start) * FPS))}>
+            <Grafico g={g} />
           </Sequence>
         ))}
         {E.zocalo?.texto && (

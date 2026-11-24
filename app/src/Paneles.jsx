@@ -147,10 +147,11 @@ export function Audio({p, data, setData, opciones, aplicar, subir, ocupado}) {
 // ---------- Estilo: las opciones del brief (scripts/estilo.py) ----------
 const CAMPOS = [
   ['Subtítulos', [['subtitulos.modo', 'Modo'], ['subtitulos.posicion', 'Posición'], ['subtitulos.tipografias', 'Tipografías'],
-    ['subtitulos.color', 'Color'], ['subtitulos.legibilidad', 'Legibilidad'], ['subtitulos.animacion', 'Animación']]],
+    ['subtitulos.fuente', 'Fuente (con «una»)', 'fuente'], ['subtitulos.color', 'Color'], ['subtitulos.legibilidad', 'Legibilidad'],
+    ['subtitulos.animacion', 'Animación']]],
   ['Imagen', [['camara', 'Cámara'], ['transicion.tipo', 'Transición'], ['look', 'Look'], ['vineta', 'Viñeta', 'si'], ['grano', 'Grano', 'si']]],
   ['Entrada y cierre', [['entrada.tipo', 'Entrada'], ['entrada.texto', 'Título de entrada', 'texto'], ['cierre.tipo', 'Cierre'],
-    ['cierre.texto', 'Texto del CTA', 'texto'], ['animacionLogo', 'Animación del logo']]],
+    ['cierre.texto', 'Texto del CTA', 'texto'], ['animacionLogo', 'Animación del logo'], ['animacionStickers', 'Animación de stickers']]],
   ['Extras', [['sfx.whoosh', 'Whoosh en transiciones', 'si'], ['sfx.pop', 'Pop en textos', 'si'], ['logoEsquina', 'Logo en esquina', 'si'],
     ['zocalo.texto', 'Zócalo (texto)', 'texto'], ['zocalo.start', 'Zócalo desde (s)', 'numero'], ['zocalo.end', 'Zócalo hasta (s)', 'numero']]],
 ];
@@ -189,6 +190,8 @@ export function Estilo({p, data, setData, opciones, aplicar, guardarPreset, ocup
               const v = leerRuta(e, r);
               if (tipo === 'si') return <label key={r} className="check"><input type="checkbox" checked={!!v} onChange={(x) => poner(r, x.target.checked)} /> {nombre}</label>;
               if (tipo === 'texto') return <label key={r}>{nombre}<input value={v ?? ''} onChange={(x) => poner(r, x.target.value)} /></label>;
+              if (tipo === 'fuente') return <label key={r}>{nombre}<select value={v} onChange={(x) => poner(r, x.target.value)}>
+                {Object.entries(p.brand.fuentes).map(([k, f]) => <option key={k} value={k}>{k} · {f.familia}</option>)}</select></label>;
               if (tipo === 'numero') return <label key={r}>{nombre}<input type="number" step="0.1" value={v ?? ''} onChange={(x) => poner(r, num(x.target.value))} /></label>;
               return <label key={r}>{nombre}<select value={v} onChange={(x) => poner(r, x.target.value)}>
                 {(opciones.opciones[r] || []).map((o) => <option key={o}>{o}</option>)}</select></label>;
