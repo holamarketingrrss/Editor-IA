@@ -74,6 +74,8 @@ for i, (a, b, texto) in enumerate(segs):
         alto0 = size * f.get('interlineado', 1)
         y0 = L['yAbajo'] - alto0 / 2 if posicion == 'abajo' else L['yMedio']
         x, y, rot = g.get('x', 540), g.get('y', y0), g.get('rot', 0)
+    if es_dest and not g.get('size'):
+        size = int(size * S.get('escalaDestacado', 1.0))
     if not agrupado:
         width = len(text) * ratio * size
         if width > MAXW:

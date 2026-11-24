@@ -15,18 +15,18 @@ fi
 [ -s "$P/inventario.tsv" ] || { echo "sin material: inventario.tsv vacío y raw/ vacío"; exit 1; }
 LOG="$P/thumbs/.log"; : > "$LOG"
 cuadro() {   # $1 id  $2 archivo  $3 proyecto
-  local id=$1 tit=$2 P=$3
+  local id=$1 tit=$2 P=$3 sz=${4:-0}
   if [ "${id#local_}" != "$id" ]; then
     [ -s "$P/thumbs/$id.jpg" ] && return 0
     ffprobe -v error -select_streams v:0 -show_entries stream=width,height:stream_side_data=rotation:format=duration -of json "$P/raw/$tit" > "$P/thumbs/$id.json" 2>/dev/null
     ffmpeg -v error -ss 0.6 -i "$P/raw/$tit" -frames:v 1 -vf "scale=-2:240" -q:v 4 "$P/thumbs/$id.jpg" -y 2>/dev/null || true
   else
-    scripts/thumb_head.sh "$id" "$P/thumbs"
+    scripts/thumb_head.sh "$id" "$P/thumbs" "$sz"
   fi
 }
 n=0
-while IFS=$'\t' read -r _ tit id _; do   # de a 4 en paralelo (más, y Drive corta por cupo)
-  cuadro "$id" "$tit" "$P" < /dev/null >> "$LOG" 2>&1 &   # </dev/null: ffmpeg no se come el inventario
+while IFS=$'\t' read -r _ tit id sz; do   # de a 4 en paralelo (más, y Drive corta por cupo)
+  cuadro "$id" "$tit" "$P" "$sz" < /dev/null >> "$LOG" 2>&1 &   # </dev/null: ffmpeg no se come el inventario
   n=$((n+1)); [ $((n % 4)) = 0 ] && wait
 done < "$P/inventario.tsv"
 wait

@@ -15,6 +15,11 @@ Pedido nuevo (en este orden):
 5. edl.tsv: una toma por línea, `inicio<TAB>fin<TAB>archivo de raw/<TAB>segundo de entrada en el archivo`, con tiempos
    del reel desde 0 y cortes sobre la voz (las tomas salen de catalogo.tsv). proyecto.json: solo lo que el pedido cambia
    del preset ("estilo"), "stickers" y "graficos". Opciones válidas de estilo: python3 scripts/estilo.py --opciones.
+   Persona a cámara (la voz está en las tomas; en el preset "voz": {"tipo": "propia"}): en lugar del paso 4, después de
+   material.sh corré scripts/transcribir_tomas.sh <p> y elegí con tomas.txt (texto con tiempos: descartá repeticiones y
+   tomas falladas); armá el EDL cortando entre frases y después scripts/voz_tomas.sh <p> (voz limpia + subtítulos).
+   Si lo grabado difiere del guion (otro modelo, otra frase), usá lo grabado que cumpla la misma idea y avisalo; solo
+   dejá afuera una parte si no hay ninguna toma que la cubra.
 6. scripts/armar.sh <p> --stills: baja solo las tomas usadas, arma todo y chequea. Mirá out/stills/hoja.jpg una vez,
    corregí lo que haga falta y cerrá con scripts/armar.sh <p> (sin --stills).
 

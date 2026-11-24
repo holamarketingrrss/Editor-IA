@@ -12,6 +12,8 @@ DEFAULTS = {
         'tipografias': 'alternadas',   # alternadas | una | texto+destacados
         'fuente': 'B',                 # casillero de brand.json para "una" y para el texto de "texto+destacados"
         'fuenteDestacado': 'G',        # para los destacados con "texto+destacados"
+        'efectoDestacado': 'ninguno',  # ninguno | brillo (resplandor del color + rebote sutil en las palabras destacadas)
+        'escalaDestacado': 1.0,        # tamaño de las destacadas respecto del resto (ej. 1.3 = 30 % más grandes)
         'rotacion': None,              # casilleros que se alternan con "alternadas" (None = todos los de brand.json)
         'color': 'blanco',             # blanco (destacados en colores de marca) | marca | negro
         'legibilidad': 'sombra',       # sombra | contorno | caja | barra
@@ -40,6 +42,7 @@ OPCIONES = {
     ('subtitulos', 'color'): ['blanco', 'marca', 'negro'],
     ('subtitulos', 'legibilidad'): ['sombra', 'contorno', 'caja', 'barra'],
     ('subtitulos', 'animacion'): ['pop', 'fade', 'deslizar', 'maquina', 'no'],
+    ('subtitulos', 'efectoDestacado'): ['ninguno', 'brillo'],
     ('camara',): ['pushin', 'no', 'punchin'],
     ('transicion', 'tipo'): ['corte', 'fundido', 'fundido-color', 'cortina', 'zoom', 'deslizar'],
     ('entrada', 'tipo'): ['gancho', 'logo', 'titulo'],
