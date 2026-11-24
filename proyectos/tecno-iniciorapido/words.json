@@ -1,0 +1,857 @@
+[
+ {
+  "text": "¿Vas",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.035,
+  "wend": 0.175,
+  "end": 0.236
+ },
+ {
+  "text": "a",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.236,
+  "wend": 0.256,
+  "end": 0.316
+ },
+ {
+  "text": "cambiar",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.316,
+  "wend": 0.657,
+  "end": 0.717
+ },
+ {
+  "text": "de",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.717,
+  "wend": 0.797,
+  "end": 0.858
+ },
+ {
+  "text": "iPhone",
+  "key": true,
+  "seg": 0,
+  "kind": "pri",
+  "start": 0.858,
+  "wend": 1.219,
+  "end": 1.259
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.259,
+  "wend": 1.279,
+  "end": 1.339
+ },
+ {
+  "text": "te",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.339,
+  "wend": 1.42,
+  "end": 1.44
+ },
+ {
+  "text": "preocupa",
+  "key": true,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.44,
+  "wend": 1.781,
+  "end": 1.861
+ },
+ {
+  "text": "pasar",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 1.861,
+  "wend": 2.162,
+  "end": 2.242
+ },
+ {
+  "text": "todo",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 2.242,
+  "wend": 2.443,
+  "end": 2.463
+ },
+ {
+  "text": "al",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 2.463,
+  "wend": 2.523,
+  "end": 2.543
+ },
+ {
+  "text": "nuevo?",
+  "key": false,
+  "seg": 0,
+  "kind": "pri",
+  "start": 2.543,
+  "wend": 2.844,
+  "end": 3.194
+ },
+ {
+  "text": "¡Mirá esto!",
+  "key": true,
+  "seg": 0,
+  "kind": "pri",
+  "start": 3.306,
+  "wend": 3.928,
+  "end": 4.113
+ },
+ {
+  "text": "Primero,",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 4.113,
+  "wend": 4.575,
+  "end": 4.755
+ },
+ {
+  "text": "encendé",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 4.755,
+  "wend": 5.176,
+  "end": 5.196
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.196,
+  "wend": 5.276,
+  "end": 5.317
+ },
+ {
+  "text": "nuevo",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.317,
+  "wend": 5.577,
+  "end": 5.758
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.758,
+  "wend": 5.778,
+  "end": 5.858
+ },
+ {
+  "text": "acercalo",
+  "key": true,
+  "seg": 1,
+  "kind": "vo",
+  "start": 5.858,
+  "wend": 6.38,
+  "end": 6.4
+ },
+ {
+  "text": "al",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.4,
+  "wend": 6.5,
+  "end": 6.52
+ },
+ {
+  "text": "iPhone",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.52,
+  "wend": 6.801,
+  "end": 6.841
+ },
+ {
+  "text": "que",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.841,
+  "wend": 6.921,
+  "end": 6.981
+ },
+ {
+  "text": "ya",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 6.981,
+  "wend": 7.102,
+  "end": 7.142
+ },
+ {
+  "text": "usás.",
+  "key": false,
+  "seg": 1,
+  "kind": "vo",
+  "start": 7.142,
+  "wend": 7.984,
+  "end": 8.127
+ },
+ {
+  "text": "Asegurate",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 8.127,
+  "wend": 8.468,
+  "end": 8.468
+ },
+ {
+  "text": "de",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 8.468,
+  "wend": 8.528,
+  "end": 8.588
+ },
+ {
+  "text": "tener",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 8.588,
+  "wend": 8.888,
+  "end": 8.908
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 8.908,
+  "wend": 8.948,
+  "end": 8.988
+ },
+ {
+  "text": "Bluetooth",
+  "key": true,
+  "seg": 2,
+  "kind": "vo",
+  "start": 8.988,
+  "wend": 9.489,
+  "end": 9.529
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 9.529,
+  "wend": 9.549,
+  "end": 9.609
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 9.609,
+  "wend": 9.689,
+  "end": 9.729
+ },
+ {
+  "text": "Wi-Fi",
+  "key": true,
+  "seg": 2,
+  "kind": "vo",
+  "start": 9.729,
+  "wend": 10.05,
+  "end": 10.11
+ },
+ {
+  "text": "activados.",
+  "key": false,
+  "seg": 2,
+  "kind": "vo",
+  "start": 10.11,
+  "wend": 10.771,
+  "end": 10.956
+ },
+ {
+  "text": "En",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 10.956,
+  "wend": 11.056,
+  "end": 11.097
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 11.097,
+  "wend": 11.177,
+  "end": 11.217
+ },
+ {
+  "text": "teléfono",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 11.217,
+  "wend": 11.638,
+  "end": 11.698
+ },
+ {
+  "text": "anterior",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 11.698,
+  "wend": 12.14,
+  "end": 12.28
+ },
+ {
+  "text": "aparece",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 12.28,
+  "wend": 12.641,
+  "end": 12.681
+ },
+ {
+  "text": "la",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 12.681,
+  "wend": 12.741,
+  "end": 12.782
+ },
+ {
+  "text": "opción",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 12.782,
+  "wend": 13.042,
+  "end": 13.062
+ },
+ {
+  "text": "para",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.062,
+  "wend": 13.223,
+  "end": 13.283
+ },
+ {
+  "text": "configurar",
+  "key": true,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.283,
+  "wend": 13.885,
+  "end": 13.925
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 13.925,
+  "wend": 14.005,
+  "end": 14.045
+ },
+ {
+  "text": "nuevo.",
+  "key": false,
+  "seg": 3,
+  "kind": "vo",
+  "start": 14.045,
+  "wend": 14.266,
+  "end": 14.451
+ },
+ {
+  "text": "Seguí",
+  "key": false,
+  "seg": 4,
+  "kind": "vo",
+  "start": 14.451,
+  "wend": 14.652,
+  "end": 14.692
+ },
+ {
+  "text": "las",
+  "key": false,
+  "seg": 4,
+  "kind": "vo",
+  "start": 14.692,
+  "wend": 14.832,
+  "end": 14.872
+ },
+ {
+  "text": "instrucciones",
+  "key": true,
+  "seg": 4,
+  "kind": "vo",
+  "start": 14.872,
+  "wend": 15.495,
+  "end": 15.555
+ },
+ {
+  "text": "en",
+  "key": false,
+  "seg": 4,
+  "kind": "vo",
+  "start": 15.555,
+  "wend": 15.615,
+  "end": 15.675
+ },
+ {
+  "text": "pantalla.",
+  "key": false,
+  "seg": 4,
+  "kind": "vo",
+  "start": 15.675,
+  "wend": 16.217,
+  "end": 16.402
+ },
+ {
+  "text": "Elegí",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 16.402,
+  "wend": 16.762,
+  "end": 17.003
+ },
+ {
+  "text": "cómo",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 17.003,
+  "wend": 17.203,
+  "end": 17.303
+ },
+ {
+  "text": "transferir",
+  "key": true,
+  "seg": 5,
+  "kind": "vo",
+  "start": 17.303,
+  "wend": 17.784,
+  "end": 17.844
+ },
+ {
+  "text": "tus",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 17.844,
+  "wend": 17.984,
+  "end": 18.024
+ },
+ {
+  "text": "datos",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 18.024,
+  "wend": 18.385,
+  "end": 18.525
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 18.525,
+  "wend": 18.545,
+  "end": 18.605
+ },
+ {
+  "text": "mantené",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 18.605,
+  "wend": 18.946,
+  "end": 19.006
+ },
+ {
+  "text": "los",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 19.006,
+  "wend": 19.126,
+  "end": 19.206
+ },
+ {
+  "text": "equipos",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 19.206,
+  "wend": 19.547,
+  "end": 19.607
+ },
+ {
+  "text": "cerca",
+  "key": true,
+  "seg": 5,
+  "kind": "vo",
+  "start": 19.607,
+  "wend": 19.928,
+  "end": 20.108
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 20.108,
+  "wend": 20.128,
+  "end": 20.188
+ },
+ {
+  "text": "con",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 20.188,
+  "wend": 20.308,
+  "end": 20.348
+ },
+ {
+  "text": "batería",
+  "key": true,
+  "seg": 5,
+  "kind": "vo",
+  "start": 20.348,
+  "wend": 20.789,
+  "end": 20.869
+ },
+ {
+  "text": "suficiente",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 20.869,
+  "wend": 21.49,
+  "end": 21.63
+ },
+ {
+  "text": "hasta",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 21.63,
+  "wend": 21.831,
+  "end": 21.891
+ },
+ {
+  "text": "terminar.",
+  "key": false,
+  "seg": 5,
+  "kind": "vo",
+  "start": 21.891,
+  "wend": 22.352,
+  "end": 22.537
+ },
+ {
+  "text": "Antes",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 22.537,
+  "wend": 22.779,
+  "end": 22.819
+ },
+ {
+  "text": "de",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 22.819,
+  "wend": 22.879,
+  "end": 22.899
+ },
+ {
+  "text": "borrar",
+  "key": true,
+  "seg": 6,
+  "kind": "pri",
+  "start": 22.899,
+  "wend": 23.261,
+  "end": 23.442
+ },
+ {
+  "text": "o",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 23.442,
+  "wend": 23.462,
+  "end": 23.542
+ },
+ {
+  "text": "entregar",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 23.542,
+  "wend": 23.904,
+  "end": 23.964
+ },
+ {
+  "text": "tu",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 23.964,
+  "wend": 24.044,
+  "end": 24.084
+ },
+ {
+  "text": "iPhone",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 24.084,
+  "wend": 24.406,
+  "end": 24.426
+ },
+ {
+  "text": "anterior,",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 24.426,
+  "wend": 24.868,
+  "end": 25.21
+ },
+ {
+  "text": "verificá",
+  "key": true,
+  "seg": 6,
+  "kind": "pri",
+  "start": 25.21,
+  "wend": 25.652,
+  "end": 25.712
+ },
+ {
+  "text": "todo",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 25.712,
+  "wend": 25.933,
+  "end": 26.013
+ },
+ {
+  "text": "esto.",
+  "key": false,
+  "seg": 6,
+  "kind": "pri",
+  "start": 26.013,
+  "wend": 26.274,
+  "end": 26.459
+ },
+ {
+  "text": "Que",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 26.459,
+  "wend": 26.539,
+  "end": 26.599
+ },
+ {
+  "text": "tengas",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 26.599,
+  "wend": 26.86,
+  "end": 26.9
+ },
+ {
+  "text": "tus",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 26.9,
+  "wend": 27.04,
+  "end": 27.08
+ },
+ {
+  "text": "fotos,",
+  "key": true,
+  "seg": 7,
+  "kind": "pri",
+  "start": 27.08,
+  "wend": 27.502,
+  "end": 27.702
+ },
+ {
+  "text": "tus",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 27.702,
+  "wend": 27.863,
+  "end": 27.903
+ },
+ {
+  "text": "contactos",
+  "key": true,
+  "seg": 7,
+  "kind": "pri",
+  "start": 27.903,
+  "wend": 28.605,
+  "end": 28.805
+ },
+ {
+  "text": "y",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 28.805,
+  "wend": 28.825,
+  "end": 28.906
+ },
+ {
+  "text": "tu",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 28.906,
+  "wend": 28.986,
+  "end": 28.986
+ },
+ {
+  "text": "WhatsApp",
+  "key": true,
+  "seg": 7,
+  "kind": "pri",
+  "start": 28.986,
+  "wend": 29.347,
+  "end": 29.407
+ },
+ {
+  "text": "instalado.",
+  "key": false,
+  "seg": 7,
+  "kind": "pri",
+  "start": 29.407,
+  "wend": 29.929,
+  "end": 30.114
+ },
+ {
+  "text": "si",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 30.114,
+  "wend": 30.214,
+  "end": 30.274
+ },
+ {
+  "text": "querés",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 30.274,
+  "wend": 30.475,
+  "end": 30.535
+ },
+ {
+  "text": "cambiarlo,",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 30.535,
+  "wend": 31.076,
+  "end": 31.297
+ },
+ {
+  "text": "consultá",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 31.297,
+  "wend": 31.698,
+  "end": 31.778
+ },
+ {
+  "text": "por",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 31.778,
+  "wend": 31.898,
+  "end": 31.918
+ },
+ {
+  "text": "el",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 31.918,
+  "wend": 31.999,
+  "end": 32.039
+ },
+ {
+  "text": "Plan Canje",
+  "key": true,
+  "seg": 8,
+  "kind": "pri",
+  "start": 32.039,
+  "wend": 32.6,
+  "end": 32.64
+ },
+ {
+  "text": "de",
+  "key": false,
+  "seg": 8,
+  "kind": "pri",
+  "start": 32.64,
+  "wend": 32.7,
+  "end": 32.761
+ },
+ {
+  "text": "TECNO.",
+  "key": true,
+  "seg": 8,
+  "kind": "pri",
+  "start": 32.761,
+  "wend": 33.081,
+  "end": 33.231
+ }
+]

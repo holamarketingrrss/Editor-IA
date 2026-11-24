@@ -1,0 +1,785 @@
+[
+ {
+  "file": "C4676",
+  "win": [
+   0.0,
+   6.0
+  ],
+  "kind": "pri",
+  "words": [
+   {
+    "text": "¿Vas",
+    "key": false,
+    "start": 1.766,
+    "end": 1.906,
+    "score": 1.0
+   },
+   {
+    "text": "a",
+    "key": false,
+    "start": 1.967,
+    "end": 1.987,
+    "score": 1.0
+   },
+   {
+    "text": "cambiar",
+    "key": false,
+    "start": 2.047,
+    "end": 2.388,
+    "score": 1.0
+   },
+   {
+    "text": "de",
+    "key": false,
+    "start": 2.448,
+    "end": 2.528,
+    "score": 0.99
+   },
+   {
+    "text": "iPhone",
+    "key": true,
+    "start": 2.589,
+    "end": 2.95,
+    "score": 0.96
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 2.99,
+    "end": 3.01,
+    "score": 0.11
+   },
+   {
+    "text": "te",
+    "key": false,
+    "start": 3.07,
+    "end": 3.151,
+    "score": 1.0
+   },
+   {
+    "text": "preocupa",
+    "key": true,
+    "start": 3.171,
+    "end": 3.512,
+    "score": 0.97
+   },
+   {
+    "text": "pasar",
+    "key": false,
+    "start": 3.592,
+    "end": 3.893,
+    "score": 1.0
+   },
+   {
+    "text": "todo",
+    "key": false,
+    "start": 3.973,
+    "end": 4.174,
+    "score": 1.0
+   },
+   {
+    "text": "al",
+    "key": false,
+    "start": 4.194,
+    "end": 4.254,
+    "score": 0.5
+   },
+   {
+    "text": "nuevo?",
+    "key": false,
+    "start": 4.274,
+    "end": 4.575,
+    "score": 0.99
+   },
+   {
+    "text": "¡Mirá esto!",
+    "key": true,
+    "start": 5.037,
+    "end": 5.659,
+    "score": 1.0
+   }
+  ]
+ },
+ {
+  "file": "C4678",
+  "win": [
+   0.0,
+   7.1
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "Primero,",
+    "key": true,
+    "start": 2.206,
+    "end": 2.668,
+    "score": 0.22
+   },
+   {
+    "text": "encendé",
+    "key": true,
+    "start": 2.848,
+    "end": 3.269,
+    "score": 0.92
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 3.289,
+    "end": 3.369,
+    "score": 0.38
+   },
+   {
+    "text": "nuevo",
+    "key": false,
+    "start": 3.41,
+    "end": 3.67,
+    "score": 0.78
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 3.851,
+    "end": 3.871,
+    "score": 0.95
+   },
+   {
+    "text": "acercalo",
+    "key": true,
+    "start": 3.951,
+    "end": 4.473,
+    "score": 0.96
+   },
+   {
+    "text": "al",
+    "key": false,
+    "start": 4.493,
+    "end": 4.593,
+    "score": 0.88
+   },
+   {
+    "text": "iPhone",
+    "key": false,
+    "start": 4.613,
+    "end": 4.894,
+    "score": 0.84
+   },
+   {
+    "text": "que",
+    "key": false,
+    "start": 4.934,
+    "end": 5.014,
+    "score": 0.96
+   },
+   {
+    "text": "ya",
+    "key": false,
+    "start": 5.074,
+    "end": 5.195,
+    "score": 0.59
+   },
+   {
+    "text": "usás.",
+    "key": false,
+    "start": 5.235,
+    "end": 6.077,
+    "score": 0.91
+   }
+  ]
+ },
+ {
+  "file": "C4678",
+  "win": [
+   6.15,
+   12.6
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "Asegurate",
+    "key": false,
+    "start": 6.15,
+    "end": 6.491,
+    "score": 0.43
+   },
+   {
+    "text": "de",
+    "key": false,
+    "start": 6.491,
+    "end": 6.551,
+    "score": 0.61
+   },
+   {
+    "text": "tener",
+    "key": false,
+    "start": 6.611,
+    "end": 6.911,
+    "score": 0.95
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 6.931,
+    "end": 6.971,
+    "score": 0.44
+   },
+   {
+    "text": "Bluetooth",
+    "key": true,
+    "start": 7.011,
+    "end": 7.512,
+    "score": 0.68
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 7.552,
+    "end": 7.572,
+    "score": 0.95
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 7.632,
+    "end": 7.712,
+    "score": 0.94
+   },
+   {
+    "text": "Wi-Fi",
+    "key": true,
+    "start": 7.752,
+    "end": 8.073,
+    "score": 0.5
+   },
+   {
+    "text": "activados.",
+    "key": false,
+    "start": 8.133,
+    "end": 8.794,
+    "score": 0.85
+   }
+  ]
+ },
+ {
+  "file": "C4678",
+  "win": [
+   12.0,
+   18.8
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "En",
+    "key": false,
+    "start": 14.788,
+    "end": 14.888,
+    "score": 0.95
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 14.929,
+    "end": 15.009,
+    "score": 0.92
+   },
+   {
+    "text": "teléfono",
+    "key": false,
+    "start": 15.049,
+    "end": 15.47,
+    "score": 0.98
+   },
+   {
+    "text": "anterior",
+    "key": false,
+    "start": 15.53,
+    "end": 15.972,
+    "score": 0.99
+   },
+   {
+    "text": "aparece",
+    "key": false,
+    "start": 16.112,
+    "end": 16.473,
+    "score": 0.97
+   },
+   {
+    "text": "la",
+    "key": false,
+    "start": 16.513,
+    "end": 16.573,
+    "score": 0.97
+   },
+   {
+    "text": "opción",
+    "key": false,
+    "start": 16.614,
+    "end": 16.874,
+    "score": 1.0
+   },
+   {
+    "text": "para",
+    "key": false,
+    "start": 16.894,
+    "end": 17.055,
+    "score": 0.98
+   },
+   {
+    "text": "configurar",
+    "key": true,
+    "start": 17.115,
+    "end": 17.717,
+    "score": 0.99
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 17.757,
+    "end": 17.837,
+    "score": 0.95
+   },
+   {
+    "text": "nuevo.",
+    "key": false,
+    "start": 17.877,
+    "end": 18.098,
+    "score": 0.99
+   }
+  ]
+ },
+ {
+  "file": "C4678",
+  "win": [
+   18.2,
+   23.6
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "Seguí",
+    "key": false,
+    "start": 18.441,
+    "end": 18.642,
+    "score": 0.87
+   },
+   {
+    "text": "las",
+    "key": false,
+    "start": 18.682,
+    "end": 18.822,
+    "score": 0.99
+   },
+   {
+    "text": "instrucciones",
+    "key": true,
+    "start": 18.862,
+    "end": 19.485,
+    "score": 0.99
+   },
+   {
+    "text": "en",
+    "key": false,
+    "start": 19.545,
+    "end": 19.605,
+    "score": 0.97
+   },
+   {
+    "text": "pantalla.",
+    "key": false,
+    "start": 19.665,
+    "end": 20.207,
+    "score": 0.79
+   }
+  ]
+ },
+ {
+  "file": "C4678",
+  "win": [
+   20.4,
+   32.6
+  ],
+  "kind": "vo",
+  "words": [
+   {
+    "text": "Elegí",
+    "key": false,
+    "start": 22.083,
+    "end": 22.443,
+    "score": 0.97
+   },
+   {
+    "text": "cómo",
+    "key": false,
+    "start": 22.684,
+    "end": 22.884,
+    "score": 0.99
+   },
+   {
+    "text": "transferir",
+    "key": true,
+    "start": 22.984,
+    "end": 23.465,
+    "score": 1.0
+   },
+   {
+    "text": "tus",
+    "key": false,
+    "start": 23.525,
+    "end": 23.665,
+    "score": 1.0
+   },
+   {
+    "text": "datos",
+    "key": false,
+    "start": 23.705,
+    "end": 24.066,
+    "score": 1.0
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 24.206,
+    "end": 24.226,
+    "score": 1.0
+   },
+   {
+    "text": "mantené",
+    "key": false,
+    "start": 24.286,
+    "end": 24.627,
+    "score": 1.0
+   },
+   {
+    "text": "los",
+    "key": false,
+    "start": 24.687,
+    "end": 24.807,
+    "score": 1.0
+   },
+   {
+    "text": "equipos",
+    "key": false,
+    "start": 24.887,
+    "end": 25.228,
+    "score": 1.0
+   },
+   {
+    "text": "cerca",
+    "key": true,
+    "start": 25.288,
+    "end": 25.609,
+    "score": 1.0
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 25.789,
+    "end": 25.809,
+    "score": 1.0
+   },
+   {
+    "text": "con",
+    "key": false,
+    "start": 25.869,
+    "end": 25.989,
+    "score": 0.67
+   },
+   {
+    "text": "batería",
+    "key": true,
+    "start": 26.029,
+    "end": 26.47,
+    "score": 0.99
+   },
+   {
+    "text": "suficiente",
+    "key": false,
+    "start": 26.55,
+    "end": 27.171,
+    "score": 1.0
+   },
+   {
+    "text": "hasta",
+    "key": false,
+    "start": 27.311,
+    "end": 27.512,
+    "score": 1.0
+   },
+   {
+    "text": "terminar.",
+    "key": false,
+    "start": 27.572,
+    "end": 28.033,
+    "score": 1.0
+   }
+  ]
+ },
+ {
+  "file": "C4676",
+  "win": [
+   55.9,
+   60.3
+  ],
+  "kind": "pri",
+  "words": [
+   {
+    "text": "Antes",
+    "key": false,
+    "start": 56.442,
+    "end": 56.684,
+    "score": 1.0
+   },
+   {
+    "text": "de",
+    "key": false,
+    "start": 56.724,
+    "end": 56.784,
+    "score": 1.0
+   },
+   {
+    "text": "borrar",
+    "key": true,
+    "start": 56.804,
+    "end": 57.166,
+    "score": 0.99
+   },
+   {
+    "text": "o",
+    "key": false,
+    "start": 57.347,
+    "end": 57.367,
+    "score": 1.0
+   },
+   {
+    "text": "entregar",
+    "key": false,
+    "start": 57.447,
+    "end": 57.809,
+    "score": 1.0
+   },
+   {
+    "text": "tu",
+    "key": false,
+    "start": 57.869,
+    "end": 57.949,
+    "score": 1.0
+   },
+   {
+    "text": "iPhone",
+    "key": false,
+    "start": 57.989,
+    "end": 58.311,
+    "score": 0.73
+   },
+   {
+    "text": "anterior,",
+    "key": false,
+    "start": 58.331,
+    "end": 58.773,
+    "score": 0.99
+   },
+   {
+    "text": "verificá",
+    "key": true,
+    "start": 59.115,
+    "end": 59.557,
+    "score": 1.0
+   },
+   {
+    "text": "todo",
+    "key": false,
+    "start": 59.617,
+    "end": 59.838,
+    "score": 1.0
+   },
+   {
+    "text": "esto.",
+    "key": false,
+    "start": 59.918,
+    "end": 60.179,
+    "score": 1.0
+   }
+  ]
+ },
+ {
+  "file": "C4676",
+  "win": [
+   128.3,
+   135.3
+  ],
+  "kind": "pri",
+  "words": [
+   {
+    "text": "Verificá",
+    "key": false,
+    "start": 129.122,
+    "end": 129.523,
+    "score": 1.0
+   },
+   {
+    "text": "todo",
+    "key": false,
+    "start": 129.584,
+    "end": 129.784,
+    "score": 0.86
+   },
+   {
+    "text": "esto.",
+    "key": false,
+    "start": 129.824,
+    "end": 130.025,
+    "score": 0.96
+   },
+   {
+    "text": "Que",
+    "key": false,
+    "start": 131.329,
+    "end": 131.409,
+    "score": 0.99
+   },
+   {
+    "text": "tengas",
+    "key": false,
+    "start": 131.469,
+    "end": 131.73,
+    "score": 0.98
+   },
+   {
+    "text": "tus",
+    "key": false,
+    "start": 131.77,
+    "end": 131.91,
+    "score": 0.97
+   },
+   {
+    "text": "fotos,",
+    "key": true,
+    "start": 131.95,
+    "end": 132.372,
+    "score": 1.0
+   },
+   {
+    "text": "tus",
+    "key": false,
+    "start": 132.572,
+    "end": 132.733,
+    "score": 0.99
+   },
+   {
+    "text": "contactos",
+    "key": true,
+    "start": 132.773,
+    "end": 133.475,
+    "score": 1.0
+   },
+   {
+    "text": "y",
+    "key": false,
+    "start": 133.675,
+    "end": 133.695,
+    "score": 0.99
+   },
+   {
+    "text": "tu",
+    "key": false,
+    "start": 133.776,
+    "end": 133.856,
+    "score": 1.0
+   },
+   {
+    "text": "WhatsApp",
+    "key": true,
+    "start": 133.856,
+    "end": 134.217,
+    "score": 0.66
+   },
+   {
+    "text": "instalado.",
+    "key": false,
+    "start": 134.277,
+    "end": 134.799,
+    "score": 0.97
+   }
+  ]
+ },
+ {
+  "file": "C4677",
+  "win": [
+   0.0,
+   7.68
+  ],
+  "kind": "pri",
+  "words": [
+   {
+    "text": "Entonces,",
+    "key": false,
+    "start": 2.065,
+    "end": 2.707,
+    "score": 0.99
+   },
+   {
+    "text": "si",
+    "key": false,
+    "start": 2.928,
+    "end": 3.028,
+    "score": 1.0
+   },
+   {
+    "text": "querés",
+    "key": false,
+    "start": 3.088,
+    "end": 3.289,
+    "score": 0.99
+   },
+   {
+    "text": "cambiarlo,",
+    "key": false,
+    "start": 3.349,
+    "end": 3.89,
+    "score": 1.0
+   },
+   {
+    "text": "consultá",
+    "key": false,
+    "start": 4.111,
+    "end": 4.512,
+    "score": 1.0
+   },
+   {
+    "text": "por",
+    "key": false,
+    "start": 4.592,
+    "end": 4.712,
+    "score": 1.0
+   },
+   {
+    "text": "el",
+    "key": false,
+    "start": 4.732,
+    "end": 4.813,
+    "score": 0.99
+   },
+   {
+    "text": "Plan Canje",
+    "key": true,
+    "start": 4.853,
+    "end": 5.414,
+    "score": 0.77
+   },
+   {
+    "text": "de",
+    "key": false,
+    "start": 5.454,
+    "end": 5.514,
+    "score": 0.98
+   },
+   {
+    "text": "TECNO.",
+    "key": true,
+    "start": 5.575,
+    "end": 5.895,
+    "score": 0.81
+   }
+  ]
+ }
+]
