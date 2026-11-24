@@ -16,11 +16,15 @@
 //   /api/claude/...                         Claude como motor (server/claude.js)
 //   GET  /media/<id>/<ruta>                  archivos de reel/public (con Range, para el video)
 //   GET  /salida/<id>/<archivo>.mp4          videos exportados (out/)
+//   GET|POST|DELETE /api/sesion              quién soy / entrar {usuario, clave} / salir (server/equipo.js)
+//   GET  /api/equipo                         (admin) miembros, uso del mes y registro; POST agrega, POST /<id> cambia, DELETE /<id> quita
+// Con equipo (~/.editor-ia/equipo.json) todo lo de arriba pide sesión; sin equipo, la app es local y no pide nada.
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFile, spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {claude} from './claude.js';
+import * as eq from './equipo.js';
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PROY = path.join(REPO, 'proyectos');
@@ -116,7 +120,7 @@ function servirArchivo(req, res, f) {
   fs.createReadStream(f).pipe(res);
 }
 
-function exportar(id, res) {
+function exportar(id, res, usuario) {
   const d = dir(id);
   res.writeHead(200, {'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive'});
   const enviar = (ev, x) => res.write(`event: ${ev}\ndata: ${JSON.stringify(x)}\n\n`);
@@ -126,7 +130,9 @@ function exportar(id, res) {
   p.stdout.on('data', linea); p.stderr.on('data', linea);
   p.on('close', (code) => {
     const mp4 = /(\S+\.mp4)\s*$/m.exec(todoLog.split('\n').filter((l) => l.trim().endsWith('.mp4')).pop() || '');
-    enviar('fin', {ok: code === 0, revisar: /REVISAR/.test(todoLog), video: mp4 ? path.basename(mp4[1]) : null});
+    const fin = {ok: code === 0, revisar: /REVISAR/.test(todoLog), video: mp4 ? path.basename(mp4[1]) : null};
+    eq.registrar({usuario, accion: 'exportar', proyecto: id, ok: fin.ok && !fin.revisar, video: fin.video});
+    enviar('fin', fin);
     res.end();
   });
   res.on('close', () => p.exitCode === null && p.kill());
@@ -139,6 +145,29 @@ export function api() {
     const partes = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
     const json = (x, st = 200) => { res.statusCode = st; res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(x)); };
     try {
+      // ---------- acceso
+      const yo = eq.quien(req);
+      if (!yo && eq.protegida(url.pathname, REPO)) return json({error: 'Iniciá sesión', sesion: false}, 401);
+      if (partes[0] === 'api' && partes[1] === 'sesion') {
+        if (req.method === 'POST') return json({usuario: eq.entrar(req, res, JSON.parse((await cuerpo(req)).toString() || '{}'))});
+        if (req.method === 'DELETE') { eq.salir(req, res); return json({ok: true}); }
+        return json({usuario: yo, equipo: eq.activo(), motor: eq.leerEquipo()?.motor || 'cuenta'});
+      }
+      if (partes[0] === 'api' && partes[1] === 'equipo') {
+        if (yo?.rol !== 'admin') return json({error: 'Solo para admins'}, 403);
+        const objetivo = partes[2];
+        if (req.method === 'POST') {
+          const datos = JSON.parse((await cuerpo(req)).toString() || '{}');
+          if (objetivo === 'motor') eq.motor(datos.motor);
+          else if (objetivo) eq.cambiar(objetivo, datos);
+          else eq.agregar(datos);
+          eq.registrar({usuario: yo.id, accion: 'equipo', detalle: objetivo ? `${objetivo}: ${Object.keys(datos).filter((k) => k !== 'clave').join(', ')}${datos.clave ? ' clave' : ''}` : `agrega ${datos.id || datos.nombre}`});
+        }
+        if (req.method === 'DELETE' && objetivo) { eq.quitar(objetivo); eq.registrar({usuario: yo.id, accion: 'equipo', detalle: `quita ${objetivo}`}); }
+        const e = eq.leerEquipo() || {motor: 'cuenta', miembros: []};
+        return json({motor: e.motor, miembros: e.miembros.map(({clave, ...m}) => m), uso: eq.usoDelMes(),
+          registro: eq.leerRegistro(Date.now() - 30 * 86400000).reverse().slice(0, 80), config: eq.CONFIG});
+      }
       if (partes[0] === 'media' && partes.length >= 3) return servirArchivo(req, res, dentro(path.join(dir(partes[1]), 'reel/public'), partes.slice(2).join('/')));
       if (partes[0] === 'marca' && partes.length >= 3 && ID_OK.test(partes[1])) return servirArchivo(req, res, dentro(path.join(PRESETS, partes[1], 'public'), partes.slice(2).join('/')));
       if (partes[0] === 'salida' && partes.length === 3) return servirArchivo(req, res, dentro(path.join(dir(partes[1]), 'out'), partes[2]));
@@ -159,7 +188,7 @@ export function api() {
         if (id === 'estado') return json(await motor.estado());
         if (id === 'eventos') return motor.eventos(req, res);
         if (id === 'parar' && req.method === 'POST') return json(motor.parar());
-        if (id === 'iniciar' && req.method === 'POST') return json(motor.iniciar(JSON.parse((await cuerpo(req)).toString() || '{}')));
+        if (id === 'iniciar' && req.method === 'POST') return json(motor.iniciar({...JSON.parse((await cuerpo(req)).toString() || '{}'), usuario: yo}));
         return json({error: 'ruta desconocida'}, 404);
       }
       if (que === 'presets') {
@@ -193,7 +222,7 @@ export function api() {
         }
         return servirArchivo(req, res, out);
       }
-      if (accion === 'exportar') return exportar(id, res);
+      if (accion === 'exportar') return exportar(id, res, yo.id);
       if (req.method !== 'POST') return json({error: 'método'}, 405);
       if (accion === 'subir') {
         const tipo = url.searchParams.get('tipo'), nombre = path.basename(url.searchParams.get('nombre') || '').replace(/[^\w.\- ]/g, '_');
@@ -201,9 +230,11 @@ export function api() {
         const carpeta = tipo === 'musica' ? path.join(d, 'reel/public/musica') : path.join(d, 'raw');
         fs.mkdirSync(carpeta, {recursive: true});
         fs.writeFileSync(dentro(carpeta, nombre), await cuerpo(req));
+        eq.registrar({usuario: yo.id, accion: 'subir', proyecto: id, detalle: `${tipo === 'musica' ? 'música' : 'toma'}: ${nombre}`});
         return json(todo(id));
       }
       const datos = JSON.parse((await cuerpo(req)).toString() || '{}');
+      eq.registrar({usuario: yo.id, accion: accion === 'guion' ? 'textos' : accion === 'edl' ? 'tomas' : accion, proyecto: id});
       if (accion === 'guion') {
         escribir(path.join(d, 'guion.json'), datos.guion);
         return json(await regenerar(id, {tomas: false}));

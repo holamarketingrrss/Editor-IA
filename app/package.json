@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "editor": "vite --open",
+    "equipo": "vite --host 0.0.0.0",
     "dev": "vite"
   },
   "dependencies": {
