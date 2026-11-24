@@ -27,6 +27,7 @@ OUT="$(pwd)/$P/out"; mkdir -p "$OUT"
 if [ -z "$VERSION" ]; then VERSION=1; while [ -e "$OUT/${MARCA}_${TEMA}_${FORMATO}_v$VERSION.mp4" ]; do VERSION=$((VERSION+1)); done; fi
 FINAL="$OUT/${MARCA}_${TEMA}_${FORMATO}_v$VERSION.mp4"; CRUDO="$OUT/.crudo.mp4"
 
+scripts/sync_reel.sh "$P"
 # 0) Zona segura (rápido, sin renderizar)
 if [ "$CHEQUEO" = 1 ]; then
   python3 -I scripts/zona_segura.py "$P" | grep -v '^  CONTRASTE' || true

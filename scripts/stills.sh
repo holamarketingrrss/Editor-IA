@@ -11,6 +11,7 @@ MAX=8
 while [ $# -gt 0 ]; do case "$1" in --max) MAX="$2"; shift 2;; *) echo "opción desconocida: $1"; exit 1;; esac; done
 [ -f "$P/reel/src/data.json" ] || { echo "falta $P/reel/src/data.json: corré scripts/make_clips.py primero"; exit 1; }
 
+scripts/sync_reel.sh "$P"
 RC=0; python3 -I scripts/zona_segura.py "$P" || RC=$?
 OUT="$(pwd)/$P/out/stills"; rm -rf "$OUT"; mkdir -p "$OUT"
 [ -d "$P/reel/node_modules" ] || (cd "$P/reel" && npm install --silent)

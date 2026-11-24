@@ -1,0 +1,23 @@
+{
+ "marca": "PAUSA",
+ "designSystem": "https://claude.ai/artifact/3oRveHBXCUShLi9oDg6YLw",
+ "voz": {"voice_id": "YLtqUTaEXb7a9MAYuJu4", "nombre": "Julieta", "nota": "mujer rioplatense, cálida y pausada, sin tono de venta"},
+ "notas": [
+  "Skincare natural y simple: cada pieza tiene que sentirse tranquila, cercana y luminosa, nunca agresiva ni de oferta.",
+  "Español rioplatense con voseo, frases cortas, sin exclamaciones de venta. Sin precios ni promociones en piezas de marca o contenido.",
+  "PAUSA en mayúsculas como logo o rótulo; 'Pausa' en el texto corrido.",
+  "Logos: pausa-logo-yellow sobre noche (cierre), pausa-logo-white sobre noche, azul o verde; palmera sola (pausa-palm-*) para logo en esquina o marca de agua. Nunca redibujar la palmera.",
+  "Coral y celeste son acentos: poca cantidad. Texto blanco solo sobre noche, azul o verde.",
+  "Helvetica Now (texto) no está: se usa Arimo, equivalente libre de Helvetica/Arial. Titulares en Playfair Display; frases destacadas en Playfair itálica (K)."
+ ],
+ "estilo": {
+  "subtitulos": {"modo": "grupo", "posicion": "abajo", "tipografias": "texto+destacados", "fuente": "B", "fuenteDestacado": "K",
+                 "color": "blanco", "legibilidad": "sombra", "animacion": "fade"},
+  "camara": "pushin",
+  "transicion": {"tipo": "fundido", "dur": 0.4},
+  "cierre": {"tipo": "logo"},
+  "animacionLogo": "fade",
+  "look": "original",
+  "vineta": false
+ }
+}

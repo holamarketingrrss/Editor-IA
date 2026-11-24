@@ -1,0 +1,24 @@
+{
+ "nombre": "LUJIS",
+ "handle": "@luji.miami",
+ "logo": "luji-logo-oficial.png",
+ "colores": {
+  "texto": "#FFFFFF",
+  "rojo": "#DD0A0A",
+  "vino": "#A61602",
+  "naranja": "#EE4D0B",
+  "amarillo": "#DFAD12",
+  "crema": "#F6DCB9",
+  "papel": "#FFF1D9",
+  "negro": "#000000",
+  "blanco": "#FFFFFF"
+ },
+ "acentos": ["amarillo", "naranja", "rojo"],
+ "fuentes": {
+  "G": {"familia": "League Gothic", "archivo": "league-gothic-latin-400-normal.woff2", "peso": 400, "mayusculas": true, "interlineado": 0.9, "espaciado": 1, "ancho": 0.37, "respaldo": "Impact, sans-serif"},
+  "B": {"familia": "League Spartan", "archivo": "league-spartan-latin-700-normal.woff2", "peso": 700, "mayusculas": true, "interlineado": 0.95, "espaciado": -1, "ancho": 0.63, "respaldo": "Arial, sans-serif"},
+  "S": {"familia": "League Spartan", "archivo": "league-spartan-latin-700-normal.woff2", "peso": 700, "mayusculas": true, "interlineado": 1, "espaciado": 0, "ancho": 0.63, "respaldo": "Arial, sans-serif"},
+  "K": {"familia": "Kaushan Script", "archivo": "kaushan-script-latin-400-normal.woff2", "peso": 400, "mayusculas": false, "interlineado": 1.1, "espaciado": 0, "ancho": 0.46, "respaldo": "cursive"}
+ },
+ "outro": {"fondo": "naranja", "fuenteHandle": "S", "colorHandle": "texto"}
+}

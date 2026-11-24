@@ -1,0 +1,20 @@
+{
+  "name": "editor-ia-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "editor": "vite --open",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@remotion/player": "4.0.546",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.546"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.1.4",
+    "vite": "7.1.12"
+  }
+}
