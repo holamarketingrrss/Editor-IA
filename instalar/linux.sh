@@ -27,11 +27,14 @@ sudo_si apt-get install -y -qq libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 l
   || sudo_si apt-get install -y -qq libnss3 libgbm1 libasound2 2>/dev/null || true
 
 echo "== Claude Code"
-if ! command -v claude >/dev/null; then
+# en WSL, Ubuntu también ve los programas de Windows: el claude de Windows no sirve acá (otra configuración y otro login)
+CL=$(command -v claude || true)
+case "$CL" in /mnt/*) echo "  (hay un Claude Code de Windows en $CL: instalo el de Ubuntu)"; CL="";; esac
+if [ -z "$CL" ]; then
   curl -fsSL https://claude.ai/install.sh | bash
-  export PATH="$HOME/.local/bin:$PATH"
   grep -q '.local/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 fi
+export PATH="$HOME/.local/bin:$PATH"
 
 echo "== Kit de edición (whisper, Remotion, app) — puede tardar unos minutos"
 bash scripts/instalar.sh

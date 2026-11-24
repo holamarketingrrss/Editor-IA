@@ -9,6 +9,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {spawn, execFile} from 'node:child_process';
+import os from 'node:os';
+
+// El Claude Code instalado para este usuario (~/.local/bin) va primero: en WSL el PATH también trae el de Windows,
+// que usa otra configuración y otro login. EDITOR_CLAUDE_BIN lo fija a mano.
+const BIN = process.env.EDITOR_CLAUDE_BIN
+  || [path.join(os.homedir(), '.local/bin/claude')].find((f) => fs.existsSync(f)) || 'claude';
+// avisos de Claude Code que no son errores del pedido
+const RUIDO = /^(Ignoring \d+ permissions|Warning: no stdin|.*hasTrustDialogAccepted|trusted\. Run Claude Code)/;
 
 const MODELO = process.env.EDITOR_CLAUDE_MODELO || '';           // vacío = el modelo por defecto de la cuenta
 const PERMISOS = process.env.EDITOR_CLAUDE_PERMISOS || 'auto';   // auto: aprueba solo lo seguro; lo demás se deniega y se avisa
@@ -61,7 +69,7 @@ export function claude(REPO) {
       '--permission-mode', PERMISOS, '--append-system-prompt', SISTEMA];
     if (MODELO) args.push('--model', MODELO);
     if (sesion) args.push('--resume', sesion);
-    const proceso = spawn('claude', args, {cwd: REPO, stdio: ['ignore', 'pipe', 'pipe']});
+    const proceso = spawn(BIN, args, {cwd: REPO, stdio: ['ignore', 'pipe', 'pipe']});
     trabajo = {id: Date.now(), modo, p, proceso, eventos: [], fin: null, clientes: new Set(), antes: new Set(proyectos()), pendientes: {}};
     emitir({tipo: 'inicio', modo, p, continua: !!sesion});
     let buf = '', sesionNueva = null, error = '';
@@ -110,7 +118,7 @@ export function claude(REPO) {
       trabajo.fin = {
         tipo: 'fin', ok: code === 0 && !r.is_error, proyecto: proy, costo: r.total_cost_usd, segundos: Math.round((r.duration_ms || 0) / 1000),
         denegados: (r.permission_denials || []).map((d) => `${d.tool_name}${d.tool_input?.command ? ': ' + String(d.tool_input.command).slice(0, 100) : ''}`),
-        error: code === 0 ? '' : (error.trim().split('\n').slice(-6).join('\n') || `claude terminó con código ${code}`),
+        error: code === 0 && !r.is_error ? '' : (error.trim().split('\n').filter((l) => l.trim() && !RUIDO.test(l)).slice(-6).join('\n') || r.result || `claude terminó con código ${code}`),
       };
       emitir(trabajo.fin);
       for (const res of trabajo.clientes) res.end();
@@ -120,7 +128,7 @@ export function claude(REPO) {
   }
 
   return {
-    estado: () => new Promise((ok) => execFile('claude', ['--version'], (err, out) => ok({
+    estado: () => new Promise((ok) => execFile(BIN, ['--version'], (err, out) => ok({
       disponible: !err, version: err ? null : out.trim(), corriendo: !!(trabajo && !trabajo.fin), modo: trabajo?.modo, p: trabajo?.p,
     }))),
     iniciar,
