@@ -5,7 +5,7 @@ Interfaz para revisar y retocar un reel sin tocar archivos a mano. Usa la misma 
 
 ```bash
 cd app && npm install      # una vez (scripts/instalar.sh ya lo hace)
-npm run editor             # abre http://127.0.0.1:4321 (solo esta compu)
+npm run editor             # abre http://127.0.0.1:4321 (solo esta compu); si falta una dependencia, la instala sola
 npm run equipo             # abierta a la red, con usuario y clave: ver EQUIPO.md
 ```
 
