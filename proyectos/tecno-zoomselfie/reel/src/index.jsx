@@ -210,7 +210,7 @@ const CompareScene = () => {
       <Bg color={C.navy} />
       <div style={{position: 'absolute', inset: 0, transform: `translateY(${(1 - pin) * 300}px)`, opacity: pin}}>
         <MiniMock x={300} y={850} w={330} src="zoom.mp4" from={16.4} rate={0.6} emph={eL} label="18 PRO · 8x" tLabel={rel(cp.tPro)} />
-        <MiniMock x={780} y={850} w={330} src="selfie.mp4" from={2.6} rate={0.45} emph={eR} label="PRO + AIR" tLabel={rel(cp.tAir)} />
+        <MiniMock x={780} y={850} w={330} src="selfie.mp4" from={2.6} rate={0.45} emph={eR} label="PRO" tLabel={rel(cp.tAir)} />
       </div>
     </AbsoluteFill>
   );
