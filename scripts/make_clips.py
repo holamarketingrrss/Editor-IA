@@ -77,7 +77,7 @@ if os.path.exists(f'{P}/audio/voz.mp3'):
 
 OUTRO = cfg.get('outroDur', 0.5 if E['cierre']['tipo'] == 'loop' else 1.94)
 solo_escenas = all(c.get('tipo') == 'escena' for c in clips)
-if solo_escenas and 'duration' not in cfg and E['cierre']['tipo'] in ('logo', 'cta'):
+if solo_escenas and 'duration' not in cfg and E['cierre']['tipo'] in ('logo', 'anillo', 'cta'):
     # motion graphics: el cierre va después de la última escena (no la tapa)
     duration = round(clips[-1]['end'] + OUTRO, 2)
     outro_at = cfg.get('outroAt', clips[-1]['end'])

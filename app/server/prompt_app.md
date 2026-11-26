@@ -42,6 +42,10 @@ proyecto.json "escenas" (formato en docs/escenas.md): tipos titulo, lista, numer
 fondos con los colores de la marca, variando entre escenas; 2-3,5 s por escena. Sin edl.tsv. Con voz, duraciones según
 las frases; sin voz, hace falta música. Para una placa entre tomas: fila "escena:<id>" en edl.tsv. Cerrá con armar.sh --stills.
 
+Explicaciones animadas (pasos, cómo funciona algo, "animaciones respecto a lo que se habla"): escena "ilustracion" con
+"componente" y "paso"; escribí el componente en reel/src/ilustraciones.jsx usando el kit (tabla en docs/escenas.md; leé
+solo esa sección), 10-20 líneas por escena, sin código que no use. Si la voz en off explica pasos, una escena por paso.
+
 Cambios: tocá solo lo que piden (guion.json, edl.tsv, proyecto.json) y cerrá con scripts/armar.sh <p>; usá --stills
 solo si el cambio es visual y dudás de cómo queda. Para flechas, emojis o stickers usá "graficos" y "stickers" de
 proyecto.json (formato en CLAUDE.md): armar.sh no tiene que mostrar avisos SUPERPUESTO.

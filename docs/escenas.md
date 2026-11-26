@@ -25,7 +25,48 @@ animada que toma colores, fuentes y logo de la marca, y deja todo el texto dentr
 | `dur` | Segundos. Con voz, que cada escena dure lo que su frase. |
 | `subtitulos` | `true` muestra los subtítulos de la voz encima (por defecto no: la escena ya tiene su texto). |
 
-- **Video solo de escenas:** sin `edl.tsv`. Van en orden y el cierre (logo + @handle) se agrega después de la última.
+## Ilustraciones a medida (`"tipo": "ilustracion"`)
+
+Para explicar algo con dibujos animados (teléfonos que se conectan, interruptores, datos que viajan), como el reel de
+TECNO "Inicio rápido". La escena dice qué componente usar y el rótulo de arriba; el componente lo escribe Claude en
+`reel/src/ilustraciones.jsx` del proyecto, con las piezas del kit, en 10 a 20 líneas por escena:
+
+```json
+{"id": "p2", "tipo": "ilustracion", "componente": "Conexiones", "paso": "PASO 2 · Conexiones", "dur": 2.5, "fondo": "verde"}
+```
+
+```jsx
+export const Conexiones = ({kit}) => {
+  const {Interruptor} = kit;
+  return <>
+    <Interruptor y={620} icono="bluetooth" texto="Bluetooth" prende={18} />
+    <Interruptor y={820} icono="wifi" texto="Wi-Fi" desde={6} prende={34} />
+  </>;
+};
+```
+
+- **Lo pone el editor:** fondo de la marca (con puntos por defecto), rótulo `paso` arriba, salida de la escena y subtítulos
+  de la voz en una franja abajo (y 1250-1420); el dibujo va entre y 330 y 1180.
+- **Colores:** el acento es el color de destacado de la marca (si tiene) y el texto el que se lea sobre el fondo; `acento` y
+  `color` en la escena los fuerzan.
+- **Kit** (`kit` en las props; x, y = centro en px de 1080x1920; `desde`, `prende` y `dura` en cuadros de la escena, 30 por segundo):
+
+| Pieza | Para qué |
+|---|---|
+| `Telefono {x, y, w, etiqueta, brillo, desde, pantalla}` | teléfono; adentro van `Apps` u otras piezas |
+| `Apps {cols, filas}` | grilla de apps dentro de la pantalla |
+| `Interruptor {y, icono, texto, desde, prende}` | tarjeta con interruptor que se prende |
+| `Tilde {x, y, size, desde}` | tilde que se dibuja en un círculo |
+| `Ondas {x, y, size, desde}` | ondas de radar (conexión, señal) |
+| `Vuela {de, a, iconos, desde, cada}` | íconos que viajan en arco de un punto a otro |
+| `Progreso {y, desde, dura, hasta, texto}` | barra con porcentaje |
+| `Bateria {x, y, nivel}`, `Tarjeta {y, titulo, texto, boton, icono}`, `Checklist {y, items, cada}`, `Titulo {y, texto}` | batería, aviso del sistema, pasos con tilde, texto con *destacado* |
+| `Icono {n, size, color}` | bluetooth, wifi, check, foto, contacto, chat, app, nube, candado, tarjeta, camara, estrella, corazon, carrito, reloj, rayo, escudo, ubicacion, mas, flecha, bateria |
+
+Para algo que el kit no tiene, el componente puede usar `useCurrentFrame`, `interpolate` y `spring` de `remotion` y divs
+con estilos; `kit.entra(frame, desde)` da la entrada con rebote de las piezas.
+
+ sin `edl.tsv`. Van en orden y el cierre (logo + @handle) se agrega después de la última.
 - **Mezcla con tomas:** en `edl.tsv`, una fila con archivo `escena:<id>` (inicio, fin, `escena:gancho`, 0).
 - **Audio:** sin voz, poné música (`"music"`): un reel sin audio no pasa el chequeo del render. Con voz, `voz.sh` como siempre.
 - **Revisar:** `scripts/armar.sh <p> --stills` deja un cuadro por escena en la hoja. En la app, pestaña *Escenas*: textos,

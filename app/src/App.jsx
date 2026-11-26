@@ -108,7 +108,14 @@ export function App({usuario, equipo, salir}) {
     setOcupado('');
   };
 
-  const props = useMemo(() => data && p && ({data, brand: p.brand, base: `/media/${p.id}/`}), [data, p]);
+  // ilustraciones a medida del proyecto (reel/src/ilustraciones.jsx): se importan del proyecto y se recargan si cambian
+  const [ilus, setIlus] = useState({});
+  useEffect(() => {
+    if (!p?.ilustraciones) { setIlus({}); return; }
+    import(/* @vite-ignore */ p.ilustraciones).then((m) => setIlus({...m}))
+      .catch((e) => { setIlus({}); avisar('error', 'Las ilustraciones del proyecto tienen un error', e.message); });
+  }, [p?.ilustraciones]);
+  const props = useMemo(() => data && p && ({data, brand: p.brand, base: `/media/${p.id}/`, ilustraciones: ilus}), [data, p, ilus]);
   const modoPalabra = (data?.estilo?.subtitulos?.modo ?? 'palabra') === 'palabra';
   const palabra = panel === 'textos' && modoPalabra && sel !== null ? data?.words[sel] : null;
 

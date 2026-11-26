@@ -10,6 +10,8 @@ for f in template/reel/src/*.jsx; do
     cp "$f" "$P/reel/src/"; echo "(composición actualizada desde template/: $(basename "$f"))"
   fi
 done
+# ilustraciones a medida: son del proyecto (las escribe Claude); si no hay, se pone la base con el ejemplo
+[ -f "$P/reel/src/ilustraciones.jsx" ] || cp template/reel/ilustraciones.jsx "$P/reel/src/ilustraciones.jsx"
 # preset de la marca: el estilo por defecto se toma siempre del de presets/ (lo propio de la pieza va en proyecto.json)
 PRESET=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('preset',''))" "$P/proyecto.json" 2>/dev/null || true)
 if [ -n "$PRESET" ] && [ -f "presets/$PRESET/preset.json" ] && ! cmp -s "presets/$PRESET/preset.json" "$P/reel/src/preset.json"; then

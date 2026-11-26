@@ -2,7 +2,7 @@
 //   data:  reel/src/data.json del proyecto (tomas, palabras, estilo resuelto)
 //   brand: reel/src/brand.json (colores, fuentes, logo, handle)
 //   base:  prefijo de los archivos de public/ (la app los sirve en /media/<proyecto>/); vacío = staticFile de Remotion
-import React, {useMemo} from 'react';
+import React, {createContext, useContext, useMemo} from 'react';
 import {
   AbsoluteFill, Sequence, OffthreadVideo, Audio, Img, Freeze,
   staticFile, useCurrentFrame, useVideoConfig, spring, interpolate, Easing,
@@ -11,12 +11,16 @@ import {
 export const FPS = 30;
 export const duracionEnFrames = (data) => Math.max(1, Math.round(data.duration * FPS));
 
-export const Reel = ({data, brand, base = ''}) => {
-  const R = useMemo(() => armar(data, brand, base), [data, brand, base]);
+// ilustraciones: componentes a medida del proyecto (reel/src/ilustraciones.jsx) para escenas tipo "ilustracion"
+export const Reel = ({data, brand, base = '', ilustraciones = {}}) => {
+  const R = useMemo(() => armar(data, brand, base, ilustraciones), [data, brand, base, ilustraciones]);
   return <R />;
 };
 
-function armar(data, brand, base) {
+// colores de la escena para las piezas del kit (texto, acento y fondo que se leen bien juntos)
+const Colores = createContext({texto: '#FFFFFF', acento: '#5FF2D2', fondo: '#0B2342', sobreAcento: '#0B2342'});
+
+function armar(data, brand, base, ilustraciones = {}) {
   const asset = (p) => (base ? base + p : staticFile(p));
   // El estilo viene resuelto en data.estilo (scripts/estilo.py: defaults <- preset de la marca <- proyecto.json).
   // Proyectos viejos sin "estilo": se dibujan como antes.
@@ -188,6 +192,153 @@ function armar(data, brand, base) {
       : <span key={i}>{p.t}</span>));
   };
 
+
+  // ---------- Kit de piezas para ilustraciones a medida (escena tipo "ilustracion"; ver docs/escenas.md).
+  // Coordenadas en px del cuadro 1080x1920 (x, y = centro). "desde" = cuadro (30 por segundo) en que entra, contado desde
+  // el inicio de la escena. Todas toman el texto, acento y fondo de la escena.
+  const entra = (frame, desde = 0, cfg = {}) => {
+    const p = spring({frame: frame - desde, fps: FPS, config: {damping: 14, stiffness: 170, ...cfg}});
+    return {p, style: {opacity: Math.min(1, p * 1.5), transform: `scale(${0.6 + 0.4 * p})`}};
+  };
+  const abs = (x, y, w, h) => ({position: 'absolute', left: x - w / 2, top: y - h / 2, width: w, height: h});
+  const ICONOS = {
+    bluetooth: 'M7 7l10 10-5 5V2l5 5L7 17', wifi: 'M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01',
+    check: 'M5 12.5l4.5 4.5L19 7.5', foto: 'M3 6h18v13H3zM3 15l5-5 4 4 3-3 6 6M16 9.5h.01', contacto: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0',
+    chat: 'M4 4h16v12H8l-4 4z', app: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z', nube: 'M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9a4.5 4.5 0 0 0 1 9z',
+    candado: 'M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4', tarjeta: 'M3 6h18v12H3zM3 10h18', camara: 'M4 7h4l2-3h4l2 3h4v12H4zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
+    estrella: 'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z', corazon: 'M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9z',
+    carrito: 'M3 4h2l2.5 11h11L21 7H6.5M9.5 20h.01M17 20h.01', reloj: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
+    rayo: 'M13 2L4 14h7l-1 8 9-12h-7z', escudo: 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', ubicacion: 'M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+    mas: 'M12 5v14M5 12h14', flecha: 'M5 12h14M13 6l6 6-6 6', bateria: 'M3 8h16v8H3zM21 11v2',
+  };
+  const Icono = ({n, size = 80, color, grosor = 2}) => {
+    const c = useContext(Colores);
+    return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color ?? c.texto} strokeWidth={grosor} strokeLinecap="round" strokeLinejoin="round">
+      <path d={ICONOS[n] ?? ICONOS.app} /></svg>;
+  };
+  // teléfono con pantalla del color de acento; children va adentro de la pantalla
+  const Telefono = ({x = 540, y = 760, w = 320, etiqueta, brillo = 0, desde = 0, pantalla, children}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores); const h = w * 2.05; const {style} = entra(frame, desde);
+    return (
+      <div style={{...abs(x, y, w, h), ...style}}>
+        <div style={{position: 'absolute', inset: 0, borderRadius: w * 0.16, background: '#0d1117', boxShadow: `0 30px 60px rgba(0,0,0,.35), 0 0 ${60 * brillo}px ${c.acento}${brillo ? 'AA' : '00'}`,
+          border: `${Math.max(3, w * 0.02)}px solid ${brillo ? c.acento : 'rgba(255,255,255,.18)'}`}} />
+        <div style={{position: 'absolute', inset: w * 0.045, borderRadius: w * 0.13, overflow: 'hidden', background: pantalla ?? `linear-gradient(170deg, ${c.acento}, ${c.fondo})`}}>
+          <div style={{position: 'absolute', top: w * 0.035, left: '50%', width: w * 0.28, height: w * 0.07, borderRadius: 99, background: '#000', transform: 'translateX(-50%)'}} />
+          {children}
+        </div>
+        {etiqueta && <div style={{position: 'absolute', top: h + 22, width: '100%', textAlign: 'center', ...FB, fontSize: Math.round(w * 0.085), letterSpacing: 3,
+          textTransform: 'uppercase', color: c.texto, opacity: 0.75}}>{etiqueta}</div>}
+      </div>
+    );
+  };
+  // grilla de apps dentro de la pantalla de un Telefono
+  const Apps = ({cols = 4, filas = 5, desde = 0}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores);
+    return <div style={{position: 'absolute', inset: '16% 10% 10%', display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: '9%'}}>
+      {Array.from({length: cols * filas}, (_, i) => <div key={i} style={{aspectRatio: '1', borderRadius: '24%', background: i % 3 ? 'rgba(255,255,255,.85)' : c.sobreAcento,
+        opacity: interpolate(frame - desde - i * 0.6, [0, 6], [0, 1], clamp)}} />)}</div>;
+  };
+  // tarjeta con ícono, texto y un interruptor que se prende en el cuadro "prende"
+  const Interruptor = ({x = 540, y = 900, w = 760, icono = 'bluetooth', texto, desde = 0, prende = 20}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores); const {style} = entra(frame, desde);
+    const on = interpolate(frame, [prende, prende + 8], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+    const h = w * 0.2;
+    return (
+      <div style={{...abs(x, y, w, h), ...style, borderRadius: h * 0.3, background: 'rgba(255,255,255,.12)', border: '2px solid rgba(255,255,255,.18)',
+        display: 'flex', alignItems: 'center', gap: h * 0.25, padding: `0 ${h * 0.3}px`, boxSizing: 'border-box'}}>
+        <div style={{width: h * 0.62, height: h * 0.62, borderRadius: '50%', display: 'grid', placeItems: 'center', background: on > 0.5 ? c.acento : 'rgba(255,255,255,.15)'}}>
+          <Icono n={icono} size={h * 0.38} color={on > 0.5 ? c.sobreAcento : c.texto} grosor={2.4} /></div>
+        <div style={{flex: 1, ...FB, fontSize: h * 0.3, color: c.texto}}>{texto}</div>
+        <div style={{width: h * 0.95, height: h * 0.52, borderRadius: 99, background: on > 0.5 ? c.acento : 'rgba(255,255,255,.25)', position: 'relative', boxShadow: on > 0.5 ? `0 0 24px ${c.acento}88` : 'none'}}>
+          <div style={{position: 'absolute', top: h * 0.05, left: h * 0.05 + on * h * 0.43, width: h * 0.42, height: h * 0.42, borderRadius: '50%', background: on > 0.5 ? c.sobreAcento : '#fff'}} /></div>
+      </div>
+    );
+  };
+  // tilde dentro de un círculo que se dibuja
+  const Tilde = ({x = 540, y = 760, size = 200, desde = 0, color}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores); const {p} = entra(frame, desde, {damping: 10});
+    const traza = interpolate(frame - desde, [4, 14], [24, 0], clamp);
+    return <div style={{...abs(x, y, size, size), borderRadius: '50%', background: color ?? c.acento, transform: `scale(${p})`, display: 'grid', placeItems: 'center',
+      boxShadow: `0 0 0 ${Math.round(size * 0.04)}px ${c.sobreAcento}55, 0 0 50px ${(color ?? c.acento)}88`}}>
+      <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 24 24" fill="none" stroke={c.sobreAcento} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <path d={ICONOS.check} strokeDasharray="24" strokeDashoffset={traza} /></svg></div>;
+  };
+  // ondas de radar que salen de un punto (conexión, señal, "acercá los equipos")
+  const Ondas = ({x = 540, y = 760, size = 420, desde = 0, cada = 18, color}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores);
+    return [0, 1, 2].map((k) => {
+      const t = ((frame - desde - k * cada / 3) % cada + cada) % cada / cada;
+      return frame < desde ? null : <div key={k} style={{...abs(x, y, size, size), borderRadius: '50%', border: `4px solid ${color ?? c.acento}`,
+        transform: `scale(${0.2 + 0.8 * t})`, opacity: 1 - t}} />;
+    });
+  };
+  // íconos que viajan en arco de un punto a otro, uno detrás de otro (transferencia de datos, envío)
+  const Vuela = ({de = [380, 760], a = [700, 760], iconos = ['foto', 'contacto', 'chat', 'app'], desde = 0, cada = 8, dura = 18, alto = 220, size = 70}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores);
+    return iconos.map((n, i) => {
+      const t = interpolate(frame - desde - i * cada, [0, dura], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+      if (t <= 0 || t >= 1) return null;
+      const x = de[0] + (a[0] - de[0]) * t, y = de[1] + (a[1] - de[1]) * t - Math.sin(Math.PI * t) * alto;
+      return <div key={i} style={{...abs(x, y, size * 1.5, size * 1.5), borderRadius: size * 0.4, background: 'rgba(255,255,255,.95)', display: 'grid', placeItems: 'center',
+        boxShadow: '0 10px 24px rgba(0,0,0,.25)', opacity: Math.min(1, Math.sin(Math.PI * t) * 3)}}><Icono n={n} size={size} color={c.fondo} /></div>;
+    });
+  };
+  // barra de progreso con porcentaje (de 0 a "hasta" entre los cuadros desde y desde + dura)
+  const Progreso = ({x = 540, y = 1150, w = 700, desde = 0, dura = 45, hasta = 100, texto}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores);
+    const v = interpolate(frame - desde, [0, dura], [0, hasta], {...clamp, easing: Easing.inOut(Easing.quad)});
+    return <div style={{...abs(x, y, w, 90), opacity: interpolate(frame - desde, [-4, 2], [0, 1], clamp)}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', ...FB, fontSize: 34, color: c.texto, marginBottom: 12}}><span>{texto}</span><b>{Math.round(v)}%</b></div>
+      <div style={{height: 22, borderRadius: 99, background: 'rgba(255,255,255,.2)', overflow: 'hidden'}}>
+        <div style={{height: '100%', width: `${v}%`, borderRadius: 99, background: c.acento, boxShadow: `0 0 20px ${c.acento}`}} /></div></div>;
+  };
+  const Bateria = ({x = 540, y = 1150, w = 120, nivel = 0.8, desde = 0}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores); const {style} = entra(frame, desde);
+    return <div style={{...abs(x, y, w, w * 0.5), ...style, border: `4px solid ${c.texto}`, borderRadius: w * 0.1, padding: 5, boxSizing: 'border-box'}}>
+      <div style={{height: '100%', width: `${nivel * 100}%`, background: nivel > 0.3 ? c.acento : '#FF5A4F', borderRadius: w * 0.05}} />
+      <div style={{position: 'absolute', right: -12, top: '30%', width: 7, height: '40%', background: c.texto, borderRadius: 3}} /></div>;
+  };
+  // tarjeta tipo aviso del sistema (sube desde abajo): título, texto y botón opcional
+  const Tarjeta = ({x = 540, y = 1000, w = 640, titulo, texto, boton, icono, desde = 0}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores); const {p} = entra(frame, desde);
+    return <div style={{position: 'absolute', left: x - w / 2, top: y, width: w, transform: `translateY(${(1 - p) * 160}px)`, opacity: Math.min(1, p * 1.5),
+      background: '#fff', color: '#111', borderRadius: 40, padding: '34px 36px', boxSizing: 'border-box', textAlign: 'center', boxShadow: '0 30px 60px rgba(0,0,0,.3)'}}>
+      {icono && <div style={{display: 'grid', placeItems: 'center', marginBottom: 14}}><Icono n={icono} size={80} color={c.fondo} /></div>}
+      {titulo && <div style={{...FG, fontSize: 44, lineHeight: 1.1}}>{titulo}</div>}
+      {texto && <div style={{...FB, fontSize: 30, opacity: 0.7, marginTop: 10, lineHeight: 1.25}}>{texto}</div>}
+      {boton && <div style={{marginTop: 24, background: c.acento, color: c.sobreAcento, borderRadius: 99, padding: '16px 0', ...FG, fontSize: 32}}>{boton}</div>}
+    </div>;
+  };
+  // lista de pasos con tilde que entran de a uno
+  const Checklist = ({x = 540, y = 760, w = 820, items = [], desde = 0, cada = 12}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores);
+    return <div style={{position: 'absolute', left: x - w / 2, top: y, width: w, display: 'flex', flexDirection: 'column', gap: 26}}>
+      {items.map((t, i) => { const {p} = entra(frame, desde + i * cada);
+        return <div key={i} style={{display: 'flex', alignItems: 'center', gap: 24, opacity: Math.min(1, p * 1.5), transform: `translateX(${(1 - p) * -60}px)`,
+          background: 'rgba(255,255,255,.1)', border: '2px solid rgba(255,255,255,.15)', borderRadius: 26, padding: '22px 28px'}}>
+          <div style={{width: 64, height: 64, borderRadius: '50%', background: c.acento, display: 'grid', placeItems: 'center', flex: 'none'}}><Icono n="check" size={40} color={c.sobreAcento} grosor={3} /></div>
+          <span style={{...FB, fontSize: 42, color: c.texto, lineHeight: 1.15}}>{t}</span></div>; })}</div>;
+  };
+  // texto grande de apoyo dentro de una ilustración (con *destacado*)
+  const Titulo = ({x = 540, y = 400, w = 900, texto, size = 96, desde = 0}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores); const {p} = entra(frame, desde);
+    return <div style={{position: 'absolute', left: x - w / 2, top: y, width: w, textAlign: 'center', ...FG, fontSize: size, lineHeight: 1.05, color: c.texto,
+      opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 40}px)`}}><Marcado texto={texto} acento={c.acento} sobre={c.sobreAcento} desde={desde + 6} /></div>;
+  };
+  const KIT = {Icono, Telefono, Apps, Interruptor, Tilde, Ondas, Vuela, Progreso, Bateria, Tarjeta, Checklist, Titulo, entra, Colores};
+
+  // rótulo de paso arriba ("PASO 2 · Conexiones")
+  const PasoChip = ({texto}) => {
+    const frame = useCurrentFrame(); const c = useContext(Colores);
+    const t = interpolate(frame, [0, 8], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+    const [cabeza, ...resto] = String(texto).split(' · ');
+    return <div style={{position: 'absolute', top: 250, left: '50%', transform: `translate(-50%, ${(1 - t) * -24}px)`, opacity: t, whiteSpace: 'nowrap',
+      display: 'flex', gap: 12, alignItems: 'center', padding: '12px 26px', borderRadius: 99, border: `2px solid ${c.acento}88`, background: 'rgba(0,0,0,.18)',
+      ...FB, textTransform: 'none', fontSize: 30, color: c.texto}}>
+      <b style={{color: c.acento, letterSpacing: 2, textTransform: 'uppercase'}}>{cabeza}</b>{resto.length > 0 && <span style={{opacity: 0.9}}>· {resto.join(' · ')}</span>}</div>;
+  };
+
   const Escena = ({e, dur}) => {
     const frame = useCurrentFrame();
     const {fps} = useVideoConfig();
@@ -198,6 +349,25 @@ function armar(data, brand, base) {
     // con barrido, la destacada va con el color de texto que se lea sobre el acento
     const tcAcc = contraste('#FFFFFF', acc) >= contraste(col(OSCURO), acc) ? '#FFFFFF' : col(OSCURO);
     const salida = interpolate(frame, [dur - 7, dur], [0, 1], {...clamp, easing: Easing.in(Easing.cubic)});
+    if ((e.tipo ?? 'titulo') === 'ilustracion') {   // componente a medida del proyecto, armado con el kit
+      const Comp = ilustraciones[e.componente];
+      // acento de la marca para destacados (si tiene) como en las placas de HM; si no, el automático
+      const accI = e.acento ? col(e.acento) : (SUB.colorDestacado && hex(SUB.colorDestacado) !== hex(base) ? col(SUB.colorDestacado) : acc);
+      const sobreI = contraste('#FFFFFF', accI) >= contraste(col(OSCURO), accI) ? '#FFFFFF' : col(OSCURO);
+      const colores = {texto: e.color ? col(e.color) : (contraste('#FFFFFF', base) >= 2.6 ? '#FFFFFF' : tc), acento: accI, fondo: col(base), sobreAcento: sobreI};
+      return (
+        <AbsoluteFill>
+          <Fondo e={{decor: 'puntos', ...e}} dur={dur} />
+          <Colores.Provider value={colores}>
+            <AbsoluteFill style={{opacity: 1 - salida}}>
+              {Comp ? <Comp e={e} dur={dur} kit={KIT} />
+                : <div style={{position: 'absolute', top: 800, width: '100%', textAlign: 'center', ...FB, fontSize: 40, color: tc}}>Falta la ilustración «{e.componente}» en reel/src/ilustraciones.jsx</div>}
+            </AbsoluteFill>
+            {e.paso && <PasoChip texto={e.paso} />}
+          </Colores.Provider>
+        </AbsoluteFill>
+      );
+    }
     const izq = e.alineacion === 'izquierda';
     const caja = {position: 'absolute', left: 90, right: 90, top: 260, bottom: 460, display: 'flex', flexDirection: 'column',
       justifyContent: 'center', alignItems: izq ? 'flex-start' : 'center', textAlign: izq ? 'left' : 'center', gap: 34, color: tc,
@@ -646,7 +816,11 @@ function armar(data, brand, base) {
   }
 
   // las escenas traen su propio texto: los subtítulos de la voz no se muestran encima (salvo escena "subtitulos": true)
-  const enEscena = (fr) => data.clips.some((c) => c.tipo === 'escena' && !c.escena?.subtitulos && fr >= c.start * FPS && fr < c.end * FPS);
+  const conSubs = (c) => c.escena?.subtitulos ?? c.escena?.tipo === 'ilustracion';
+  const enEscena = (fr) => data.clips.some((c) => c.tipo === 'escena' && !conSubs(c) && fr >= c.start * FPS && fr < c.end * FPS);
+  // en ilustraciones, las palabras van en la franja de abajo (y 1250-1420), rectas, para no tapar el dibujo
+  const FRANJA = [[400, 1300], [680, 1390], [540, 1250], [700, 1290], [380, 1400]];
+  const enIlustracion = (fr) => data.clips.some((c) => c.tipo === 'escena' && c.escena?.tipo === 'ilustracion' && fr >= c.start * FPS && fr < c.end * FPS);
 
   const Reel = () => {
     const outroStart = Math.round(data.outroAt * FPS);
@@ -655,9 +829,14 @@ function armar(data, brand, base) {
     const tapa = ['fundido-color', 'cortina'].includes(E.transicion?.tipo);
     const introDur = E.entrada?.tipo === 'logo' ? 15 : E.entrada?.tipo === 'titulo' ? 36 : 0;
     const textos = SUB.modo === 'no' ? [] : SUB.modo === 'palabra'
-      ? data.words.filter((w) => !w.oculta).map((w) => {
+      ? data.words.filter((w) => !w.oculta).map((w, i) => {
         const from = Math.round((w.start + data.voiceOffset) * FPS);
-        return {from, dur: Math.max(5, Math.round((w.end + data.voiceOffset) * FPS) - from), w};
+        let ww = w;
+        if (enIlustracion(from)) {
+          const size = Math.min(w.size, 130), medio = Math.min(450, ((w.frase ?? w.text).length * (brand.fuentes[w.font]?.ancho ?? 0.55) * size) / 2);
+          ww = {...w, size, rot: 0, x: Math.max(70 + medio, Math.min(1010 - medio, FRANJA[i % FRANJA.length][0])), y: FRANJA[i % FRANJA.length][1]};
+        }
+        return {from, dur: Math.max(5, Math.round((w.end + data.voiceOffset) * FPS) - from), w: ww};
       })
       : BLOQUES.map((b) => {
         const from = Math.round((b.ws[0].start + data.voiceOffset) * FPS);
