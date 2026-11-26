@@ -149,13 +149,16 @@ export function Audio({p, data, setData, opciones, aplicar, subir, ocupado}) {
 
 // ---------- Estilo: las opciones del brief (scripts/estilo.py) ----------
 const CAMPOS = [
-  ['Subtítulos', [['subtitulos.modo', 'Modo'], ['subtitulos.posicion', 'Posición'], ['subtitulos.tipografias', 'Tipografías'],
-    ['subtitulos.fuente', 'Fuente (con «una»)', 'fuente'], ['subtitulos.color', 'Color'], ['subtitulos.legibilidad', 'Legibilidad'],
-    ['subtitulos.animacion', 'Animación']]],
+  ['Subtítulos', [['subtitulos.tamano', 'Tamaño de los textos', 'rango'], ['subtitulos.modo', 'Modo'], ['subtitulos.posicion', 'Posición'],
+    ['subtitulos.tipografias', 'Tipografías'], ['subtitulos.fuente', 'Fuente (con «una»)', 'fuente'], ['subtitulos.color', 'Color'],
+    ['subtitulos.legibilidad', 'Legibilidad'], ['subtitulos.animacion', 'Animación'], ['subtitulos.puntuacion', 'Puntos y comas']]],
+  ['Palabras clave', [['subtitulos.efectoDestacado', 'Efecto'], ['subtitulos.colorDestacado', 'Color', 'color'],
+    ['subtitulos.escalaDestacado', 'Tamaño respecto del resto', 'rango'], ['subtitulos.destacar', 'Palabras o frases (separadas por coma)', 'lista']]],
   ['Imagen', [['camara', 'Cámara'], ['transicion.tipo', 'Transición'], ['look', 'Look'], ['vineta', 'Viñeta', 'si'], ['grano', 'Grano', 'si']]],
   ['Entrada y cierre', [['entrada.tipo', 'Entrada'], ['entrada.texto', 'Título de entrada', 'texto'], ['cierre.tipo', 'Cierre'],
     ['cierre.texto', 'Texto del CTA', 'texto'], ['animacionLogo', 'Animación del logo'], ['animacionStickers', 'Animación de stickers']]],
-  ['Extras', [['sfx.whoosh', 'Whoosh en transiciones', 'si'], ['sfx.pop', 'Pop en textos', 'si'], ['logoEsquina', 'Logo en esquina', 'si'],
+  ['Extras', [['etiqueta.texto', 'Etiqueta arriba (TEMA · bajada)', 'texto'], ['etiqueta.end', 'Etiqueta hasta (s)', 'numero'],
+    ['sfx.whoosh', 'Whoosh en transiciones', 'si'], ['sfx.pop', 'Pop en textos', 'si'], ['logoEsquina', 'Logo en esquina', 'si'],
     ['zocalo.texto', 'Zócalo (texto)', 'texto'], ['zocalo.start', 'Zócalo desde (s)', 'numero'], ['zocalo.end', 'Zócalo hasta (s)', 'numero']]],
 ];
 const leerRuta = (o, r) => r.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o);
@@ -181,11 +184,12 @@ export function Estilo({p, data, setData, opciones, aplicar, guardarPreset, ocup
   const poner = (r, v) => {
     let n = ponerRuta(e, r, v);
     if (r.startsWith('zocalo.')) n = {...n, zocalo: {start: 1, end: 3, ...(e.zocalo || {}), [r.split('.')[1]]: v}};
+    if (r.startsWith('etiqueta.')) n = {...n, etiqueta: {start: 0, end: 3, ...(e.etiqueta || {}), [r.split('.')[1]]: v}};
     setData((d) => ({...d, estilo: n}));
   };
   return (
     <>
-      <p className="nota">Transiciones, look, cierre y extras se ven al instante. Lo de subtítulos (modo, posición, tipografías, color) se recalcula al aplicar.</p>
+      <p className="nota">Transiciones, look, cierre, etiqueta y extras se ven al instante. Lo de subtítulos y palabras clave (tamaño, modo, posición, colores, frases) se recalcula al aplicar.</p>
       {CAMPOS.map(([grupo, campos]) => (
         <fieldset key={grupo}><legend>{grupo}</legend>
           <div className="form dos">
@@ -195,6 +199,12 @@ export function Estilo({p, data, setData, opciones, aplicar, guardarPreset, ocup
               if (tipo === 'texto') return <label key={r}>{nombre}<input value={v ?? ''} onChange={(x) => poner(r, x.target.value)} /></label>;
               if (tipo === 'fuente') return <label key={r}>{nombre}<select value={v} onChange={(x) => poner(r, x.target.value)}>
                 {Object.entries(p.brand.fuentes).map(([k, f]) => <option key={k} value={k}>{k} · {f.familia}</option>)}</select></label>;
+              if (tipo === 'rango') return <label key={r}>{nombre} · {Math.round((v ?? 1) * 100)}%<input type="range" min="0.4" max="1.6" step="0.05" value={v ?? 1}
+                onChange={(x) => poner(r, +x.target.value)} /></label>;
+              if (tipo === 'color') return <label key={r}>{nombre}<select value={v ?? ''} onChange={(x) => poner(r, x.target.value || null)}>
+                <option value="">Los acentos de la marca</option>{[...new Set([...Object.keys(p.brand.colores), ...(v && !p.brand.colores[v] ? [v] : [])])].map((c) => <option key={c} value={c}>{c}</option>)}</select></label>;
+              if (tipo === 'lista') return <label key={r} className="ancho">{nombre}<input value={(v ?? []).join(', ')} placeholder="Black Friday, 18 Pro Max, Plan Canje"
+                onChange={(x) => poner(r, x.target.value.split(',').map((t) => t.trim()).filter(Boolean))} /></label>;
               if (tipo === 'numero') return <label key={r}>{nombre}<input type="number" step="0.1" value={v ?? ''} onChange={(x) => poner(r, num(x.target.value))} /></label>;
               return <label key={r}>{nombre}<select value={v} onChange={(x) => poner(r, x.target.value)}>
                 {(opciones.opciones[r] || []).map((o) => <option key={o}>{o}</option>)}</select></label>;

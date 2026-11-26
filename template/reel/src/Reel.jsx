@@ -354,9 +354,10 @@ function armar(data, brand, base) {
     const a = entrada(frame, fps, w.rot);
     const out = w.hold ? 1 : interpolate(frame, [dur - 3, dur], [1, 0], clamp);
     const color = col(w.color);
+    const completo = w.frase ?? w.text;   // frase destacada: se muestra entera en su primera palabra
     const text = SUB.animacion === 'maquina'
-      ? w.text.slice(0, Math.max(1, Math.ceil(w.text.length * interpolate(frame, [0, Math.max(4, Math.min(dur * 0.6, 10))], [0, 1], clamp))))
-      : w.text;
+      ? completo.slice(0, Math.max(1, Math.ceil(completo.length * interpolate(frame, [0, Math.max(4, Math.min(dur * 0.6, 10))], [0, 1], clamp))))
+      : completo;
     // destacado "brillo": resplandor del color de la palabra que se enciende y late suave, con un rebote extra al entrar
     let brillo = {}, extra = 1;
     if (w.destacado && SUB.efectoDestacado === 'brillo') {
@@ -365,11 +366,23 @@ function armar(data, brand, base) {
       brillo = {textShadow: `0 0 ${r}px ${color}, 0 0 ${r2}px ${color}, 0 4px 14px rgba(0,0,0,.55)`};
       extra = 1 + 0.06 * spring({frame: frame - 2, fps, config: {damping: 7, stiffness: 260, mass: 0.5}}) * Math.max(0, 1 - frame / 18);
     }
+    // destacado "neon": resplandor intenso del color y un subrayado que se dibuja debajo
+    let subrayado = null;
+    if (w.destacado && SUB.efectoDestacado === 'neon') {
+      const prende = interpolate(frame, [0, 5, 10], [0, 1.25, 1], clamp) * (1 + 0.06 * Math.sin(frame / 4));
+      // la letra queda nítida: sombra oscura pegada + halo del color alrededor
+      const r = Math.round(w.size * 0.12 * prende), r2 = Math.round(w.size * 0.3 * prende);
+      brillo = {textShadow: `0 2px 4px rgba(0,0,0,.55), 0 0 ${r}px ${color}AA, 0 0 ${r2}px ${color}66`};
+      extra = 1 + 0.05 * spring({frame: frame - 1, fps, config: {damping: 8, stiffness: 260, mass: 0.5}}) * Math.max(0, 1 - frame / 16);
+      const linea = interpolate(frame, [3, 11], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+      subrayado = <span style={{position: 'absolute', left: '22%', right: '22%', bottom: '-0.1em', height: Math.max(4, Math.round(w.size * 0.05)),
+        borderRadius: 99, background: color, boxShadow: `0 0 ${r}px ${color}`, transform: `scaleX(${linea})`, transformOrigin: 'center'}} />;
+    }
     return (
       <div style={{
         position: 'absolute', left: w.x, top: w.y, transform: `translate(-50%,-50%) translateY(${a.y}px) rotate(${a.r}deg) scale(${a.s * extra})`,
         opacity: a.o * out, color, fontSize: w.size, whiteSpace: 'nowrap', ...FONT[w.font], ...legible(color, w.size), ...brillo,
-      }}>{text}</div>
+      }}>{text}{subrayado}</div>
     );
   };
 
@@ -518,10 +531,32 @@ function armar(data, brand, base) {
         </AbsoluteFill>
       );
     }
+    if (tipo === 'anillo') {   // fondo lleno, anillo que se abre alrededor del logo (isotipo arriba si la marca lo tiene) y @handle en pastilla
+      const acc = col(SUB.colorDestacado ?? brand.acentos?.[0] ?? 'texto');
+      const anillo = spring({frame: frame - 2, fps: FPS, config: {damping: 18, stiffness: 70}});
+      const iso = spring({frame: frame - 3, fps: FPS, config: {damping: 12, stiffness: 160}});
+      return (
+        <AbsoluteFill style={{backgroundColor: fondo, opacity: bg}}>
+          <AbsoluteFill style={{background: 'radial-gradient(circle at 50% 45%, rgba(255,255,255,.07), rgba(0,0,0,.28) 72%)'}} />
+          <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 70, paddingBottom: 60}}>
+            <div style={{position: 'relative', width: 600, height: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 46}}>
+              <div style={{position: 'absolute', inset: 0, borderRadius: '50%', border: `3px solid ${acc}55`, boxShadow: `0 0 70px ${acc}1F inset`,
+                transform: `scale(${0.6 + 0.4 * anillo})`, opacity: anillo}} />
+              {o.isotipo && <Img src={asset(`brand/${o.isotipo}`)} style={{width: 150, opacity: Math.min(1, iso * 1.4), transform: `scale(${0.5 + 0.5 * iso})`}} />}
+              <Logo w={o.isotipo ? 340 : 420} demora={o.isotipo ? 8 : 4} />
+            </div>
+            <div style={{opacity: interpolate(frame, [14, 22], [0, 1], clamp), transform: `translateY(${interpolate(frame, [14, 24], [24, 0], clamp)}px)`,
+              border: `2px solid ${acc}88`, borderRadius: 999, padding: '10px 30px', background: 'rgba(0,0,0,.18)'}}>
+              <Handle demora={14} size={40} />
+            </div>
+          </AbsoluteFill>
+        </AbsoluteFill>
+      );
+    }
     const cta = tipo === 'cta' && E.cierre?.texto;
     return (
       <AbsoluteFill>
-        <AbsoluteFill style={{backgroundColor: fondo, opacity: bg * (data.clips[data.clips.length - 1].end <= data.outroAt + 0.01 ? 1 : 0.92)}} />
+        <AbsoluteFill style={{backgroundColor: fondo, opacity: bg}} />
         <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: cta ? 44 : 60}}>
           {cta && <CTA texto={E.cierre.texto} />}
           <Logo w={cta ? 380 : 620} demora={cta ? 10 : 4} />
@@ -560,6 +595,26 @@ function armar(data, brand, base) {
     );
   };
 
+  // Rótulo arriba (tema o paso): "BLACK FRIDAY · No comprés por impulso" -> la primera parte en mayúsculas y color
+  const Etiqueta = ({e, dur}) => {
+    const frame = useCurrentFrame();
+    const t = interpolate(frame, [0, 8], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+    const fuera = interpolate(frame, [dur - 6, dur], [1, 0], clamp);
+    const [cabeza, ...resto] = String(e.texto).split(' · ');
+    const acc = col(SUB.colorDestacado ?? brand.acentos?.[0] ?? 'texto');
+    const fondo = col(brand.outro?.fondo ?? '#000000');
+    return (
+      <div style={{position: 'absolute', top: 250, left: e.centrado ? '50%' : 70, transform: `${e.centrado ? 'translateX(-50%) ' : ''}translateY(${(1 - t) * -30}px)`,
+        opacity: t * fuera, display: 'flex', alignItems: 'center', gap: 14, padding: '12px 24px 12px 20px', borderRadius: 999, maxWidth: 940,
+        background: /^#[0-9a-f]{6}$/i.test(fondo) ? fondo + 'D9' : 'rgba(0,0,0,.7)', border: `2px solid ${acc}66`, boxShadow: '0 6px 20px rgba(0,0,0,.3)',
+        ...(FONT.B ?? {}), textTransform: 'none', fontSize: 30, lineHeight: 1.1, color: col('texto'), whiteSpace: 'nowrap'}}>
+        <span style={{width: 12, height: 12, borderRadius: 99, background: acc, boxShadow: `0 0 12px ${acc}`, flex: 'none'}} />
+        <b style={{color: acc, textTransform: 'uppercase', letterSpacing: 2}}>{cabeza}</b>
+        {resto.length > 0 && <span style={{opacity: 0.9}}>· {resto.join(' · ')}</span>}
+      </div>
+    );
+  };
+
   const Zocalo = ({z}) => {
     const frame = useCurrentFrame();
     const t = interpolate(frame, [0, 9], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
@@ -588,7 +643,7 @@ function armar(data, brand, base) {
     const tapa = ['fundido-color', 'cortina'].includes(E.transicion?.tipo);
     const introDur = E.entrada?.tipo === 'logo' ? 15 : E.entrada?.tipo === 'titulo' ? 36 : 0;
     const textos = SUB.modo === 'no' ? [] : SUB.modo === 'palabra'
-      ? data.words.map((w) => {
+      ? data.words.filter((w) => !w.oculta).map((w) => {
         const from = Math.round((w.start + data.voiceOffset) * FPS);
         return {from, dur: Math.max(5, Math.round((w.end + data.voiceOffset) * FPS) - from), w};
       })
@@ -634,6 +689,11 @@ function armar(data, brand, base) {
             <Grafico g={g} />
           </Sequence>
         ))}
+        {E.etiqueta?.texto && (
+          <Sequence from={Math.round((E.etiqueta.start ?? 0) * FPS)} durationInFrames={Math.max(1, Math.round(((E.etiqueta.end ?? 3) - (E.etiqueta.start ?? 0)) * FPS))}>
+            <Etiqueta e={E.etiqueta} dur={Math.max(1, Math.round(((E.etiqueta.end ?? 3) - (E.etiqueta.start ?? 0)) * FPS))} />
+          </Sequence>
+        )}
         {E.zocalo?.texto && (
           <Sequence from={Math.round(E.zocalo.start * FPS)} durationInFrames={Math.round((E.zocalo.end - E.zocalo.start) * FPS)}>
             <Zocalo z={E.zocalo} />

@@ -11,7 +11,9 @@
   "Tipografía: DM Sans (la que usa la agencia). Subtítulos palabra por palabra; destacadas más grandes (DM Sans Black) con brillo y rebote sutil: estética moderna y tecnológica.",
   "Reels de persona a cámara: elegí tomas con transcribir_tomas.sh (descartá repeticiones y tomas falladas), cortá entre frases y armá la voz con voz_tomas.sh (limpia ruido y realza). Priscila al frente la mayor parte del video; tomas de producto como apoyo.",
   "Material de cámara 4K horizontal (XAVC): el editor recorta a 9:16; si la persona no queda centrada, usá la 5.ª columna del EDL (objectPosition, ej. '35% 50%').",
-  "Cierre: logotipo blanco sobre navy. Logo en esquina: isotipo blanco (tecno-isotipo-blanco.png)."
+  "Cierre: logotipo blanco sobre navy. Logo en esquina: isotipo blanco (tecno-isotipo-blanco.png).",
+  "Subtítulos chicos (tamaño 0,55) con destacados menta #5FF2D2 en neón con subrayado; frases clave enteras en \"destacar\" (\"18 Pro Max\", \"Plan Canje\"); etiqueta arriba con el tema (\"BLACK FRIDAY · No comprés por impulso\"); cierre con anillo.",
+  "Pri (la persona a cámara) siempre visible mientras habla a cámara: las escenas de color o gráficos van solo en la voz en off."
  ],
  "estrategia": [
   "Venta de productos Apple nuevos y usados en Moreno (Buenos Aires), con financiamiento y toma de usados como parte de pago (Plan Canje).",
@@ -32,15 +34,18 @@
    "color": "blanco",
    "legibilidad": "sombra",
    "animacion": "pop",
-   "efectoDestacado": "brillo",
-   "escalaDestacado": 1.15
+   "efectoDestacado": "neon",
+   "escalaDestacado": 1.12,
+   "tamano": 0.55,
+   "colorDestacado": "#5FF2D2",
+   "puntuacion": "auto"
   },
   "camara": "no",
   "transicion": {
    "tipo": "corte"
   },
   "cierre": {
-   "tipo": "logo"
+   "tipo": "anillo"
   },
   "animacionLogo": "fade",
   "look": "original",

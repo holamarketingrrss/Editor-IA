@@ -58,6 +58,7 @@
  "outro": {
   "fondo": "navy",
   "fuenteHandle": "S",
-  "colorHandle": "texto"
+  "colorHandle": "texto",
+  "isotipo": "tecno-isotipo-blanco.png"
  }
 }
