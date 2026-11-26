@@ -45,15 +45,19 @@ export const Conexiones = ({kit}) => {
 };
 ```
 
-- **Lo pone el editor:** fondo de la marca (con puntos por defecto), rótulo `paso` arriba, salida de la escena y subtítulos
-  de la voz en una franja abajo (y 1250-1420); el dibujo va entre y 330 y 1180.
+- **Lo pone el editor:** fondo de la marca (se alternan solos entre pasos con los `fondosEscenas` de la marca; no lo fijes
+  salvo que el pedido lo pida), anillos finos de decoración, rótulo `paso` arriba, salida de la escena y subtítulos de la
+  voz en una franja abajo (y 1250-1420).
+- **Cómo se ve bien:** el dibujo grande y centrado (centro en y 760-800, entre y 380 y 1150; teléfonos de w 340-380, uno
+  en x 540 o dos en x 330/750) y con contenido en las pantallas: `texto` ("Hola"), un `Progreso` o una `Tarjeta` adentro
+  del `Telefono` (ahí las coordenadas son de la pantalla). Nada de dibujos chicos arriba con la mitad del cuadro vacía.
 - **Colores:** el acento es el color de destacado de la marca (si tiene) y el texto el que se lea sobre el fondo; `acento` y
   `color` en la escena los fuerzan.
 - **Kit** (`kit` en las props; x, y = centro en px de 1080x1920; `desde`, `prende` y `dura` en cuadros de la escena, 30 por segundo):
 
 | Pieza | Para qué |
 |---|---|
-| `Telefono {x, y, w, etiqueta, brillo, desde, pantalla}` | teléfono; adentro van `Apps` u otras piezas |
+| `Telefono {x, y, w, etiqueta, brillo, desde, texto, pantalla}` | teléfono (por defecto centrado, w 360); `texto` grande en la pantalla; adentro van `Apps` u otras piezas |
 | `Apps {cols, filas}` | grilla de apps dentro de la pantalla |
 | `Interruptor {y, icono, texto, desde, prende}` | tarjeta con interruptor que se prende |
 | `Tilde {x, y, size, desde}` | tilde que se dibuja en un círculo |
