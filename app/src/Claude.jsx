@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {api, claudeApi} from './api.js';
 import {Icono} from './ui.jsx';
-import {PLANTILLAS, CAMBIOS} from './plantillas.js';
 
 const PLANTILLA = `Elegí una plantilla arriba o pegá el pedido (también sirve el brief completo).`;
 const MODELOS = [['sonnet', 'Sonnet · recomendado'], ['opus', 'Opus · más capaz, gasta más'],
@@ -10,8 +9,14 @@ const leerModelo = () => { try { return localStorage.getItem('editor.modelo') ||
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // Pedido (sin proyecto: brief → reel nuevo) o Cambios (sobre el proyecto abierto, en la misma sesión de Claude)
-export function Claude({p, t, recargar, alTerminar}) {
-  const modo = p ? 'cambios' : 'pedido';
+// soporte: 'pregunta' | 'ajuste' (pantalla Soporte); si no, pedido (sin proyecto) o cambios (con proyecto)
+export function Claude({p, t, recargar, alTerminar, soporte}) {
+  const modo = soporte || (p ? 'cambios' : 'pedido');
+  const esSoporte = !!soporte;
+  // plantillas y botones de cambios: app/plantillas.json, editable en Ajustes
+  const [pl, setPl] = useState({plantillas: [], cambios: []});
+  useEffect(() => { if (!esSoporte) fetch('/api/ajustes/plantillas').then((r) => r.json()).then((x) => setPl(JSON.parse(x.texto))).catch(() => {}); }, []);
+  const PLANTILLAS = pl.plantillas, CAMBIOS = pl.cambios;
   const [estado, setEstado] = useState(null);
   const [texto, setTexto] = useState('');
   const [eventos, setEventos] = useState([]);
@@ -64,7 +69,7 @@ export function Claude({p, t, recargar, alTerminar}) {
     if (texto.trim() && texto !== PLANTILLAS.find((x) => x.id === plantilla)?.texto && !confirm('¿Reemplazar lo que escribiste por la plantilla?')) return;
     setPlantilla(pl.id); setTexto(pl.texto); proximoCampo(pl.texto);
   };
-  const insertarCambio = ([, frase]) => {
+  const insertarCambio = ({texto: frase}) => {
     const a = area.current, linea = `${mmss(t)} — ${frase}`;
     const pos = a?.selectionEnd ?? texto.length;
     const antes = texto.slice(0, pos), sep = antes && !antes.endsWith('\n') ? '\n' : '';
@@ -94,11 +99,11 @@ export function Claude({p, t, recargar, alTerminar}) {
   }
   return (
     <div className={'claude ' + modo}>
-      {modo === 'pedido'
+      {!esSoporte && (modo === 'pedido'
         ? <p className="nota">Elegí la marca y una plantilla, y completá lo que está entre corchetes (también podés pegar el brief completo).
             Claude lee la ficha de Notion y el preset de la marca, baja el material, arma el corte, los subtítulos y el cierre. Lo vas a ver en la vista previa.</p>
         : <p className="nota">Un cambio por línea, con el segundo del reel. Pausá donde querés el cambio y tocá <b>Insertar tiempo</b>.
-            Claude sigue la misma sesión del pedido y reusa lo que ya armó.</p>}
+            Claude sigue la misma sesión del pedido y reusa lo que ya armó.</p>)}
       {modo === 'pedido' && presets.length > 0 && (
         <div className="marcas" role="radiogroup" aria-label="Marca">
           <button role="radio" aria-checked={!marca} className={'marca-op' + (!marca ? ' activo' : '')} onClick={() => setMarca('')} disabled={corriendo}>
@@ -112,17 +117,19 @@ export function Claude({p, t, recargar, alTerminar}) {
           ))}
         </div>
       )}
-      <div className="plantillas" role="group" aria-label={modo === 'pedido' ? 'Plantillas de pedido' : 'Cambios frecuentes'}>
+      {!esSoporte && <div className="plantillas" role="group" aria-label={modo === 'pedido' ? 'Plantillas de pedido' : 'Cambios frecuentes'}>
         <span className="sub">{modo === 'pedido' ? 'Plantilla:' : 'Agregar:'}</span>
         {modo === 'pedido'
           ? PLANTILLAS.map((pl) => <button key={pl.id} className={'chip' + (plantilla === pl.id ? ' activo' : '')} title={pl.ayuda} disabled={corriendo}
               onClick={() => usarPlantilla(pl)}>{pl.nombre}</button>)
-          : CAMBIOS.map((c) => <button key={c[0]} className="chip" disabled={corriendo} onClick={() => insertarCambio(c)} title={`${mmss(t)} — ${c[1]}`}>{c[0]}</button>)}
-      </div>
+          : CAMBIOS.map((c) => <button key={c.nombre} className="chip" disabled={corriendo} onClick={() => insertarCambio(c)} title={`${mmss(t)} — ${c.texto}`}>{c.nombre}</button>)}
+      </div>}
       {modo === 'pedido' && plantilla && <p className="sub ayuda-plantilla">{PLANTILLAS.find((x) => x.id === plantilla)?.ayuda}. Completá lo que está entre corchetes
         (<kbd>Tab</kbd> pasa al siguiente) y borrá las líneas que no apliquen: el resto lo toma de la ficha y del preset de la marca.</p>}
       <textarea ref={area} value={texto} onChange={(e) => setTexto(e.target.value)} disabled={corriendo}
-        placeholder={modo === 'pedido' ? PLANTILLA : '0:04 — "argentina" se lee poco: pasala a blanco\n0:06–0:07 — cambiá la toma por una de clientes comiendo'}
+        placeholder={modo === 'pedido' ? PLANTILLA : modo === 'pregunta' ? '¿Cómo cambio el logo de una marca? ¿Por qué el reel salió sin música?'
+          : modo === 'ajuste' ? 'Agregá el color violeta #7B2CBF a TECNO como acento\nSumá una plantilla para stories de 10 s'
+          : '0:04 — "argentina" se lee poco: pasala a blanco\n0:06–0:07 — cambiá la toma por una de clientes comiendo'}
         rows={modo === 'pedido' ? 10 : 5}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && texto.trim() && !corriendo) enviarRevisando();
@@ -130,7 +137,7 @@ export function Claude({p, t, recargar, alTerminar}) {
         }} />
       <div className="acciones">
         <button className="primario" disabled={!texto.trim() || corriendo || !estado} onClick={enviarRevisando}>
-          <Icono n="chispa" />{modo === 'pedido' ? 'Editar con Claude' : 'Pedir cambios'}<kbd>⌘↵</kbd></button>
+          <Icono n="chispa" />{{pedido: 'Editar con Claude', cambios: 'Pedir cambios', pregunta: 'Preguntar', ajuste: 'Pedir el cambio'}[modo]}<kbd>⌘↵</kbd></button>
         {modo === 'cambios' && <button disabled={corriendo} onClick={insertarTiempo}><Icono n="reloj" />Insertar {mmss(t)}</button>}
         {corriendo && <button onClick={() => claudeApi.parar()}>Parar</button>}
         <label className="modelo"><span>Modelo</span><select value={modelo} onChange={(e) => elegirModelo(e.target.value)} disabled={corriendo}>
@@ -153,7 +160,7 @@ const md = (t) => t.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((x, i) => (x.startsWit
   : x.startsWith('`') ? <code key={i}>{x.slice(1, -1)}</code> : x));
 
 function Evento({ev}) {
-  if (ev.tipo === 'inicio') return <div className="ev sub">{ev.modo === 'pedido' ? 'Pedido nuevo' : `Cambios en ${ev.p}`}{ev.continua ? ' · sigue la sesión anterior' : ''}</div>;
+  if (ev.tipo === 'inicio') return <div className="ev sub">{{pedido: 'Pedido nuevo', pregunta: 'Consulta a soporte', ajuste: 'Pedido de cambio a soporte'}[ev.modo] ?? `Cambios en ${ev.p}`}{ev.continua ? ' · sigue la sesión anterior' : ''}</div>;
   if (ev.tipo === 'conectores') {
     const srv = ev.servidores ?? ev.lista.map((nombre) => ({nombre, estado: 'connected'}));
     const ESTADO = {connected: 'ok', pending: 'conectando…', 'needs-auth': 'falta autorizar', failed: 'falló'};

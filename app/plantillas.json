@@ -1,0 +1,50 @@
+{
+ "plantillas": [
+  {
+   "id": "recap",
+   "nombre": "Recap con voz en off",
+   "ayuda": "Tomas del Drive + voz de la marca (ElevenLabs) + subtítulos",
+   "texto": "Tipo: recap con voz en off y subtítulos.\nFicha: [link de la ficha en Notion]\nMaterial: [link de la carpeta de Drive] (sin: [tomas a excluir])\nDuración: [15] s\nPedidos puntuales: [lo que cambia respecto del estilo de la marca, o \"ninguno\"]"
+  },
+  {
+   "id": "camara",
+   "nombre": "Persona a cámara",
+   "ayuda": "La voz es la de las tomas; cortes limpios y audio podcast",
+   "texto": "Tipo: persona a cámara (la voz es la de las tomas). Seguí el guion de la ficha.\nFicha: [link de la ficha en Notion]\nMaterial: [link de la carpeta de Drive]\nPalabras clave: [ej. Black Friday, 18 Pro Max, Plan Canje]\nEtiqueta arriba: [TEMA · bajada]\nRitmo: audio podcast, zooms suaves con swoosh y click en las palabras clave"
+  },
+  {
+   "id": "motion",
+   "nombre": "Motion graphics",
+   "ayuda": "Sin material grabado: escenas animadas con la marca",
+   "texto": "Tipo: motion graphics, sin material grabado.\nFicha: [link de la ficha en Notion]\nEscenas: [gancho, dato o número, lista de 3 puntos, cierre con CTA] (si lo dejás así, salen de la ficha)\nVoz en off: [sí, con la voz de la marca / no, con música: link]\nDuración: [20] s"
+  },
+  {
+   "id": "mixto",
+   "nombre": "Cámara + explicación animada",
+   "ayuda": "Habla a cámara y, en la voz en off, escenas de color sobre lo que dice",
+   "texto": "Tipo: persona a cámara + escenas animadas en la voz en off.\nFicha: [link de la ficha en Notion]\nMaterial: [link de la carpeta de Drive]\nEscenas: mientras habla en off, fondo de color de la marca con escenas sobre lo que dice ([ej. pasos 1 a 5])\nPalabras clave: [ej. Inicio rápido, Bluetooth, Plan Canje]\nRitmo: audio podcast, zooms suaves con swoosh y click en las palabras clave"
+  }
+ ],
+ "cambios": [
+  {
+   "nombre": "Texto",
+   "texto": "cambiá «[palabra]» por «[nueva]»"
+  },
+  {
+   "nombre": "Toma",
+   "texto": "cambiá esta toma por una de [qué se tiene que ver]"
+  },
+  {
+   "nombre": "Más corto",
+   "texto": "recortá esta parte: [qué sobra]"
+  },
+  {
+   "nombre": "Destacar",
+   "texto": "destacá «[palabra o frase]»"
+  },
+  {
+   "nombre": "Zoom",
+   "texto": "acercá acá con swoosh"
+  }
+ ]
+}

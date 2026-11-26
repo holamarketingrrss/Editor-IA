@@ -34,7 +34,9 @@ export function Login({entro}) {
 
 const usd = (n) => `US$ ${(+n || 0).toFixed(2)}`;
 const ACCIONES = {pedido: 'Pedido nuevo', cambios: 'Cambios con Claude', exportar: 'Exportó', textos: 'Editó textos', tomas: 'Editó tomas',
-  proyecto: 'Editó estilo/audio', 'guardar-preset': 'Guardó estilo de marca', subir: 'Subió archivo', login: 'Entró', 'login-fallido': 'Clave incorrecta', equipo: 'Cambió el equipo'};
+  proyecto: 'Editó estilo/audio', 'guardar-preset': 'Guardó estilo de marca', subir: 'Subió archivo', login: 'Entró', 'login-fallido': 'Clave incorrecta', equipo: 'Cambió el equipo',
+  eliminar: 'Eliminó (a la papelera)', duplicar: 'Duplicó', renombrar: 'Renombró', recuperar: 'Recuperó de la papelera', marca: 'Cambió una marca',
+  ajuste: 'Cambió un ajuste', pregunta: 'Consultó a soporte'};
 
 export function Equipo({yo, volver}) {
   const avisar = useAviso();
