@@ -271,7 +271,7 @@ export function Exportar({p, recargar}) {
 }
 
 // ---------- Escenas de motion graphics (proyecto.json "escenas"): textos, tipo, fondo, duración y orden ----------
-const TIPOS_ESCENA = [['titulo', 'Título'], ['lista', 'Lista'], ['numero', 'Número'], ['imagen', 'Imagen'], ['frase', 'Frase']];
+const TIPOS_ESCENA = [['titulo', 'Título'], ['lista', 'Lista'], ['numero', 'Número'], ['imagen', 'Imagen'], ['frase', 'Frase'], ['ilustracion', 'Ilustración']];
 const DECOR = [['formas', 'Formas'], ['lineas', 'Líneas'], ['puntos', 'Puntos'], ['ninguno', 'Liso']];
 // clips del video solo de escenas, como los arma make_clips.py (para ver los cambios al instante)
 const clipsDeEscenas = (escenas) => {
@@ -322,8 +322,12 @@ export function Escenas({p, data, setData, irA, aplicar, ocupado}) {
                 <label>Decoración<select value={e.decor ?? 'formas'} onChange={(x) => cambiar(i, 'decor', x.target.value)}>{DECOR.map(([k, n]) => <option key={k} value={k}>{n}</option>)}</select></label>
                 <label>Dura (s)<input type="number" step="0.1" min="0.5" value={e.dur ?? 2.5} onChange={(x) => cambiar(i, 'dur', num(x.target.value))} /></label>
               </div>
-              <label className="largo">{tipo === 'lista' ? 'Título de la lista' : tipo === 'numero' ? 'Texto debajo del número' : 'Texto'}
-                <textarea rows={2} value={e.texto ?? ''} onChange={(x) => cambiar(i, 'texto', x.target.value)} /></label>
+              {tipo === 'ilustracion' ? <div className="form dos">
+                <label>Rótulo arriba<input value={e.paso ?? ''} placeholder="PASO 1 · Encendé y acercá" onChange={(x) => cambiar(i, 'paso', x.target.value)} /></label>
+                <label>Ilustración (componente)<input value={e.componente ?? ''} onChange={(x) => cambiar(i, 'componente', x.target.value)} /></label>
+              </div> : <label className="largo">{tipo === 'lista' ? 'Título de la lista' : tipo === 'numero' ? 'Texto debajo del número' : 'Texto'}
+                <textarea rows={2} value={e.texto ?? ''} onChange={(x) => cambiar(i, 'texto', x.target.value)} /></label>}
+              {tipo === 'ilustracion' && <p className="sub">El dibujo animado lo escribe Claude en <code>reel/src/ilustraciones.jsx</code>; pedile cambios en la pestaña Claude.</p>}
               {tipo === 'lista' && <label className="largo">Ítems (uno por renglón)
                 <textarea rows={3} value={(e.items ?? []).join('\n')} onChange={(x) => cambiar(i, 'items', x.target.value.split('\n'))} /></label>}
               {tipo === 'numero' && <div className="form dos">

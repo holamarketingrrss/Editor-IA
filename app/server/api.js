@@ -79,6 +79,9 @@ function todo(id) {
     edl: leerEdl(d),
     tomas: archivos(path.join(d, 'raw'), ['.mp4', '.mov', '.m4v', '.webm']),
     imagenes: archivos(path.join(d, 'raw'), ['.png', '.jpg', '.jpeg', '.webp', '.svg']),
+    // ilustraciones a medida del proyecto: la app las importa por /@fs (con la fecha, para recargarlas cuando cambian)
+    ilustraciones: fs.existsSync(path.join(d, 'reel/src/ilustraciones.jsx'))
+      ? `/@fs${path.join(d, 'reel/src/ilustraciones.jsx')}?v=${Math.round(fs.statSync(path.join(d, 'reel/src/ilustraciones.jsx')).mtimeMs)}` : null,
     musicas: archivos(path.join(d, 'reel/public/musica'), ['.mp3', '.wav', '.m4a']).map((f) => 'musica/' + f),
     videos: archivos(path.join(d, 'out'), ['.mp4']).filter((f) => !f.startsWith('.')),
   };

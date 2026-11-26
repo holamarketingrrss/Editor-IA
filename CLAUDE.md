@@ -35,7 +35,8 @@ con el design system y avisalo en la entrega.
   dibujan solas `{"tipo": "flecha", "forma": "curva"|"recta", "start", "end", "x", "y", "w", "rot", "color"}` y emojis
   `{"tipo": "emoji", "emoji": "🔥", "start", "end", "x", "y", "size", "rot"}`; pocos y con sentido (señalar producto, acompañar una
   palabra). Los subtítulos van encima: si `zona_segura.py` dice SUPERPUESTO, mové el sticker o gráfico.
-  Motion graphics (sin material o placas entre tomas): `proyecto.json` → `escenas` (titulo, lista, numero, imagen, frase; ver `docs/escenas.md`).
+  Motion graphics (sin material o placas entre tomas): `proyecto.json` → `escenas` (titulo, lista, numero, imagen, frase e ilustracion; ver `docs/escenas.md`).
+  Ilustraciones a medida: componente en `reel/src/ilustraciones.jsx` del proyecto armado con el kit (Telefono, Interruptor, Vuela, Tilde...).
   Subtítulos: `estilo.subtitulos.tamano` (tamaño general), `destacar` acepta frases enteras ("18 Pro Max"), `efectoDestacado: "neon"`;
   `estilo.etiqueta` = rótulo arriba ("TEMA · bajada"); cierre `anillo`. Persona a cámara: siempre visible mientras habla a cámara.
   Audio: `estilo.audio: "podcast"` (voz de las tomas), `camara: "acercar"` (zoom suave en destacadas), `sfx.clave` (click/blip/pop) y
