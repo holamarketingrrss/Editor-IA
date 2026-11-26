@@ -97,6 +97,12 @@ function armar(data, brand, base) {
   const T_FR = Math.round(Math.min(0.4, E.transicion?.dur ?? 0.3) * FPS);   // las tomas traen 0,4 s de cola: alcanza para solapar
   const SOLAPA = ['fundido', 'zoom', 'deslizar'].includes(E.transicion?.tipo);
   const DESTACADAS = data.words.filter((w) => w.destacado).map((w) => [w.start + data.voiceOffset, Math.min(w.end, w.start + 0.6) + data.voiceOffset]);
+  // camara "acercar": zoom suave en las destacadas, como mucho uno cada 2 s (si no, marea); cada uno puede llevar swoosh
+  const ZOOMS = [];
+  data.words.filter((w) => w.destacado && !w.oculta).forEach((w) => {
+    const t = w.start + data.voiceOffset;
+    if (!ZOOMS.length || t - ZOOMS[ZOOMS.length - 1] >= 2) ZOOMS.push(t);
+  });
 
 
   // ---------- Escenas de motion graphics (proyecto.json "escenas"): reemplazan una toma o arman un video sin material.
@@ -293,7 +299,13 @@ function armar(data, brand, base) {
     const durationInFrames = Math.round((clip.end - clip.start) * FPS);
     let scale = 1;
     if (E.camara === 'pushin') scale = interpolate(frame, [0, durationInFrames], [1.06, 1.14], {extrapolateRight: 'clamp'});
-    if (E.camara === 'punchin') {
+    if (E.camara === 'acercar') {
+      const t = clip.start + frame / FPS;
+      const z = ZOOMS.filter((a) => t >= a - 0.1 && t < a + 1.6).pop();
+      const p = z === undefined ? 0 : interpolate(t, [z - 0.1, z + 0.15, z + 1.1, z + 1.6], [0, 1, 1, 0], {...clamp, easing: Easing.inOut(Easing.cubic)});
+      scale = 1.02 + 0.1 * p;
+    }
+        if (E.camara === 'punchin') {
       const t = clip.start + frame / FPS;
       scale = DESTACADAS.some(([a, b]) => t >= a && t < b) ? 1.16 : 1.04;
     }
@@ -718,6 +730,12 @@ function armar(data, brand, base) {
         {data.music && <Audio src={asset(data.music)} volume={data.musicVolume ?? 0.18} />}
         {sfx.whoosh && cortes.map((f, i) => (
           <Sequence key={'wh' + i} from={Math.max(0, f - 6)} durationInFrames={20}><Audio src={asset('sfx/whoosh.wav')} volume={0.55} /></Sequence>
+        ))}
+        {sfx.clave && sfx.clave !== 'no' && textos.filter((x) => !enEscena(x.from) && (x.w ? x.w.destacado : x.b.ws.some((w) => w.destacado))).map((x, i) => (
+          <Sequence key={'cl' + i} from={x.from} durationInFrames={10}><Audio src={asset(`sfx/${sfx.clave}.wav`)} volume={0.32} /></Sequence>
+        ))}
+        {sfx.zoom && E.camara === 'acercar' && ZOOMS.map((z, i) => (
+          <Sequence key={'zm' + i} from={Math.max(0, Math.round((z - 0.2) * FPS))} durationInFrames={16}><Audio src={asset('sfx/swoosh.wav')} volume={0.22} /></Sequence>
         ))}
         {sfx.pop && textos.filter((x) => !enEscena(x.from)).map((x, i) => (
           <Sequence key={'pp' + i} from={x.from} durationInFrames={8}><Audio src={asset('sfx/pop.wav')} volume={0.4} /></Sequence>

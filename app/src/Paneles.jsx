@@ -157,6 +157,7 @@ const CAMPOS = [
   ['Imagen', [['camara', 'Cámara'], ['transicion.tipo', 'Transición'], ['look', 'Look'], ['vineta', 'Viñeta', 'si'], ['grano', 'Grano', 'si']]],
   ['Entrada y cierre', [['entrada.tipo', 'Entrada'], ['entrada.texto', 'Título de entrada', 'texto'], ['cierre.tipo', 'Cierre'],
     ['cierre.texto', 'Texto del CTA', 'texto'], ['animacionLogo', 'Animación del logo'], ['animacionStickers', 'Animación de stickers']]],
+  ['Sonido', [['audio', 'Voz de las tomas'], ['sfx.clave', 'Sonido en palabras clave'], ['sfx.zoom', 'Swoosh en los zooms (cámara «acercar»)', 'si']]],
   ['Extras', [['etiqueta.texto', 'Etiqueta arriba (TEMA · bajada)', 'texto'], ['etiqueta.end', 'Etiqueta hasta (s)', 'numero'],
     ['sfx.whoosh', 'Whoosh en transiciones', 'si'], ['sfx.pop', 'Pop en textos', 'si'], ['logoEsquina', 'Logo en esquina', 'si'],
     ['zocalo.texto', 'Zócalo (texto)', 'texto'], ['zocalo.start', 'Zócalo desde (s)', 'numero'], ['zocalo.end', 'Zócalo hasta (s)', 'numero']]],
