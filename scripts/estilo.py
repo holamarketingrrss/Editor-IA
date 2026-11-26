@@ -25,7 +25,7 @@ DEFAULTS = {
         'animacion': 'pop',            # pop | fade | deslizar | maquina | no
         'destacar': [],                # palabras a destacar (si está vacío, el preset automático: 1 de cada 4)
     },
-    'camara': 'pushin',                # pushin | no | punchin (salto de zoom en las palabras destacadas)
+    'camara': 'pushin',                # pushin | no | punchin (salto de zoom en las destacadas) | acercar (zoom suave en las destacadas, cada 2 s como mucho)
     'transicion': {'tipo': 'corte', 'dur': 0.3, 'color': None},   # corte | fundido | fundido-color | cortina | zoom | deslizar
     'entrada': {'tipo': 'gancho', 'texto': ''},                   # gancho | logo | titulo
     'cierre': {'tipo': 'logo', 'texto': ''},                      # logo | anillo | cta | congelada | loop
@@ -35,7 +35,8 @@ DEFAULTS = {
     'vineta': True,
     'grano': False,
     'audioOriginal': 'mute',           # mute | bajo | alto
-    'sfx': {'whoosh': False, 'pop': False},
+    'audio': 'natural',                # natural | podcast (voz de las tomas: graves, ruido, de-esser, compresión y EQ de locución)
+    'sfx': {'whoosh': False, 'pop': False, 'clave': 'no', 'zoom': False},   # clave: no | click | blip | pop en las destacadas; zoom: swoosh en cada acercamiento
     'zocalo': None,                    # {"texto": "...", "start": 2, "end": 5}
     'etiqueta': None,                  # rótulo arriba: {"texto": "BLACK FRIDAY · No comprés por impulso", "start": 0, "end": 3}
     'logoEsquina': False,
@@ -50,7 +51,9 @@ OPCIONES = {
     ('subtitulos', 'animacion'): ['pop', 'fade', 'deslizar', 'maquina', 'no'],
     ('subtitulos', 'efectoDestacado'): ['ninguno', 'brillo', 'neon'],
     ('subtitulos', 'puntuacion'): ['auto', 'si', 'no'],
-    ('camara',): ['pushin', 'no', 'punchin'],
+    ('camara',): ['pushin', 'no', 'punchin', 'acercar'],
+    ('audio',): ['natural', 'podcast'],
+    ('sfx', 'clave'): ['no', 'click', 'blip', 'pop'],
     ('transicion', 'tipo'): ['corte', 'fundido', 'fundido-color', 'cortina', 'zoom', 'deslizar'],
     ('entrada', 'tipo'): ['gancho', 'logo', 'titulo'],
     ('cierre', 'tipo'): ['logo', 'anillo', 'cta', 'congelada', 'loop'],

@@ -272,6 +272,10 @@ export function api() {
       if (accion === 'proyecto') {
         const f = path.join(d, 'proyecto.json');
         escribir(f, mezclar(leer(f, {}), datos.cambios || {}));
+        // reel de persona a cámara: cambiar el audio (natural / podcast) rearma la voz desde las tomas
+        if (datos.cambios?.estilo?.audio && leer(path.join(d, 'reel/src/preset.json'), {}).voz?.tipo === 'propia') {
+          await correr('bash', ['scripts/voz_tomas.sh', path.relative(REPO, d), '--sin-ajustar']);
+        }
         return json(await regenerar(id));
       }
       return json({error: 'acción desconocida'}, 404);

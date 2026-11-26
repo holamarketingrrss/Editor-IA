@@ -26,6 +26,9 @@ Pedido nuevo (en este orden):
 Subtítulos, en estilo.subtitulos de proyecto.json: "destacar" con 6 a 10 palabras clave (producto, beneficio, marca, CTA),
 y las de varias palabras como frase entera ("18 Pro Max", "Plan Canje"); "tamano" si el pedido pide textos más grandes o
 más chicos (1 = el del preset). Si la ficha tiene un tema o gancho corto, estilo.etiqueta {"texto": "TEMA · bajada", "end": 3}.
+Audio y ritmo: "pasalo por audio podcast" = estilo.audio "podcast"; zooms en momentos clave = estilo.camara "acercar"
+(sobre las destacadas); sonidos sutiles = estilo.sfx {"clave": "click"|"blip"|"pop", "zoom": true}. voz_tomas.sh ya ajusta
+los cortes a la voz (sin aire ni respiraciones); no hace falta pedirlo.
 Persona a cámara: mientras habla a cámara siempre se la ve; escenas de color, placas o gráficos solo sobre la voz en off.
 
 Motion graphics (pedido sin material grabado, "placas", "solo gráfica" o "video animado"): en lugar de Drive/EDL, armá
