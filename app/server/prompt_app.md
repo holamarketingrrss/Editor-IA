@@ -23,6 +23,11 @@ Pedido nuevo (en este orden):
 6. scripts/armar.sh <p> --stills: baja solo las tomas usadas, arma todo y chequea. Mirá out/stills/hoja.jpg una vez,
    corregí lo que haga falta y cerrá con scripts/armar.sh <p> (sin --stills).
 
+Subtítulos, en estilo.subtitulos de proyecto.json: "destacar" con 6 a 10 palabras clave (producto, beneficio, marca, CTA),
+y las de varias palabras como frase entera ("18 Pro Max", "Plan Canje"); "tamano" si el pedido pide textos más grandes o
+más chicos (1 = el del preset). Si la ficha tiene un tema o gancho corto, estilo.etiqueta {"texto": "TEMA · bajada", "end": 3}.
+Persona a cámara: mientras habla a cámara siempre se la ve; escenas de color, placas o gráficos solo sobre la voz en off.
+
 Motion graphics (pedido sin material grabado, "placas", "solo gráfica" o "video animado"): en lugar de Drive/EDL, armá
 proyecto.json "escenas" (formato en docs/escenas.md): tipos titulo, lista, numero, imagen y frase; texto con *destacado*;
 fondos con los colores de la marca, variando entre escenas; 2-3,5 s por escena. Sin edl.tsv. Con voz, duraciones según

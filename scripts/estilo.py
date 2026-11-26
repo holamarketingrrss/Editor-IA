@@ -13,8 +13,12 @@ DEFAULTS = {
         'fuente': 'B',                 # casillero de brand.json para "una" y para el texto de "texto+destacados"
         'fuenteDestacado': 'G',        # para los destacados con "texto+destacados"
         'colorCaja': None,             # con legibilidad "caja": color de marca de la caja (pastilla); None = negra o blanca
-        'efectoDestacado': 'ninguno',  # ninguno | brillo (resplandor del color + rebote sutil en las palabras destacadas)
+        'efectoDestacado': 'ninguno',  # ninguno | brillo (resplandor + rebote sutil) | neon (resplandor intenso + subrayado que se dibuja)
         'escalaDestacado': 1.0,        # tamaño de las destacadas respecto del resto (ej. 1.3 = 30 % más grandes)
+        'tamano': 1.0,                 # tamaño general de los subtítulos (0.6 = 60 %, 1.2 = 20 % más grandes)
+        'puntuacion': 'auto',          # auto (sin puntos ni comas en palabra y grupo) | si | no
+        'colorDestacado': None,        # color fijo de las destacadas (nombre de la paleta o hex); None = acentos de la marca
+                                       # destacar acepta frases: "18 Pro Max" sale entera, como una sola palabra
         'rotacion': None,              # casilleros que se alternan con "alternadas" (None = todos los de brand.json)
         'color': 'blanco',             # blanco (destacados en colores de marca) | marca | negro
         'legibilidad': 'sombra',       # sombra | contorno | caja | barra
@@ -24,7 +28,7 @@ DEFAULTS = {
     'camara': 'pushin',                # pushin | no | punchin (salto de zoom en las palabras destacadas)
     'transicion': {'tipo': 'corte', 'dur': 0.3, 'color': None},   # corte | fundido | fundido-color | cortina | zoom | deslizar
     'entrada': {'tipo': 'gancho', 'texto': ''},                   # gancho | logo | titulo
-    'cierre': {'tipo': 'logo', 'texto': ''},                      # logo | cta | congelada | loop
+    'cierre': {'tipo': 'logo', 'texto': ''},                      # logo | anillo | cta | congelada | loop
     'animacionLogo': 'pop',            # pop | fade | deslizar | sello | estatico
     'animacionStickers': 'pop',        # pop | trazo (el garabato aparece como pintado); por sticker: "anim"
     'look': 'original',                # original | calido | vibrante | bn | vintage | cine
@@ -33,6 +37,7 @@ DEFAULTS = {
     'audioOriginal': 'mute',           # mute | bajo | alto
     'sfx': {'whoosh': False, 'pop': False},
     'zocalo': None,                    # {"texto": "...", "start": 2, "end": 5}
+    'etiqueta': None,                  # rótulo arriba: {"texto": "BLACK FRIDAY · No comprés por impulso", "start": 0, "end": 3}
     'logoEsquina': False,
 }
 
@@ -43,11 +48,12 @@ OPCIONES = {
     ('subtitulos', 'color'): ['blanco', 'marca', 'negro'],
     ('subtitulos', 'legibilidad'): ['sombra', 'contorno', 'caja', 'barra'],
     ('subtitulos', 'animacion'): ['pop', 'fade', 'deslizar', 'maquina', 'no'],
-    ('subtitulos', 'efectoDestacado'): ['ninguno', 'brillo'],
+    ('subtitulos', 'efectoDestacado'): ['ninguno', 'brillo', 'neon'],
+    ('subtitulos', 'puntuacion'): ['auto', 'si', 'no'],
     ('camara',): ['pushin', 'no', 'punchin'],
     ('transicion', 'tipo'): ['corte', 'fundido', 'fundido-color', 'cortina', 'zoom', 'deslizar'],
     ('entrada', 'tipo'): ['gancho', 'logo', 'titulo'],
-    ('cierre', 'tipo'): ['logo', 'cta', 'congelada', 'loop'],
+    ('cierre', 'tipo'): ['logo', 'anillo', 'cta', 'congelada', 'loop'],
     ('animacionLogo',): ['pop', 'fade', 'deslizar', 'sello', 'estatico'],
     ('animacionStickers',): ['pop', 'trazo'],
     ('look',): ['original', 'calido', 'vibrante', 'bn', 'vintage', 'cine'],

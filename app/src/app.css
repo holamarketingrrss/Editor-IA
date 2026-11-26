@@ -388,3 +388,4 @@ button.peligro:hover:not(:disabled) { border-color: var(--mal); color: var(--mal
 .escena-tarjeta .botones button { padding: 4px 9px; background: none; }
 .muestra-escena { width: 64px; height: 114px; border-radius: 7px; justify-content: center; font: 600 11px var(--mono); background: var(--tinta-3); white-space: normal; }
 .toma-bloque.escena span { text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+.form.dos label.ancho { grid-column: 1 / -1; }

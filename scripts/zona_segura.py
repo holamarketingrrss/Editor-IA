@@ -34,7 +34,7 @@ def caja(cx, cy, w, h, rot):
 
 def caja_palabra(w):
     f = brand['fuentes'][w['font']]
-    return caja(w['x'], w['y'], len(w['text']) * f.get('ancho', 0.5) * w['size'], w['size'] * f.get('interlineado', 1), w['rot'])
+    return caja(w['x'], w['y'], len(w.get('frase', w['text'])) * f.get('ancho', 0.5) * w['size'], w['size'] * f.get('interlineado', 1), w['rot'])
 
 
 def caja_sticker(s):
@@ -84,13 +84,14 @@ def frames_clave(maximo):
     esc = [(fr(c['start'] + (c['end'] - c['start']) * 0.7), 'escena-' + str(c['escena'].get('id', i + 1)))
            for i, c in enumerate(data['clips']) if c.get('tipo') == 'escena']
     obl = esc + [(fr(data['outroAt'] + 0.7), 'cierre')] + [(fr((s['start'] + s['end']) / 2), 'sticker-' + os.path.splitext(s['img'])[0]) for s in data['stickers']]
-    acentos = [w for w in data['words'] if col(w['color']).lower() != col('texto').lower()]
-    grandes = [w for w in data['words'] if w['size'] >= 250 and w not in acentos]
+    vis = [w for w in data['words'] if not w.get('oculta')]
+    acentos = [w for w in vis if col(w['color']).lower() != col('texto').lower()]
+    grandes = [w for w in vis if w['size'] >= 250 and w not in acentos]
     resto = [data['words'][0], data['words'][-1]] if data['words'] else []
     lista = list(obl)
     for w in acentos + grandes + resto:
         a, b = tiempo_palabra(w)
-        lista.append((fr(max(a + 0.05, min(a + 0.2, b - 0.12))), 'palabra-' + ''.join(ch for ch in w['text'] if ch.isalnum())))
+        lista.append((fr(max(a + 0.05, min(a + 0.2, b - 0.12))), 'palabra-' + ''.join(ch for ch in w.get('frase', w['text']) if ch.isalnum())))
     vistos, final = set(), []
     for f, n in lista:
         if all(abs(f - v) > 3 for v in vistos):
@@ -142,7 +143,7 @@ def bloques():
 if MODO == 'no':
     revisar = []
 elif MODO == 'palabra':
-    revisar = [(w['text'], *tiempo_palabra(w), caja_palabra(w), w['color']) for w in data['words']]
+    revisar = [(w.get('frase', w['text']), *tiempo_palabra(w), caja_palabra(w), w['color']) for w in data['words'] if not w.get('oculta')]
 else:
     revisar = bloques()
 
