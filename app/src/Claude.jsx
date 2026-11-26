@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {api, claudeApi} from './api.js';
 import {Icono} from './ui.jsx';
+import {PLANTILLAS, CAMBIOS} from './plantillas.js';
 
-const PLANTILLA = `Editá el video de esta pieza: [link a la ficha en Notion].
-Material: [link de Drive] (excluir […]). Formato 9:16, 15 s.`;
+const PLANTILLA = `Elegí una plantilla arriba o pegá el pedido (también sirve el brief completo).`;
 const MODELOS = [['sonnet', 'Sonnet · recomendado'], ['opus', 'Opus · más capaz, gasta más'],
   ['haiku', 'Haiku · cambios chicos'], ['cuenta', 'El de la cuenta']];
 const leerModelo = () => { try { return localStorage.getItem('editor.modelo') || 'sonnet'; } catch { return 'sonnet'; } };
@@ -50,6 +50,32 @@ export function Claude({p, t, recargar, alTerminar}) {
     setError('');
     try { await claudeApi.iniciar(modo, p?.id, texto, marca || undefined, modelo); setTexto(''); conectar(); } catch (e) { setError(e.message); }
   };
+  // selecciona el próximo campo [entre corchetes] desde la posición dada (Tab lo recorre)
+  const proximoCampo = (txt, desde = 0) => {
+    const a = area.current; if (!a) return false;
+    const re = /\[[^\]\n]+\]/g; re.lastIndex = desde;
+    const m = re.exec(txt) || (desde > 0 ? (re.lastIndex = 0, re.exec(txt)) : null);
+    if (!m) return false;
+    setTimeout(() => { a.focus(); a.setSelectionRange(m.index, m.index + m[0].length); });
+    return true;
+  };
+  const [plantilla, setPlantilla] = useState('');
+  const usarPlantilla = (pl) => {
+    if (texto.trim() && texto !== PLANTILLAS.find((x) => x.id === plantilla)?.texto && !confirm('¿Reemplazar lo que escribiste por la plantilla?')) return;
+    setPlantilla(pl.id); setTexto(pl.texto); proximoCampo(pl.texto);
+  };
+  const insertarCambio = ([, frase]) => {
+    const a = area.current, linea = `${mmss(t)} — ${frase}`;
+    const pos = a?.selectionEnd ?? texto.length;
+    const antes = texto.slice(0, pos), sep = antes && !antes.endsWith('\n') ? '\n' : '';
+    const nuevo = antes + sep + linea + texto.slice(pos);
+    setTexto(nuevo); proximoCampo(nuevo, (antes + sep).length);
+  };
+  const enviarRevisando = () => {
+    const pendientes = texto.match(/\[[^\]\n]+\]/g);
+    if (pendientes && !confirm(`Quedaron campos sin completar: ${pendientes.slice(0, 4).join(', ')}${pendientes.length > 4 ? '…' : ''}.\n¿Mandar igual?`)) return;
+    enviar();
+  };
   const insertarTiempo = () => {
     const a = area.current, marca = `${mmss(t)} — `;
     const pos = a?.selectionStart ?? texto.length;
@@ -69,8 +95,8 @@ export function Claude({p, t, recargar, alTerminar}) {
   return (
     <div className={'claude ' + modo}>
       {modo === 'pedido'
-        ? <p className="nota">Pegá el pedido (la plantilla del brief, completa o la versión corta). Claude lee la ficha de Notion y el design system,
-            baja el material de Drive, genera la voz, arma el corte, los subtítulos y el cierre. Lo vas a ver en la vista previa.</p>
+        ? <p className="nota">Elegí la marca y una plantilla, y completá lo que está entre corchetes (también podés pegar el brief completo).
+            Claude lee la ficha de Notion y el preset de la marca, baja el material, arma el corte, los subtítulos y el cierre. Lo vas a ver en la vista previa.</p>
         : <p className="nota">Un cambio por línea, con el segundo del reel. Pausá donde querés el cambio y tocá <b>Insertar tiempo</b>.
             Claude sigue la misma sesión del pedido y reusa lo que ya armó.</p>}
       {modo === 'pedido' && presets.length > 0 && (
@@ -86,12 +112,24 @@ export function Claude({p, t, recargar, alTerminar}) {
           ))}
         </div>
       )}
+      <div className="plantillas" role="group" aria-label={modo === 'pedido' ? 'Plantillas de pedido' : 'Cambios frecuentes'}>
+        <span className="sub">{modo === 'pedido' ? 'Plantilla:' : 'Agregar:'}</span>
+        {modo === 'pedido'
+          ? PLANTILLAS.map((pl) => <button key={pl.id} className={'chip' + (plantilla === pl.id ? ' activo' : '')} title={pl.ayuda} disabled={corriendo}
+              onClick={() => usarPlantilla(pl)}>{pl.nombre}</button>)
+          : CAMBIOS.map((c) => <button key={c[0]} className="chip" disabled={corriendo} onClick={() => insertarCambio(c)} title={`${mmss(t)} — ${c[1]}`}>{c[0]}</button>)}
+      </div>
+      {modo === 'pedido' && plantilla && <p className="sub ayuda-plantilla">{PLANTILLAS.find((x) => x.id === plantilla)?.ayuda}. Completá lo que está entre corchetes
+        (<kbd>Tab</kbd> pasa al siguiente) y borrá las líneas que no apliquen: el resto lo toma de la ficha y del preset de la marca.</p>}
       <textarea ref={area} value={texto} onChange={(e) => setTexto(e.target.value)} disabled={corriendo}
         placeholder={modo === 'pedido' ? PLANTILLA : '0:04 — "argentina" se lee poco: pasala a blanco\n0:06–0:07 — cambiá la toma por una de clientes comiendo'}
         rows={modo === 'pedido' ? 10 : 5}
-        onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && texto.trim() && !corriendo) enviar(); }} />
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && texto.trim() && !corriendo) enviarRevisando();
+          if (e.key === 'Tab' && !e.shiftKey && /\[[^\]\n]+\]/.test(texto) && proximoCampo(texto, e.currentTarget.selectionEnd)) e.preventDefault();
+        }} />
       <div className="acciones">
-        <button className="primario" disabled={!texto.trim() || corriendo || !estado} onClick={enviar}>
+        <button className="primario" disabled={!texto.trim() || corriendo || !estado} onClick={enviarRevisando}>
           <Icono n="chispa" />{modo === 'pedido' ? 'Editar con Claude' : 'Pedir cambios'}<kbd>⌘↵</kbd></button>
         {modo === 'cambios' && <button disabled={corriendo} onClick={insertarTiempo}><Icono n="reloj" />Insertar {mmss(t)}</button>}
         {corriendo && <button onClick={() => claudeApi.parar()}>Parar</button>}

@@ -12,6 +12,8 @@ npm run equipo             # abierta a la red, con usuario y clave: ver EQUIPO.m
 **Equipo:** usuarios con clave, roles, límite mensual de Claude por persona, registro de quién hizo qué y motor de
 Claude (cuenta o clave de API). Todo en [EQUIPO.md](EQUIPO.md).
 
+- **Plantillas de pedido** (`src/plantillas.js`, editable): recap con voz en off, persona a cámara, motion graphics y cámara +
+  explicación animada; cada una trae solo lo que Claude no saca de la ficha ni del preset. En *Cambios*, botones para las líneas frecuentes.
 - **Claude** (el motor): sin proyecto abierto, *Pedido nuevo* (con selector de marca: usa su preset) recibe el brief y Claude arma el reel completo
   (Notion, design system, Drive, voz con ElevenLabs, corte, subtítulos, cierre). Con un proyecto abierto, *Cambios*:
   un cambio por línea con el segundo del reel (*Insertar tiempo* pone el actual). Claude sigue la misma sesión del

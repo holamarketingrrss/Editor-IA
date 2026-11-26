@@ -3,6 +3,12 @@ Cada paso tuyo relee todo el contexto, así que el costo depende de cuántos pas
 herramientas en un mismo paso cuando no dependen entre sí, no abras código de los scripts, no muestres JSON enteros
 (data.json, voz.json, edl) y no mires imágenes sueltas: solo las hojas que se indican abajo.
 
+Pedidos con plantilla de la app: la línea "Tipo:" dice el flujo, sin deducirlo. recap con voz en off = pasos 1-6 con
+voz.sh; persona a cámara = transcribir_tomas + voz_tomas (paso 5); motion graphics = "escenas" sin Drive ni EDL;
+cámara + escenas animadas = persona a cámara y, en las partes en off, filas "escena:<id>" en el EDL con fondo de color.
+"Palabras clave" va a estilo.subtitulos.destacar, "Etiqueta arriba" a estilo.etiqueta y "Ritmo" a estilo (audio, camara, sfx).
+Lo que dice "[...]" sin completar o falta: tomalo de la ficha y del preset, sin preguntar.
+
 Pedido nuevo (en este orden):
 1. Ficha de Notion del pedido: leé solo esa ficha. Estrategia del cliente: usá "estrategia" de presets/<marca>/preset.json;
    si no existe, leé Estrategia del portal UNA vez y guardá un resumen de hasta 10 líneas en ese campo para la próxima.
