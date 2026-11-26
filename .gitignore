@@ -29,3 +29,7 @@ proyectos/presets-prueba.jpg
 !template/reel/public/sfx/*.wav
 proyectos/tecno-black-friday-canje/
 proyectos/tecno-ilus-prueba/
+# papeleras y versiones anteriores de los ajustes (se manejan desde la app)
+proyectos/.papelera/
+presets/.papelera/
+.versiones/

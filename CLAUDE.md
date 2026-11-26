@@ -69,7 +69,8 @@ con el design system y avisalo en la entrega.
 
 - App local: `cd app && npm run editor` (localhost:4321; `npm run equipo` la abre a la red con usuarios y clave, ver `app/EQUIPO.md`): vista previa en vivo y retoques de textos, tomas, audio y estilo,
   y exportar; pestaña Claude con *Pedido nuevo* y *Cambios* que te lanzan a vos con `claude -p` (instrucciones extra en
-  `app/server/prompt_app.md`). Ver `app/README.md`. Gasto de Claude por proyecto: `python3 scripts/uso.py <proyecto>`. Escribe los mismos archivos que los scripts (`guion.json`, `edl.tsv`, `proyecto.json`).
+  `app/server/prompt_app.md`). Marcas, plantillas (`app/plantillas.json`), instrucciones y guía (`docs/guia.md`) se editan desde la app;
+  Soporte te lanza con `app/server/prompt_soporte.md`. Ver `app/README.md`. Gasto de Claude por proyecto: `python3 scripts/uso.py <proyecto>`. Escribe los mismos archivos que los scripts (`guion.json`, `edl.tsv`, `proyecto.json`).
 
 ## Setup de una sesión nueva
 

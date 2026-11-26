@@ -1,8 +1,9 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Player} from '@remotion/player';
 import {Reel, FPS, duracionEnFrames} from '../../template/reel/src/Reel.jsx';
-import {api, sesionApi} from './api.js';
+import {api, sesionApi, gestionApi} from './api.js';
 import {Login, Equipo} from './Equipo.jsx';
+import {Marcas, Ajustes, Guia, Soporte} from './Gestion.jsx';
 import {Textos, Tomas, Escenas, Audio, Estilo, Exportar} from './Paneles.jsx';
 import {Claude} from './Claude.jsx';
 import {Icono, Linea, fmt, useAviso} from './ui.jsx';
@@ -47,20 +48,22 @@ export function App({usuario, equipo, salir}) {
   const [sonando, setSonando] = useState(false);
   const [sel, setSel] = useState(null);      // palabra elegida en Textos: se arrastra en la vista previa
   const [atajos, setAtajos] = useState(false);
-  const [verEquipo, setVerEquipo] = useState(false);
+  const [vista, setVista] = useState(() => new URLSearchParams(location.search).get('v') || 'proyectos');
   const player = useRef(null);
-  const yoBarra = <Usuario u={usuario} equipo={equipo} salir={salir} abrirEquipo={() => { setId(''); setVerEquipo(true); }} />;
+  const yoBarra = <Usuario u={usuario} equipo={equipo} salir={salir} abrirEquipo={() => { setId(''); setVista('equipo'); }} />;
+  const ir = (v) => { setId(''); setVista(v); };
+  const nav = <Nav vista={vista} ir={ir} admin={usuario.rol === 'admin'} />;
 
   const listar = () => api.proyectos().then(setLista).catch((e) => avisar('error', 'No se pudo leer la lista de proyectos', e.message));
   useEffect(() => { listar(); api.opciones().then(setOpciones).catch(() => {}); }, []);
   const recargar = () => id && api.proyecto(id).then((x) => { setP(x); setData(x.data); }).catch(() => {});
   useEffect(() => {
-    history.replaceState(null, '', id ? `?p=${id}` : location.pathname);
+    history.replaceState(null, '', id ? `?p=${id}` : vista !== 'proyectos' ? `?v=${vista}` : location.pathname);
     setSel(null); setFrame(0); setSonando(false);
     if (!id) { setP(null); setData(null); listar(); return; }
     api.proyecto(id).then((x) => { setP(x); setData(x.data); })
       .catch((e) => { avisar('error', 'No se pudo abrir el proyecto', e.message); setId(''); });
-  }, [id]);
+  }, [id, vista]);
   // cuando Claude termina un pedido, se abre el proyecto que armó
   const alTerminar = (proy) => { listar(); if (proy && proy !== id) { setId(proy); setPanel('claude'); } else recargar(); };
 
@@ -131,8 +134,12 @@ export function App({usuario, equipo, salir}) {
     window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar);
   };
 
-  if (verEquipo) return <div className="app"><Barra><span className="espacio" />{yoBarra}</Barra><Equipo yo={usuario} volver={() => setVerEquipo(false)} /></div>;
-  if (!id) return <Inicio lista={lista} abrir={setId} alTerminar={alTerminar} yoBarra={yoBarra} />;
+  if (!id && vista !== 'proyectos') {
+    const pagina = {equipo: <Equipo yo={usuario} volver={() => ir('proyectos')} />, marcas: <Marcas />, ajustes: <Ajustes />,
+      guia: <Guia abrirSoporte={() => ir('soporte')} />, soporte: <Soporte />}[vista] ?? null;
+    return <div className="app"><Barra>{nav}<span className="espacio" />{yoBarra}</Barra>{pagina}</div>;
+  }
+  if (!id) return <Inicio lista={lista} abrir={setId} alTerminar={alTerminar} yoBarra={yoBarra} nav={nav} recargar={listar} />;
   if (!p || !props) return <div className="app"><Barra><span className="espacio" />{yoBarra}</Barra><main className="cargando"><span className="pulso" />Abriendo {nombreProyecto(id)}…</main></div>;
 
   const info = lista.find((x) => x.id === id);
@@ -220,12 +227,53 @@ function Usuario({u, equipo, salir, abrirEquipo}) {
   );
 }
 
-function Inicio({lista, abrir, alTerminar, yoBarra}) {
+function Nav({vista, ir, admin}) {
+  const items = [['proyectos', 'Proyectos'], ['marcas', 'Marcas'], ['ajustes', 'Ajustes'], ['guia', 'Guía'], ['soporte', 'Soporte']];
+  return <nav className="nav-principal">{items.map(([k, n]) => <button key={k} className={vista === k ? 'activo' : ''} onClick={() => ir(k)}>{n}</button>)}</nav>;
+}
+
+// menú de cada proyecto en la galería: duplicar, renombrar, eliminar (a la papelera)
+function MenuProyecto({x, recargar, abrir}) {
+  const avisar = useAviso();
+  const [abierto, setAbierto] = useState(false);
+  const hacer = async (que, fn) => { setAbierto(false); try { const r = await fn(); await recargar(); avisar('ok', que); return r; } catch (e) { avisar('error', `${que}: no se pudo`, e.message); } };
+  return (
+    <div className="menu-proyecto" onClick={(e) => e.stopPropagation()}>
+      <button className="icono" aria-label="Opciones del proyecto" onClick={() => setAbierto((a) => !a)}>⋯</button>
+      {abierto && <div className="menu-caja" onMouseLeave={() => setAbierto(false)}>
+        <button onClick={() => { const n = prompt('Nombre de la copia:', `${x.id}-v2`); if (n) hacer('Proyecto duplicado', () => gestionApi.duplicar(x.id, n)).then((r) => r && abrir(r.id)); }}>Duplicar</button>
+        <button onClick={() => { const n = prompt('Nombre nuevo:', x.id); if (n && n !== x.id) hacer('Proyecto renombrado', () => gestionApi.renombrar(x.id, n)); }}>Renombrar</button>
+        <button className="peligro" onClick={() => confirm(`¿Eliminar «${nombreProyecto(x.id)}»? Va a la papelera y se puede recuperar.`) && hacer('Proyecto en la papelera', () => gestionApi.borrarProyecto(x.id))}>Eliminar</button>
+      </div>}
+    </div>
+  );
+}
+
+function Papelera({recargar}) {
+  const avisar = useAviso();
+  const [lista, setLista] = useState(null);
+  const ver = () => gestionApi.papelera().then(setLista).catch(() => setLista([]));
+  if (lista === null) return <button className="link-papelera" onClick={ver}>Ver papelera</button>;
+  return (
+    <div className="papelera">
+      <h3>Papelera <button className="icono" onClick={() => setLista(null)} aria-label="Cerrar"><Icono n="x" /></button></h3>
+      {!lista.length && <p className="nota">Está vacía.</p>}
+      {lista.map((x) => (
+        <div key={x.nombre} className="papelera-fila">
+          <span className="dato">{x.tipo}</span><b>{nombreProyecto(x.id)}</b><span className="dato">{x.fecha.slice(0, 10)}</span>
+          <button onClick={() => gestionApi.recuperar(x.nombre).then((r) => { avisar('ok', `Recuperado: ${r.id}`); ver(); recargar(); }).catch((e) => avisar('error', 'No se pudo', e.message))}>Recuperar</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Inicio({lista, abrir, alTerminar, yoBarra, nav, recargar}) {
   const [q, setQ] = useState('');
   const filtrados = lista.filter((x) => (x.id + ' ' + x.marca).toLowerCase().includes(q.toLowerCase()));
   return (
     <div className="app inicio">
-      <Barra><span className="espacio" /><span className="dato">Hola Marketing · {lista.length} proyectos</span>{yoBarra}</Barra>
+      <Barra>{nav}<span className="espacio" /><span className="dato">{lista.length} proyectos</span>{yoBarra}</Barra>
       <main className="inicio-grilla">
         <section className="bloque pedido">
           <h2><small>01</small>Pedido <em>nuevo</em></h2>
@@ -239,7 +287,9 @@ function Inicio({lista, abrir, alTerminar, yoBarra}) {
           {!lista.length && <p className="nota">Todavía no hay proyectos. Hacé un pedido y aparecen acá.</p>}
           <div className="galeria">
             {filtrados.map((x, i) => (
-              <button key={x.id} className="tarjeta" onClick={() => abrir(x.id)} style={{'--marca': x.color, animationDelay: `${Math.min(i, 12) * 35}ms`}}>
+              <div key={x.id} className="tarjeta-envoltura">
+              <MenuProyecto x={x} recargar={recargar} abrir={abrir} />
+              <button className="tarjeta" onClick={() => abrir(x.id)} style={{'--marca': x.color, animationDelay: `${Math.min(i, 12) * 35}ms`}}>
                 <div className="portada">
                   <img src={`/api/p/${x.id}/portada`} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
                   <span className="duracion">{x.duracion ? `${x.duracion.toFixed(0)} s` : '—'}</span>
@@ -251,9 +301,11 @@ function Inicio({lista, abrir, alTerminar, yoBarra}) {
                   <span className="dato">{x.tomas} tomas · {hace(x.cambiado)}</span>
                 </div>
               </button>
+              </div>
             ))}
           </div>
           {lista.length > 0 && !filtrados.length && <p className="nota">Nada coincide con «{q}».</p>}
+          <Papelera recargar={recargar} />
         </section>
       </main>
     </div>

@@ -14,6 +14,7 @@
 //   GET  /api/p/<id>/miniatura?archivo=x&t=1.5
 //   GET  /api/p/<id>/exportar                render.sh con el progreso en vivo (text/event-stream)
 //   /api/claude/...                         Claude como motor (server/claude.js)
+//   /api/papelera, /api/marcas, /api/ajustes, /api/guia, DELETE /api/p/<id>, /duplicar, /renombrar   (server/gestion.js)
 //   GET  /media/<id>/<ruta>                  archivos de reel/public (con Range, para el video)
 //   GET  /salida/<id>/<archivo>.mp4          videos exportados (out/)
 //   GET|POST|DELETE /api/sesion              quién soy / entrar {usuario, clave} / salir (server/equipo.js)
@@ -25,6 +26,7 @@ import {execFile, spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {claude} from './claude.js';
 import * as eq from './equipo.js';
+import {gestion} from './gestion.js';
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PROY = path.join(REPO, 'proyectos');
@@ -144,6 +146,7 @@ function exportar(id, res, usuario) {
 
 export function api() {
   const motor = claude(REPO);
+  const gest = gestion(REPO, eq.registrar);
   return async (req, res, next) => {
     const url = new URL(req.url, 'http://x');
     const partes = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
@@ -177,6 +180,9 @@ export function api() {
       if (partes[0] === 'salida' && partes.length === 3) return servirArchivo(req, res, dentro(path.join(dir(partes[1]), 'out'), partes[2]));
       if (partes[0] !== 'api') return next();
       const [, que, id, accion] = partes;
+      const g = await gest({que, id, accion, metodo: req.method, url, yo,
+        datos: async () => JSON.parse((await cuerpo(req)).toString() || '{}'), cuerpo: () => cuerpo(req)});
+      if (g !== undefined) return json(g);
       if (que === 'proyectos') {
         const lista = fs.existsSync(PROY) ? fs.readdirSync(PROY).filter((p) => ID_OK.test(p)
           && fs.existsSync(path.join(PROY, p, 'reel/src/data.json')) && !fs.existsSync(path.join(PROY, p, 'reel/src/.propia'))) : [];

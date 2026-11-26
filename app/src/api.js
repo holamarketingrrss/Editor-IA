@@ -36,6 +36,24 @@ export const equipoApi = {
   motor: (motor) => post('/api/equipo/motor', {motor}),
 };
 
+const enviarArchivo = (url, archivo) => pedir(url, {method: 'POST', body: archivo});
+export const gestionApi = {
+  borrarProyecto: (id) => borrar(`/api/p/${id}`),
+  duplicar: (id, nuevo) => post(`/api/p/${id}/duplicar`, {nuevo}),
+  renombrar: (id, nuevo) => post(`/api/p/${id}/renombrar`, {nuevo}),
+  papelera: () => pedir('/api/papelera'),
+  recuperar: (nombre) => post(`/api/papelera/${encodeURIComponent(nombre)}/recuperar`, {}),
+  marca: (id) => pedir(`/api/marcas/${id}`),
+  guardarMarca: (id, cambios) => post(`/api/marcas/${id}`, cambios),
+  nuevaMarca: (nombre) => post('/api/marcas', {nombre}),
+  borrarMarca: (id) => borrar(`/api/marcas/${id}`),
+  subirMarca: (id, tipo, archivo) => enviarArchivo(`/api/marcas/${id}/archivo?tipo=${tipo}&nombre=${encodeURIComponent(archivo.name)}`, archivo),
+  ajustes: () => pedir('/api/ajustes'),
+  ajuste: (clave) => pedir(`/api/ajustes/${clave}`),
+  guardarAjuste: (clave, texto) => post(`/api/ajustes/${clave}`, {texto}),
+  ajusteOriginal: (clave) => post(`/api/ajustes/${clave}/original`, {}),
+};
+
 export const claudeApi = {
   estado: () => pedir('/api/claude/estado'),
   iniciar: (modo, p, texto, marca, modelo) => post('/api/claude/iniciar', {modo, p, texto, marca, modelo}),

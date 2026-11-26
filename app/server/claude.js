@@ -63,6 +63,8 @@ function emitir(ev) {
 }
 
 function prompt(REPO, modo, p, texto, marca) {
+  if (modo === 'pregunta') return `Consulta del equipo (solo respondé: no cambies archivos):\n\n${texto}`;
+  if (modo === 'ajuste') return `Pedido de cambio del equipo para el editor (hacelo y explicá qué cambiaste):\n\n${texto}`;
   if (modo === 'pedido') {
     const pre = marca ? `Marca: ${marca}. Creá el proyecto con scripts/nuevo_proyecto.sh <cliente> <tema> --preset ${marca} `
       + `(presets/${marca}: brand, assets, voz y estilo por defecto; leé sus notas en preset.json).\n` : '';
@@ -74,7 +76,8 @@ function prompt(REPO, modo, p, texto, marca) {
 }
 
 export function claude(REPO) {
-  const SISTEMA = fs.readFileSync(path.join(REPO, 'app/server/prompt_app.md'), 'utf8');
+  // las instrucciones se leen en cada pedido: si el equipo las cambia en Ajustes, valen desde el siguiente
+  const sistema = (modo) => fs.readFileSync(path.join(REPO, ['pregunta', 'ajuste'].includes(modo) ? 'app/server/prompt_soporte.md' : 'app/server/prompt_app.md'), 'utf8');
   const PROY = path.join(REPO, 'proyectos');
   const proyectos = () => (fs.existsSync(PROY) ? fs.readdirSync(PROY) : []);
 
@@ -86,9 +89,10 @@ export function claude(REPO) {
     if (modo === 'cambios' && !/^[a-z0-9][a-z0-9-]*$/.test(p || '')) throw new Error('falta el proyecto');
     const sesion = modo === 'cambios' ? leer(path.join(PROY, p, '.claude.json'), {}).sesion : null;
     if (marca && !/^[a-z0-9-]+$/.test(marca)) throw new Error('marca inválida');
+    if (!['pedido', 'cambios', 'pregunta', 'ajuste'].includes(modo)) throw new Error('modo inválido');
     const args = ['-p', prompt(REPO, modo, p, texto, marca), '--output-format', 'stream-json', '--verbose',
-      '--permission-mode', PERMISOS, '--append-system-prompt', SISTEMA,
-      '--tools', HERRAMIENTAS, '--exclude-dynamic-system-prompt-sections'];
+      '--permission-mode', PERMISOS, '--append-system-prompt', sistema(modo),
+      '--tools', modo === 'pregunta' ? 'Read,Glob,Grep' : HERRAMIENTAS, '--exclude-dynamic-system-prompt-sections'];
     if (modelo && !MODELOS.includes(modelo)) throw new Error('modelo inválido');
     const m = modelo === 'cuenta' ? '' : (modelo || MODELO);
     if (m) args.push('--model', m);
