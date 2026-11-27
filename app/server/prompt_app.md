@@ -29,7 +29,8 @@ Pedido nuevo (en este orden):
 6. scripts/armar.sh <p> --stills: baja solo las tomas usadas, arma todo y chequea. Mirá out/stills/hoja.jpg una vez,
    corregí lo que haga falta y cerrá con scripts/armar.sh <p> (sin --stills).
 
-Subtítulos, en estilo.subtitulos de proyecto.json: "destacar" con 6 a 10 palabras clave (producto, beneficio, marca, CTA),
+Subtítulos, en estilo.subtitulos de proyecto.json: "destacar" con 8 a 12 palabras clave (producto, beneficio, marca, CTA)
+repartidas en todo el video, también en la parte final,
 y las de varias palabras como frase entera ("18 Pro Max", "Plan Canje"); "tamano" si el pedido pide textos más grandes o
 más chicos (1 = el del preset). Si la ficha tiene un tema o gancho corto, estilo.etiqueta {"texto": "TEMA · bajada", "end": 3}.
 Audio y ritmo: "pasalo por audio podcast" = estilo.audio "podcast"; zooms en momentos clave = estilo.camara "acercar"
@@ -44,7 +45,8 @@ las frases; sin voz, hace falta música. Para una placa entre tomas: fila "escen
 
 Explicaciones animadas (pasos, cómo funciona algo, "animaciones respecto a lo que se habla"): escena "ilustracion" con
 "componente" y "paso"; escribí el componente en reel/src/ilustraciones.jsx usando el kit (tabla en docs/escenas.md; leé
-solo esa sección), 10-20 líneas por escena, sin código que no use. Si la voz en off explica pasos, una escena por paso.
+solo esa sección), 10-20 líneas por escena, sin código que no use. Dibujo grande y centrado, con contenido en las
+pantallas ("Hola", porcentaje, aviso); sin "fondo" (se alternan solos). Si la voz en off explica pasos, una escena por paso.
 
 Cambios: tocá solo lo que piden (guion.json, edl.tsv, proyecto.json) y cerrá con scripts/armar.sh <p>; usá --stills
 solo si el cambio es visual y dudás de cómo queda. Para flechas, emojis o stickers usá "graficos" y "stickers" de

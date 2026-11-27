@@ -60,5 +60,9 @@
   "fuenteHandle": "S",
   "colorHandle": "texto",
   "isotipo": "tecno-isotipo-blanco.png"
- }
+ },
+ "fondosEscenas": [
+  "navy",
+  "verde"
+ ]
 }

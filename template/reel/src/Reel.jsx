@@ -174,7 +174,11 @@ function armar(data, brand, base, ilustraciones = {}) {
           <div key={i} style={{position: 'absolute', left: -200, right: -200, top: 140 + i * 280, height: 18, background: a1, opacity: 0.18,
             transform: `translateX(${((i % 2 ? 1 : -1) * (1 - en) * 100) + (i % 2 ? t : -t) * 80}px) rotate(-8deg)`}} />
         ))}
-        {deco === 'puntos' && <AbsoluteFill style={{backgroundImage: `radial-gradient(${a1} 5px, transparent 6px)`, backgroundSize: '64px 64px',
+        {deco === 'anillos' && [[150, 330, 140], [900, 260, 90], [960, 1340, 180], [110, 1500, 110], [820, 820, 60]].map(([x, y, r], i) => (
+          <div key={i} style={{position: 'absolute', left: x - r + Math.sin(t * 3 + i) * 18, top: y - r - t * 40 * (i % 2 ? 1 : -1), width: r * 2, height: r * 2,
+            borderRadius: '50%', border: `3px solid ${a1}`, opacity: 0.22 * en, transform: `scale(${0.85 + 0.15 * en})`}} />
+        ))}
+                {deco === 'puntos' && <AbsoluteFill style={{backgroundImage: `radial-gradient(${a1} 5px, transparent 6px)`, backgroundSize: '64px 64px',
           opacity: 0.22 * en, transform: `translateY(${-t * 64}px)`}} />}
       </AbsoluteFill>
     );
@@ -217,7 +221,7 @@ function armar(data, brand, base, ilustraciones = {}) {
       <path d={ICONOS[n] ?? ICONOS.app} /></svg>;
   };
   // teléfono con pantalla del color de acento; children va adentro de la pantalla
-  const Telefono = ({x = 540, y = 760, w = 320, etiqueta, brillo = 0, desde = 0, pantalla, children}) => {
+  const Telefono = ({x = 540, y = 780, w = 360, etiqueta, brillo = 0, desde = 0, pantalla, texto, children}) => {
     const frame = useCurrentFrame(); const c = useContext(Colores); const h = w * 2.05; const {style} = entra(frame, desde);
     return (
       <div style={{...abs(x, y, w, h), ...style}}>
@@ -225,6 +229,7 @@ function armar(data, brand, base, ilustraciones = {}) {
           border: `${Math.max(3, w * 0.02)}px solid ${brillo ? c.acento : 'rgba(255,255,255,.18)'}`}} />
         <div style={{position: 'absolute', inset: w * 0.045, borderRadius: w * 0.13, overflow: 'hidden', background: pantalla ?? `linear-gradient(170deg, ${c.acento}, ${c.fondo})`}}>
           <div style={{position: 'absolute', top: w * 0.035, left: '50%', width: w * 0.28, height: w * 0.07, borderRadius: 99, background: '#000', transform: 'translateX(-50%)'}} />
+          {texto && <div style={{position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', ...FG, fontSize: w * 0.17, color: c.sobreAcento, textAlign: 'center', padding: '0 8%'}}>{texto}</div>}
           {children}
         </div>
         {etiqueta && <div style={{position: 'absolute', top: h + 22, width: '100%', textAlign: 'center', ...FB, fontSize: Math.round(w * 0.085), letterSpacing: 3,
@@ -357,7 +362,7 @@ function armar(data, brand, base, ilustraciones = {}) {
       const colores = {texto: e.color ? col(e.color) : (contraste('#FFFFFF', base) >= 2.6 ? '#FFFFFF' : tc), acento: accI, fondo: col(base), sobreAcento: sobreI};
       return (
         <AbsoluteFill>
-          <Fondo e={{decor: 'puntos', ...e}} dur={dur} />
+          <Fondo e={{decor: 'anillos', ...e}} dur={dur} />
           <Colores.Provider value={colores}>
             <AbsoluteFill style={{opacity: 1 - salida}}>
               {Comp ? <Comp e={e} dur={dur} kit={KIT} />
@@ -678,12 +683,12 @@ function armar(data, brand, base, ilustraciones = {}) {
     return <Img src={asset(`brand/${brand.logo}`)} style={{width: w, filter: 'drop-shadow(0 20px 40px rgba(0,0,0,.35))', ...animLogo(frame - demora, fps)}} />;
   };
 
-  const Handle = ({demora = 14, size = 64}) => {
+  const Handle = ({demora = 14, size = 64, minuscula = false}) => {
     const frame = useCurrentFrame();
     const {fps} = useVideoConfig();
     const o = brand.outro ?? {};
     const h = spring({frame: frame - demora, fps, config: {damping: 14}});
-    return <div style={{...FONT[o.fuenteHandle ?? 'S'], fontSize: size, color: col(o.colorHandle ?? 'texto'), letterSpacing: 4, opacity: h,
+    return <div style={{...FONT[o.fuenteHandle ?? 'S'], ...(minuscula ? {textTransform: 'none', letterSpacing: 1} : {letterSpacing: 4}), fontSize: size, color: col(o.colorHandle ?? 'texto'), opacity: h,
       transform: `translateY(${(1 - h) * 40}px)`, textShadow: '0 4px 14px rgba(0,0,0,.35)'}}>{brand.handle}</div>;
   };
 
@@ -729,7 +734,7 @@ function armar(data, brand, base, ilustraciones = {}) {
             </div>
             <div style={{opacity: interpolate(frame, [14, 22], [0, 1], clamp), transform: `translateY(${interpolate(frame, [14, 24], [24, 0], clamp)}px)`,
               border: `2px solid ${acc}88`, borderRadius: 999, padding: '10px 30px', background: 'rgba(0,0,0,.18)'}}>
-              <Handle demora={14} size={40} />
+              <Handle demora={14} size={40} minuscula />
             </div>
           </AbsoluteFill>
         </AbsoluteFill>

@@ -16,6 +16,13 @@ INTRO = {'logo': 0.5, 'titulo': 1.2}   # con entrada, la voz arranca después (s
 audio = ['-c:a', 'aac', '-b:a', '160k', '-ar', '48000'] if E['audioOriginal'] != 'mute' else ['-an']
 
 ESCENAS = {str(e.get('id', i + 1)): e for i, e in enumerate(cfg.get('escenas', []))}
+# fondos de las escenas que no eligen uno: se alternan los de la marca (brand.json "fondosEscenas"; si no, el del cierre
+# y el primer acento), así una explicación por pasos no queda toda del mismo color
+_b = json.load(open(f'{P}/reel/src/brand.json')) if os.path.exists(f'{P}/reel/src/brand.json') else {}
+FONDOS = [c for c in dict.fromkeys(_b.get('fondosEscenas') or [(_b.get('outro') or {}).get('fondo'), *(_b.get('acentos') or [])[:1]]) if c]
+for _i, _e in enumerate(e for e in ESCENAS.values() if not e.get('fondo')):
+    if FONDOS:
+        _e['fondo'] = FONDOS[_i % len(FONDOS)]
 IMG = ('.png', '.jpg', '.jpeg', '.webp', '.svg')
 
 

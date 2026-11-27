@@ -8,15 +8,18 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 
-// Ejemplo (se puede borrar): dos teléfonos que se conectan y se pasan los datos.
+// Ejemplo (se puede borrar): dos teléfonos grandes y centrados que se conectan y se pasan los datos, con contenido en
+// las pantallas. Dibujo entre y 380 y 1150; abajo van los subtítulos.
 export const Ejemplo = ({kit}) => {
   const frame = useCurrentFrame();
-  const {Telefono, Apps, Ondas, Vuela, Tilde} = kit;
+  const {Telefono, Apps, Ondas, Vuela, Progreso, Tilde} = kit;
   return <>
-    <Telefono x={330} y={720} w={300} etiqueta="Anterior"><Apps /></Telefono>
-    <Telefono x={750} y={720} w={300} etiqueta="Nuevo" desde={6} brillo={frame > 40 ? 1 : 0} />
-    <Ondas x={540} y={720} desde={10} />
-    <Vuela de={[330, 640]} a={[750, 640]} desde={20} />
-    {frame > 60 && <Tilde x={750} y={720} size={170} desde={60} />}
+    <Telefono x={330} y={760} w={360} etiqueta="Anterior"><Apps /></Telefono>
+    <Telefono x={750} y={760} w={360} etiqueta="Nuevo" desde={6} brillo={frame > 40 ? 1 : 0} texto={frame < 40 ? 'Hola' : null}>
+      {frame >= 40 && <Progreso x={180} y={330} w={260} desde={40} dura={50} />}
+    </Telefono>
+    <Ondas x={540} y={760} desde={10} />
+    <Vuela de={[330, 660]} a={[750, 660]} desde={40} />
+    {frame > 95 && <Tilde x={750} y={760} size={170} desde={95} />}
   </>;
 };
