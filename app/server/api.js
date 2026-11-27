@@ -237,6 +237,18 @@ export function api() {
       if (accion === 'subir') {
         const tipo = url.searchParams.get('tipo'), nombre = path.basename(url.searchParams.get('nombre') || '').replace(/[^\w.\- ]/g, '_');
         if (!nombre) return json({error: 'falta el nombre'}, 400);
+        // capa: imágenes a public/capas, audios a public/audios (las usa la línea de tiempo; no se recorta nada)
+        if (tipo === 'capa') {
+          const ext = path.extname(nombre).toLowerCase(), esAudio = ['.mp3', '.wav', '.m4a', '.aac', '.ogg'].includes(ext);
+          if (!esAudio && !['.png', '.jpg', '.jpeg', '.webp', '.svg', '.gif'].includes(ext)) return json({error: 'para capas: imágenes (png, jpg, webp, svg, gif) o audio (mp3, wav, m4a)'}, 400);
+          const sub = esAudio ? 'audios' : 'capas', dirCapa = path.join(d, 'reel/public', sub);
+          fs.mkdirSync(dirCapa, {recursive: true});
+          fs.writeFileSync(dentro(dirCapa, nombre), await cuerpo(req));
+          let dur = null;
+          if (esAudio) dur = +(await correr('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', dentro(dirCapa, nombre)]).catch(() => '0')) || null;
+          eq.registrar({usuario: yo.id, accion: 'subir', proyecto: id, detalle: `capa: ${nombre}`});
+          return json({ok: true, src: `${sub}/${nombre}`, tipo: esAudio ? 'audio' : 'imagen', dur});
+        }
         const carpeta = tipo === 'musica' ? path.join(d, 'reel/public/musica') : path.join(d, 'raw');
         fs.mkdirSync(carpeta, {recursive: true});
         fs.writeFileSync(dentro(carpeta, nombre), await cuerpo(req));

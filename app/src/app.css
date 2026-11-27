@@ -462,3 +462,47 @@ button.peligro:hover:not(:disabled) { border-color: var(--mal); color: var(--mal
 .logo-caja img { max-width: 160px; max-height: 90px; object-fit: contain; }
 .soporte .claude { max-width: 860px; }
 .guia .encabezado { max-width: 760px; }
+.puntos-color { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.form.deslizadores { max-width: 620px; }
+.form.deslizadores label { grid-template-columns: 210px 1fr 48px; }
+.form.deslizadores label > span { text-align: right; min-width: 0; }
+
+/* ---------- textos: acciones en grupo */
+.grupo-textos { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; padding: 8px 10px; background: var(--tinta-2);
+  border: 1px solid var(--linea); border-radius: 10px; position: sticky; top: -20px; z-index: 3; }
+.grupo-textos .sub { margin-right: 6px; }
+.grupo-textos button, .grupo-textos select { padding: 5px 10px; font-size: 13px; }
+
+/* ---------- capas: línea de tiempo con filas */
+.abrir-lt { padding: 6px 10px; font-size: 12.5px; }
+.capas-barra { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; }
+.zoom-lt { display: flex; align-items: center; gap: 8px; font: 500 10.5px var(--mono); text-transform: uppercase; color: var(--crema-3); }
+.lt-scroll { overflow-x: auto; border: 1px solid var(--linea); border-radius: 12px; background: var(--tinta-2); }
+.lt { position: relative; min-width: 100%; padding: 4px 0 8px; }
+.lt-fila { display: grid; grid-template-columns: 110px 1fr; align-items: center; min-height: 34px; }
+.lt-fila.regla { min-height: 22px; }
+.lt-nombre { position: sticky; left: 0; z-index: 2; background: var(--tinta-2); font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: .04em;
+  color: var(--crema-3); padding: 0 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height: 100%; display: flex; align-items: center; }
+.lt-capa-nombre { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-transform: none; gap: 5px; max-width: 100%; overflow: hidden; }
+.lt-capa-nombre.activo { color: var(--amarillo); }
+.lt-pista { position: relative; height: 28px; margin-right: 8px; border-bottom: 1px solid rgba(52, 48, 43, .5); }
+.lt-regla { position: relative; height: 20px; cursor: pointer; }
+.lt-regla span { position: absolute; top: 2px; font: 10px var(--mono); color: var(--crema-3); transform: translateX(-50%); border-left: 1px solid var(--linea-2); padding-left: 3px; }
+.lt-bloque { position: absolute; top: 3px; bottom: 3px; border-radius: 6px; font: 500 10.5px var(--mono); color: var(--crema); padding: 0 6px; display: flex; align-items: center;
+  overflow: hidden; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
+.lt-bloque.toma { background: var(--tinta-4); cursor: pointer; }
+.lt-bloque.toma.escena { background: #233a56; }
+.lt-bloque.voz { background: #1f3a2c; } .lt-bloque.musica { background: #3a2a1f; }
+.lt-bloque.capa { cursor: grab; touch-action: none; user-select: none; }
+.lt-bloque.capa:active { cursor: grabbing; }
+.lt-bloque.capa.imagen { background: #4a3c12; } .lt-bloque.capa.texto { background: #3d2a4a; } .lt-bloque.capa.audio { background: #1c3f4a; }
+.lt-bloque.capa.elegido { box-shadow: 0 0 0 2px var(--amarillo); }
+.lt-bloque span { pointer-events: none; overflow: hidden; text-overflow: ellipsis; }
+.lt-bloque .borde { position: absolute; top: 0; bottom: 0; width: 8px; cursor: ew-resize; background: rgba(255, 255, 255, .18); }
+.lt-bloque .borde.izq { left: 0; } .lt-bloque .borde.der { right: 0; }
+.lt-palabra { position: absolute; top: 11px; height: 6px; border-radius: 3px; background: var(--crema-3); opacity: .55; }
+.lt-palabra.destacada { background: var(--amarillo); opacity: 1; }
+.lt-cabezal { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--amarillo); pointer-events: none; box-shadow: 0 0 8px rgba(249, 202, 18, .6); }
+.inspector { margin-top: 14px; }
+.inspector .botones-fila { margin-top: 12px; justify-content: flex-start; }
+.form.dos label.ancho textarea { font: 14px 'DM Sans'; }

@@ -41,6 +41,8 @@ con el design system y avisalo en la entrega.
   `estilo.etiqueta` = rótulo arriba ("TEMA · bajada"); cierre `anillo`. Persona a cámara: siempre visible mientras habla a cámara.
   Audio: `estilo.audio: "podcast"` (voz de las tomas), `camara: "acercar"` (zoom suave en destacadas), `sfx.clave` (click/blip/pop) y
   `sfx.zoom` (swoosh). `voz_tomas.sh` corre `scripts/cortes_finos.py` (cortes ajustados a la voz). Sonidos: `scripts/make_sfx.py`.
+  Retoque de color de las tomas: `estilo.color` (exposicion, contraste, saturacion, luces, sombras, temperatura, tinte; -100 a 100).
+  Capas a mano (app › Capas): `proyecto.json` → `capas` (imagen `capas/x.png`, texto, audio `audios/x.mp3`; con start, end, x, y…).
   `estilo` lleva las opciones del brief (subtítulos, cámara, transición, entrada, cierre, look, audio original, SFX,
   zócalo, logo en esquina): nombres y defaults en `scripts/estilo.py` (`python3 scripts/estilo.py <proyecto>` muestra el
   resuelto). Los scripts empujan el texto a la zona segura 9:16 solos. La composición vive en `template/reel/src/Reel.jsx` (la registra `index.jsx` y la usa la app);

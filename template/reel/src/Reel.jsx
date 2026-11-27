@@ -98,6 +98,29 @@ function armar(data, brand, base, ilustraciones = {}) {
     bn: 'grayscale(1) contrast(1.15)', vintage: 'sepia(0.4) saturate(0.8) contrast(0.9) brightness(1.06)', cine: 'contrast(1.1) saturate(1.1)',
   };
 
+  // Retoque de color (estilo.color, -100 a 100): un filtro SVG con curva de tonos por canal (exposición, contraste,
+  // luces, sombras, temperatura, tinte) + saturación. Va sobre las tomas de video, después del look.
+  const G = {exposicion: 0, contraste: 0, saturacion: 0, luces: 0, sombras: 0, temperatura: 0, tinte: 0, ...(E.color ?? {})};
+  const HAY_COLOR = Object.values(G).some((v) => +v);
+  const curva = (canal) => {
+    const ex = 2 ** (G.exposicion / 100), ct = 1 + G.contraste / 100;
+    const gan = {r: 1 + G.temperatura * 0.0012 + G.tinte * 0.0006, g: 1 - G.tinte * 0.0012, b: 1 - G.temperatura * 0.0012 + G.tinte * 0.0006}[canal];
+    return Array.from({length: 17}, (_, i) => {
+      let v = (i / 16) * ex * gan;
+      v = (v - 0.5) * ct + 0.5;
+      v += (G.sombras / 100) * 0.25 * Math.max(0, 1 - v / 0.5) ** 2;          // levanta o baja la parte oscura
+      v += (G.luces / 100) * 0.25 * Math.max(0, (v - 0.5) / 0.5) ** 2;        // y la parte clara
+      return Math.max(0, Math.min(1, v)).toFixed(4);
+    }).join(' ');
+  };
+  const ID_COLOR = 'retoque-' + Math.abs(JSON.stringify(G).split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7));
+  const FiltroColor = () => (HAY_COLOR ? (
+    <svg width="0" height="0" style={{position: 'absolute'}} aria-hidden="true"><filter id={ID_COLOR} colorInterpolationFilters="sRGB">
+      <feComponentTransfer><feFuncR type="table" tableValues={curva('r')} /><feFuncG type="table" tableValues={curva('g')} /><feFuncB type="table" tableValues={curva('b')} /></feComponentTransfer>
+      <feColorMatrix type="saturate" values={String(Math.max(0, 1 + G.saturacion / 100))} />
+    </filter></svg>) : null);
+  const filtroToma = [FILTRO[E.look] && FILTRO[E.look] !== 'none' ? FILTRO[E.look] : '', HAY_COLOR ? `url(#${ID_COLOR})` : ''].filter(Boolean).join(' ') || 'none';
+
   const T_FR = Math.round(Math.min(0.4, E.transicion?.dur ?? 0.3) * FPS);   // las tomas traen 0,4 s de cola: alcanza para solapar
   const SOLAPA = ['fundido', 'zoom', 'deslizar'].includes(E.transicion?.tipo);
   const DESTACADAS = data.words.filter((w) => w.destacado).map((w) => [w.start + data.voiceOffset, Math.min(w.end, w.start + 0.6) + data.voiceOffset]);
@@ -504,7 +527,7 @@ function armar(data, brand, base, ilustraciones = {}) {
         <OffthreadVideo
           src={asset(`clips/${clip.file}`)}
           muted={vol === 0} volume={vol}
-          style={{width: '100%', height: '100%', objectFit: 'cover', filter: FILTRO[E.look] ?? 'none',
+          style={{width: '100%', height: '100%', objectFit: 'cover', filter: filtroToma,
             objectPosition: clip.pos || '50% 50%', transform: `scale(${scale})`}}
         />
       </AbsoluteFill>
@@ -623,6 +646,31 @@ function armar(data, brand, base, ilustraciones = {}) {
         filter: s.white ? 'brightness(0) invert(1) drop-shadow(0 6px 16px rgba(0,0,0,.5))' : 'drop-shadow(0 6px 16px rgba(0,0,0,.5))',
       }} />
     );
+  };
+
+  // Capas (proyecto.json "capas"), las que el equipo suma a mano en la línea de tiempo:
+  //   {"tipo": "imagen", "src": "capas/x.png", "start", "end", "x", "y", "w", "rot", "opacidad", "anim": "pop"|"fade"|"deslizar"|"no"}
+  //   {"tipo": "texto", "texto": "…", "start", "end", "x", "y", "size", "rot", "font": "G", "color": "amarillo", "caja": false, "anim"}
+  //   {"tipo": "audio", "src": "audios/x.mp3", "start", "end", "volumen": 0.8, "desde": 0 (segundos que se saltean del archivo)}
+  const entradaCapa = (anim, frame, dur) => {
+    const sal = interpolate(frame, [dur - 6, dur], [1, 0], clamp);
+    if (anim === 'no') return {o: 1, s: 1, y: 0};
+    if (anim === 'fade') return {o: interpolate(frame, [0, 8], [0, 1], clamp) * sal, s: 1, y: 0};
+    if (anim === 'deslizar') { const t = interpolate(frame, [0, 9], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)}); return {o: t * sal, s: 1, y: (1 - t) * 80}; }
+    const p = spring({frame, fps: FPS, config: {damping: 11, stiffness: 180}});
+    return {o: Math.min(1, p * 1.4) * sal, s: 0.6 + 0.4 * p, y: 0};
+  };
+  const Capa = ({c, dur}) => {
+    const frame = useCurrentFrame();
+    const a = entradaCapa(c.anim ?? 'pop', frame, dur);
+    const base = {position: 'absolute', left: c.x ?? 540, top: c.y ?? 960, opacity: a.o * (c.opacidad ?? 1),
+      transform: `translate(-50%,-50%) translateY(${a.y}px) scale(${a.s}) rotate(${c.rot ?? 0}deg)`};
+    if (c.tipo === 'texto') {
+      const color = col(c.color ?? 'texto');
+      return <div style={{...base, ...(FONT[c.font ?? 'G'] ?? {}), fontSize: c.size ?? 110, color, whiteSpace: 'pre', textAlign: 'center',
+        ...(c.caja ? {background: col(c.caja === true ? (brand.acentos?.[0] ?? '#000') : c.caja), padding: '0.1em 0.35em', borderRadius: '0.18em'} : {textShadow: SHADOW})}}>{c.texto}</div>;
+    }
+    return <Img src={asset(c.src)} style={{...base, width: c.w ?? 500}} />;
   };
 
   // Gráficos animados (proyecto.json "graficos"): flechas dibujadas a mano que se trazan solas, y emojis con rebote.
@@ -850,6 +898,7 @@ function armar(data, brand, base, ilustraciones = {}) {
     return (
       <AbsoluteFill style={{backgroundColor: '#000'}}>
         <style>{fontFaces}</style>
+        <FiltroColor />
         {data.clips.map((c, i) => {
           const ultimo = i === data.clips.length - 1;
           return (
@@ -885,6 +934,11 @@ function armar(data, brand, base, ilustraciones = {}) {
             <Grafico g={g} />
           </Sequence>
         ))}
+        {(data.capas ?? []).filter((c) => c.tipo !== 'audio' && (c.src || c.texto) && c.end > c.start).map((c, i) => (
+          <Sequence key={'cp' + i} from={Math.round(c.start * FPS)} durationInFrames={Math.max(1, Math.round((c.end - c.start) * FPS))}>
+            <Capa c={c} dur={Math.max(1, Math.round((c.end - c.start) * FPS))} />
+          </Sequence>
+        ))}
         {E.etiqueta?.texto && (
           <Sequence from={Math.round((E.etiqueta.start ?? 0) * FPS)} durationInFrames={Math.max(1, Math.round(((E.etiqueta.end ?? 3) - (E.etiqueta.start ?? 0)) * FPS))}>
             <Etiqueta e={E.etiqueta} dur={Math.max(1, Math.round(((E.etiqueta.end ?? 3) - (E.etiqueta.start ?? 0)) * FPS))} />
@@ -911,6 +965,11 @@ function armar(data, brand, base, ilustraciones = {}) {
             <Audio src={asset('voz.mp3')} volume={data.vozVolume ?? 1} />
           </Sequence>
         )}
+        {(data.capas ?? []).filter((c) => c.tipo === 'audio' && c.src && c.end > c.start).map((c, i) => (
+          <Sequence key={'ca' + i} from={Math.round(c.start * FPS)} durationInFrames={Math.max(1, Math.round((c.end - c.start) * FPS))}>
+            <Audio src={asset(c.src)} volume={c.volumen ?? 0.8} trimBefore={Math.round((c.desde ?? 0) * FPS)} />
+          </Sequence>
+        ))}
         {data.music && <Audio src={asset(data.music)} volume={data.musicVolume ?? 0.18} />}
         {sfx.whoosh && cortes.map((f, i) => (
           <Sequence key={'wh' + i} from={Math.max(0, f - 6)} durationInFrames={20}><Audio src={asset('sfx/whoosh.wav')} volume={0.55} /></Sequence>

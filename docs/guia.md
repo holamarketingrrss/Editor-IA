@@ -24,11 +24,23 @@ Lo que no esté en el pedido, Claude lo toma de la ficha de Notion y de la marca
 - **Claude**: cambios escritos, uno por línea con el segundo del reel. Pausá donde querés el cambio y usá los botones
   (Texto, Toma, Más corto, Destacar, Zoom) o **Insertar** el tiempo.
 - **Textos**: corregir palabras, color, fuente, tamaño y tiempos. Clic en una fila y arrastrá la palabra en la vista previa.
+  **Varias a la vez:** `Shift + clic` elige un rango y `Ctrl/⌘ + clic` suma o saca; al arrastrar se mueven todas juntas, y la
+  barra de arriba cambia color, fuente o tamaño (A− / A+), las pone en el mismo lugar, las centra o las endereza. **Todas**
+  aplica un cambio a todo el video.
 - **Tomas / Escenas**: cambiar, recortar, reordenar o subir tomas; en videos de motion graphics, editar las escenas.
+- **Capas** (o el botón **+ Capas** debajo del video): línea de tiempo con filas para sumar **imágenes** (PNG con
+  transparencia, JPG), **textos libres**, **emojis** y **audios** (un sonido, una canción, otra voz). Cada capa se mueve
+  arrastrando su bloque, se alarga o acorta desde los bordes, y las visibles se arrastran en la vista previa. Al elegirla:
+  tamaño, rotación, opacidad, entrada (pop, fundido, deslizar), volumen, adelante / atrás, duplicar o quitar.
 - **Audio**: volumen de voz y música, subir música.
 - **Estilo**: tamaño general de los textos, subtítulos, palabras clave (efecto, color, frases), cámara, transiciones,
   cierre, etiqueta arriba y sonidos. *Guardar como estilo de la marca* lo deja por defecto para todos sus videos.
-- Todo se ve al instante; **Aplicar** lo guarda. **Descartar** vuelve a lo guardado.
+- **Color**: retoque de las tomas: exposición, contraste, saturación, luces, sombras, temperatura y tinte, con puntos de
+  partida (Más vivo, Cálido, Frío, Luminoso, Dramático). Doble clic en un control lo vuelve a 0.
+- Todo se ve al instante; **Aplicar** lo guarda. **Descartar** vuelve a lo guardado. Aplicá una pestaña antes de pasar
+  a otra.
+- **Sin Claude también se edita:** Textos, Tomas, Capas, Audio, Estilo, Color y Exportar no usan Claude. Si se terminó
+  el uso del plan, se sigue retocando y exportando igual.
 - Atajos: `Espacio` reproduce, `← →` un segundo, `Shift + ← →` un cuadro, `?` muestra todos.
 
 ## 4. Exportar y entregar
@@ -74,6 +86,8 @@ Los cambios valen para los proyectos nuevos y para los existentes la próxima ve
 - **Claude dice "sin conectores"**: en una terminal, `claude` y después `/status` (cuenta) y `/mcp` (Notion, Drive,
   ElevenLabs). Si falta alguno, autorizalo en claude.ai › Configuración › Conectores.
 - **Los textos se ven muy grandes o chicos**: Estilo › *Tamaño de los textos*; para toda la marca, *Guardar como estilo de la marca*.
+  Para algunas palabras: Textos › elegilas con Shift › A− / A+.
+- **Quiero poner un logo, un PNG o un sonido en un momento**: Capas › + Imagen o + Audio (queda donde está el cabezal).
 - **Una palabra clave sale partida**: Estilo › Palabras clave › escribila como frase ("18 Pro Max").
 - **La persona a cámara queda tapada**: pedile a Claude que las escenas vayan solo en la voz en off.
 - **Cuánto gastó un video**: lo dice el registro de Claude al terminar; el total del mes, en Equipo.
