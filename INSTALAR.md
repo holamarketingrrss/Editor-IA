@@ -1,5 +1,12 @@
 # Instalar el Editor IA
 
+**Forma recomendada: la app de escritorio.** Bajá el instalador del último Release del repo
+(GitHub › Editor-IA › Releases: `.exe` para Windows, `.dmg` para Mac), instalalo y abrí **Editor IA** desde el
+escritorio: te guía paso a paso (cuenta de GitHub, herramientas, Claude) y se actualiza sola. Detalle y qué hacer si
+Windows o Mac avisan que no está firmada: `escritorio/README.md`.
+
+La forma manual (abajo) sigue sirviendo, por ejemplo si la app no se puede instalar.
+
 Una vez por compu, unos 15 minutos. Necesitás: acceso al repo en GitHub y la cuenta de Claude de la agencia.
 
 Durante la instalación se abre el navegador **dos veces**: una para autorizar GitHub y otra para entrar a Claude.

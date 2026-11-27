@@ -1,0 +1,64 @@
+{
+  "name": "editor-ia-escritorio",
+  "productName": "Editor IA",
+  "version": "1.0.0",
+  "description": "Editor IA de Hola Marketing: app de escritorio (Windows y Mac) con acceso por GitHub",
+  "author": "Hola Marketing",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "app": "electron .",
+    "win": "electron-builder --win nsis --publish never",
+    "mac": "electron-builder --mac dmg --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.1"
+  },
+  "build": {
+    "appId": "com.holamarketing.editoria",
+    "productName": "Editor IA",
+    "files": [
+      "main.js",
+      "preload.js",
+      "acceso.js",
+      "inicio.html",
+      "build/icon.png"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Editor IA",
+      "artifactName": "Editor-IA-Instalador-${version}.exe"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.video",
+      "identity": null,
+      "artifactName": "Editor-IA-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "title": "Editor IA"
+    }
+  },
+  "repository": "https://github.com/holamarketingrrss/Editor-IA"
+}
