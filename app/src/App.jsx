@@ -4,7 +4,8 @@ import {Reel, FPS, duracionEnFrames} from '../../template/reel/src/Reel.jsx';
 import {api, sesionApi, gestionApi} from './api.js';
 import {Login, Equipo} from './Equipo.jsx';
 import {Marcas, Ajustes, Guia, Soporte} from './Gestion.jsx';
-import {Textos, Tomas, Escenas, Audio, Estilo, Exportar} from './Paneles.jsx';
+import {Capas} from './Capas.jsx';
+import {Textos, Tomas, Escenas, Audio, Estilo, Color, Exportar} from './Paneles.jsx';
 import {Claude} from './Claude.jsx';
 import {Icono, Linea, fmt, useAviso} from './ui.jsx';
 
@@ -24,7 +25,7 @@ export function Puerta() {
   if (!s.usuario) return <Login entro={(u) => setS({...s, usuario: u})} />;
   return <App usuario={s.usuario} equipo={s.equipo} salir={() => sesionApi.salir().finally(() => setS({...s, usuario: null}))} />;
 }
-const PANELES = [['claude', 'Claude'], ['textos', 'Textos'], ['tomas', 'Tomas'], ['audio', 'Audio'], ['estilo', 'Estilo'], ['exportar', 'Exportar']];
+const PANELES = [['claude', 'Claude'], ['textos', 'Textos'], ['tomas', 'Tomas'], ['capas', 'Capas'], ['audio', 'Audio'], ['estilo', 'Estilo'], ['color', 'Color'], ['exportar', 'Exportar']];
 const nombreProyecto = (id) => id.replace(/-/g, ' ');
 const hace = (ms) => {
   if (!ms) return '';
@@ -46,7 +47,8 @@ export function App({usuario, equipo, salir}) {
   const [ocupado, setOcupado] = useState('');
   const [frame, setFrame] = useState(0);
   const [sonando, setSonando] = useState(false);
-  const [sel, setSel] = useState(null);      // palabra elegida en Textos: se arrastra en la vista previa
+  const [capaSel, setCapaSel] = useState(null);   // capa elegida en Capas: se arrastra en la vista previa
+  const [sel, setSel] = useState([]);        // palabras elegidas en Textos (la última es la principal): se arrastran juntas en la vista previa
   const [atajos, setAtajos] = useState(false);
   const [vista, setVista] = useState(() => new URLSearchParams(location.search).get('v') || 'proyectos');
   const player = useRef(null);
@@ -59,7 +61,7 @@ export function App({usuario, equipo, salir}) {
   const recargar = () => id && api.proyecto(id).then((x) => { setP(x); setData(x.data); }).catch(() => {});
   useEffect(() => {
     history.replaceState(null, '', id ? `?p=${id}` : vista !== 'proyectos' ? `?v=${vista}` : location.pathname);
-    setSel(null); setFrame(0); setSonando(false);
+    setSel([]); setCapaSel(null); setFrame(0); setSonando(false);
     if (!id) { setP(null); setData(null); listar(); return; }
     api.proyecto(id).then((x) => { setP(x); setData(x.data); })
       .catch((e) => { avisar('error', 'No se pudo abrir el proyecto', e.message); setId(''); });
@@ -83,7 +85,7 @@ export function App({usuario, equipo, salir}) {
     const tecla = (e) => {
       if (escribiendo(e)) return;
       if (e.key === '?') { setAtajos((a) => !a); return; }
-      if (e.key === 'Escape') { setAtajos(false); setSel(null); return; }
+      if (e.key === 'Escape') { setAtajos(false); setSel([]); return; }
       const pl = player.current;
       if (!pl || !data) return;
       if (e.code === 'Space') { e.preventDefault(); pl.toggle(); }
@@ -120,15 +122,36 @@ export function App({usuario, equipo, salir}) {
   }, [p?.ilustraciones]);
   const props = useMemo(() => data && p && ({data, brand: p.brand, base: `/media/${p.id}/`, ilustraciones: ilus}), [data, p, ilus]);
   const modoPalabra = (data?.estilo?.subtitulos?.modo ?? 'palabra') === 'palabra';
-  const palabra = panel === 'textos' && modoPalabra && sel !== null ? data?.words[sel] : null;
+  const principal = sel.length ? sel[sel.length - 1] : null;
+  const palabra = panel === 'textos' && modoPalabra && principal !== null ? data?.words[principal] : null;
 
+  // arrastra la palabra principal y mueve todas las elegidas lo mismo (posiciones de partida fijas durante el arrastre)
   const arrastrar = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const caja = e.currentTarget.parentElement.getBoundingClientRect();
+    const base = Object.fromEntries(sel.map((i) => [i, {x: data.words[i].x ?? 540, y: data.words[i].y ?? 960}]));
+    const p0 = base[principal];
+    const mover = (ev) => {
+      const x = Math.max(0, Math.min(1, (ev.clientX - caja.left) / caja.width)) * 1080;
+      const y = Math.max(0, Math.min(1, (ev.clientY - caja.top) / caja.height)) * 1920;
+      const dx = x - p0.x, dy = y - p0.y;
+      setData((d) => ({...d, words: d.words.map((w, i) => (base[i] ? {...w, x: Math.round(Math.max(0, Math.min(1080, base[i].x + dx))),
+        y: Math.round(Math.max(0, Math.min(1920, base[i].y + dy))), _editada: [...new Set([...(w._editada || []), 'x', 'y'])]} : w))}));
+    };
+    const soltar = () => { window.removeEventListener('pointermove', mover); window.removeEventListener('pointerup', soltar); };
+    window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar);
+  };
+
+  // capa visible elegida en Capas: se arrastra en la vista previa (cambia x, y)
+  const capa = panel === 'capas' && capaSel !== null ? data?.capas?.[capaSel] : null;
+  const capaVisible = capa && capa.tipo !== 'audio' && t >= capa.start && t < capa.end ? capa : null;
+  const arrastrarCapa = (e) => {
     e.preventDefault(); e.stopPropagation();
     const caja = e.currentTarget.parentElement.getBoundingClientRect();
     const mover = (ev) => {
       const x = Math.round(Math.max(0, Math.min(1, (ev.clientX - caja.left) / caja.width)) * 1080);
       const y = Math.round(Math.max(0, Math.min(1, (ev.clientY - caja.top) / caja.height)) * 1920);
-      setData((d) => ({...d, words: d.words.map((w, i) => (i === sel ? {...w, x, y, _editada: [...new Set([...(w._editada || []), 'x', 'y'])]} : w))}));
+      setData((d) => ({...d, capas: d.capas.map((c, i) => (i === capaSel ? {...c, x, y} : c))}));
     };
     const soltar = () => { window.removeEventListener('pointermove', mover); window.removeEventListener('pointerup', soltar); };
     window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar);
@@ -159,13 +182,20 @@ export function App({usuario, equipo, salir}) {
         <section className="vista">
           <div className="marco">
             <Player ref={player} component={Reel} inputProps={props} durationInFrames={duracionEnFrames(data)} fps={FPS}
-              compositionWidth={1080} compositionHeight={1920} controls={false} clickToPlay={!palabra}
+              compositionWidth={1080} compositionHeight={1920} controls={false} clickToPlay={!palabra && !capaVisible}
               style={{width: '100%', height: '100%'}} acknowledgeRemotionLicense />
+            {capaVisible && (
+              <div className="capa-arrastre">
+                <div className="asa" style={{left: `${(capaVisible.x ?? 540) / 10.8}%`, top: `${(capaVisible.y ?? 960) / 19.2}%`}} onPointerDown={arrastrarCapa} title="Arrastrá para mover la capa">
+                  <span>{capaVisible.tipo === 'texto' ? capaVisible.texto.slice(0, 14) : 'imagen'}</span>
+                </div>
+              </div>
+            )}
             {palabra && (
               <div className="capa-arrastre">
                 <div className="asa" style={{left: `${(palabra.x ?? 540) / 10.8}%`, top: `${(palabra.y ?? 960) / 19.2}%`}}
                   onPointerDown={arrastrar} title="Arrastrá para mover la palabra">
-                  <span>{palabra.text}</span>
+                  <span>{palabra.frase ?? palabra.text}{sel.length > 1 ? ` + ${sel.length - 1}` : ''}</span>
                 </div>
               </div>
             )}
@@ -176,6 +206,7 @@ export function App({usuario, equipo, salir}) {
             </button>
             <span className="reloj"><b>{fmt(t)}</b> / {fmt(data.duration)}</span>
             <span className="espacio" />
+            <button className="abrir-lt" onClick={() => setPanel('capas')} title="Línea de tiempo con capas: imágenes, textos y audios"><Icono n="mas" t={14} />Capas</button>
             <span className="dato">{((e) => [data.clips.length - e && `${data.clips.length - e} tomas`, e && `${e} escenas`].filter(Boolean).join(' + '))(data.clips.filter((c) => c.tipo === 'escena').length)} · {data.words.length} palabras</span>
           </div>
           <Linea data={data} t={t} irA={irA} miniatura={(f, s) => api.miniatura(p.id, f, s)}
@@ -203,6 +234,10 @@ export function App({usuario, equipo, salir}) {
             {panel === 'estilo' && opciones && <Estilo p={p} data={data} setData={setData} opciones={opciones}
               aplicar={(estilo) => aplicar('Estilo', () => api.guardarProyecto(p.id, {estilo}))}
               guardarPreset={() => aplicar('Estilo de la marca', () => api.guardarPreset(p.id))} ocupado={!!ocupado} />}
+            {panel === 'capas' && <Capas p={p} data={data} setData={setData} t={t} irA={irA} capaSel={capaSel} setCapaSel={setCapaSel} ocupado={!!ocupado}
+              aplicar={(capas) => aplicar('Capas', () => api.guardarProyecto(p.id, {capas}))} />}
+            {panel === 'color' && <Color p={p} data={data} setData={setData} ocupado={!!ocupado}
+              aplicar={(color) => aplicar('Color', () => api.guardarProyecto(p.id, {estilo: {color}}))} />}
             {panel === 'exportar' && <Exportar p={p} recargar={() => api.proyecto(p.id).then(setP)} />}
           </div>
         </section>

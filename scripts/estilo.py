@@ -33,6 +33,8 @@ DEFAULTS = {
     'animacionStickers': 'pop',        # pop | trazo (el garabato aparece como pintado); por sticker: "anim"
     'look': 'original',                # original | calido | vibrante | bn | vintage | cine
     'vineta': True,
+    # retoque de color de las tomas (no de las escenas animadas), de -100 a 100; 0 = sin cambio
+    'color': {'exposicion': 0, 'contraste': 0, 'saturacion': 0, 'luces': 0, 'sombras': 0, 'temperatura': 0, 'tinte': 0},
     'grano': False,
     'audioOriginal': 'mute',           # mute | bajo | alto
     'audio': 'natural',                # natural | podcast (voz de las tomas: graves, ruido, de-esser, compresión y EQ de locución)

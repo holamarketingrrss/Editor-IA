@@ -15,6 +15,20 @@ export function Textos({p, data, setData, t, irA, sel, setSel, aplicar, ocupado}
   const actual = words.findIndex((w) => t >= w.start + off && t < w.end + off);
   useEffect(() => { fila.current[actual]?.scrollIntoView({block: 'nearest'}); }, [actual]);
 
+  // selección: clic = una; Shift + clic = rango desde la última; Ctrl/⌘ + clic = sumar o sacar
+  const elegir = (e, i) => {
+    if (/^(INPUT|SELECT|OPTION)$/.test(e.target.tagName)) { if (!sel.includes(i)) setSel([i]); return; }
+    if (e.shiftKey && sel.length) {
+      const a = sel[sel.length - 1], rango = Array.from({length: Math.abs(i - a) + 1}, (_, k) => Math.min(a, i) + k);
+      setSel([...new Set([...sel, ...rango.filter((k) => k !== i)]), i]);
+    } else if (e.metaKey || e.ctrlKey) setSel(sel.includes(i) ? sel.filter((k) => k !== i) : [...sel, i]);
+    else { setSel([i]); irA(words[i].start + off + 0.08); }
+  };
+  // cambio en grupo: fn(palabra) devuelve los campos nuevos; quedan marcados como editados
+  const enGrupo = (fn) => setData((d) => ({...d, words: d.words.map((w, j) => {
+    if (!sel.includes(j)) return w;
+    const c = fn(w); return {...w, ...c, _editada: [...new Set([...(w._editada || []), ...Object.keys(c)])]};
+  })}));
   const editar = (i, campo, valor) => setData((d) => ({...d, words: d.words.map((w, j) => (j === i
     ? {...w, [campo]: valor, _editada: [...new Set([...(w._editada || []), campo])]} : w))}));
   const guardar = () => {
@@ -30,15 +44,36 @@ export function Textos({p, data, setData, t, irA, sel, setSel, aplicar, ocupado}
   const modo = data.estilo?.subtitulos?.modo ?? 'palabra';
   return (
     <>
-      <p className="nota">Clic en una fila para ir a esa palabra{modo === 'palabra' ? ' y arrastrarla en la vista previa' : ''}. Los cambios se ven al instante;
+      <p className="nota">Clic en una fila para ir a esa palabra{modo === 'palabra' ? ' y arrastrarla en la vista previa' : ''}; <b>Shift + clic</b> elige un rango y <b>Ctrl/⌘ + clic</b> suma o saca
+        (se mueven y cambian todas juntas). Los cambios se ven al instante;
         <b> Aplicar</b> los guarda (y los vuelve a ubicar dentro de la zona segura).
         {modo !== 'palabra' && ' En este modo de subtítulos la posición la decide el bloque.'}</p>
+      <div className="grupo-textos">
+        <span className="sub">{sel.length ? `${sel.length} ${sel.length === 1 ? 'palabra elegida' : 'palabras elegidas'}` : 'Ninguna elegida'}</span>
+        <button onClick={() => setSel(words.map((_, i) => i))}>Todas</button>
+        <button disabled={!sel.length} onClick={() => setSel([])}>Ninguna</button>
+        {sel.length > 0 && <>
+          <select value="" onChange={(e) => e.target.value && enGrupo(() => ({color: e.target.value}))}>
+            <option value="">Color…</option>{colores.map((c) => <option key={c} value={c}>{c}</option>)}</select>
+          <select value="" onChange={(e) => e.target.value && enGrupo(() => ({font: e.target.value}))}>
+            <option value="">Fuente…</option>{fuentes.map((f) => <option key={f} value={f}>{f} · {p.brand.fuentes[f].familia}</option>)}</select>
+          <button title="10 % más chicas" onClick={() => enGrupo((w) => ({size: Math.round(w.size * 0.9)}))}>A−</button>
+          <button title="10 % más grandes" onClick={() => enGrupo((w) => ({size: Math.round(w.size * 1.1)}))}>A+</button>
+          {modo === 'palabra' && <>
+            <button title="Todas en el lugar de la última elegida" onClick={() => { const b = words[sel[sel.length - 1]]; enGrupo(() => ({x: b.x, y: b.y, rot: b.rot})); }}>Mismo lugar</button>
+            <button title="Centradas horizontalmente" onClick={() => enGrupo(() => ({x: 540}))}>Centrar</button>
+            <button title="Rectas, sin rotación" onClick={() => enGrupo(() => ({rot: 0}))}>Rectas</button>
+            <button title="Subir 40 px" onClick={() => enGrupo((w) => ({y: Math.max(220, w.y - 40)}))}>↑</button>
+            <button title="Bajar 40 px" onClick={() => enGrupo((w) => ({y: Math.min(1500, w.y + 40)}))}>↓</button>
+          </>}
+        </>}
+      </div>
       <table className="tabla">
         <thead><tr><th>Tiempo</th><th>Texto</th><th>Color</th><th>Fuente</th><th>Tam.</th><th>Inicio</th><th>Fin</th></tr></thead>
         <tbody>
           {words.map((w, i) => (
-            <tr key={i} ref={(el) => { fila.current[i] = el; }} onClick={() => { if (sel !== i) { setSel(i); irA(w.start + off + 0.08); } }}
-              className={(i === actual ? 'actual ' : '') + (i === sel ? 'elegida ' : '') + (w._editada ? 'editada' : '')}>
+            <tr key={i} ref={(el) => { fila.current[i] = el; }} onClick={(e) => elegir(e, i)}
+              className={(i === actual ? 'actual ' : '') + (sel.includes(i) ? 'elegida ' : '') + (w._editada ? 'editada' : '')}>
               <td className="tiempo-celda">{fmt(w.start + off)}{w.destacado && <i className="punto" title="destacada" />}</td>
               <td><input value={w.text} onChange={(e) => editar(i, 'text', e.target.value)} /></td>
               <td>
@@ -57,7 +92,7 @@ export function Textos({p, data, setData, t, irA, sel, setSel, aplicar, ocupado}
       </table>
       <div className="acciones">
         <button className="primario" disabled={!sucias || ocupado} onClick={guardar}>Aplicar textos</button>
-        <button disabled={!sucias || ocupado} onClick={() => { setData(p.data); setSel(null); }}>Descartar</button>
+        <button disabled={!sucias || ocupado} onClick={() => { setData(p.data); setSel([]); }}>Descartar</button>
         {sucias && <span className="sub">{((n) => `${n} ${n === 1 ? 'palabra' : 'palabras'} con cambios sin aplicar`)(words.filter((w) => w._editada).length)}</span>}
       </div>
     </>
@@ -356,5 +391,37 @@ export function Escenas({p, data, setData, irA, aplicar, ocupado}) {
         <button disabled={!sucias || ocupado} onClick={() => { setLista(inicial()); setData(p.data); }}>Descartar</button>
       </div>
     </div>
+  );
+}
+
+// ---------- Color: retoque de las tomas (estilo.color, de -100 a 100), con vista previa al instante ----------
+const AJUSTES_COLOR = [['exposicion', 'Exposición'], ['contraste', 'Contraste'], ['saturacion', 'Saturación'], ['luces', 'Luces'],
+  ['sombras', 'Sombras'], ['temperatura', 'Temperatura (frío ↔ cálido)'], ['tinte', 'Tinte (verde ↔ magenta)']];
+const CERO = {exposicion: 0, contraste: 0, saturacion: 0, luces: 0, sombras: 0, temperatura: 0, tinte: 0};
+const PUNTOS = [['Natural', CERO], ['Más vivo', {...CERO, contraste: 15, saturacion: 25, luces: 10}], ['Cálido', {...CERO, temperatura: 35, saturacion: 10, sombras: 10}],
+  ['Frío', {...CERO, temperatura: -30, contraste: 10}], ['Luminoso', {...CERO, exposicion: 12, sombras: 25, contraste: -5}], ['Dramático', {...CERO, contraste: 35, sombras: -25, saturacion: -10}]];
+
+export function Color({p, data, setData, aplicar, ocupado}) {
+  const actual = {...CERO, ...(data.estilo?.color ?? {})};
+  const guardado = {...CERO, ...(p.data.estilo?.color ?? {})};
+  const sucio = JSON.stringify(actual) !== JSON.stringify(guardado);
+  const poner = (c) => setData((d) => ({...d, estilo: {...d.estilo, color: {...CERO, ...(d.estilo?.color ?? {}), ...c}}}));
+  return (
+    <>
+      <p className="nota">Retoque de color de las tomas (las escenas animadas mantienen los colores de la marca). Se ve al instante; <b>Aplicar</b> lo guarda para el render.
+        Para combinarlo con un look (cálido, cine, B&N…), elegilo en Estilo.</p>
+      <div className="puntos-color">{PUNTOS.map(([n, v]) => <button key={n} className="chip" onClick={() => poner(v)}>{n}</button>)}</div>
+      <div className="form deslizadores">
+        {AJUSTES_COLOR.map(([k, n]) => (
+          <label key={k}>{n}<input type="range" min="-100" max="100" step="1" value={actual[k]} onChange={(e) => poner({[k]: +e.target.value})}
+            onDoubleClick={() => poner({[k]: 0})} title="Doble clic: volver a 0" /><span>{actual[k] > 0 ? '+' : ''}{actual[k]}</span></label>
+        ))}
+      </div>
+      <div className="acciones">
+        <button className="primario" disabled={!sucio || ocupado} onClick={() => aplicar(actual)}>Aplicar color</button>
+        <button disabled={!sucio || ocupado} onClick={() => poner(guardado)}>Descartar</button>
+        <button onClick={() => poner(CERO)}>Todo a 0</button>
+      </div>
+    </>
   );
 }

@@ -36,6 +36,9 @@ más chicos (1 = el del preset). Si la ficha tiene un tema o gancho corto, estil
 Audio y ritmo: "pasalo por audio podcast" = estilo.audio "podcast"; zooms en momentos clave = estilo.camara "acercar"
 (sobre las destacadas); sonidos sutiles = estilo.sfx {"clave": "click"|"blip"|"pop", "zoom": true}. voz_tomas.sh ya ajusta
 los cortes a la voz (sin aire ni respiraciones); no hace falta pedirlo.
+Color de las tomas: estilo.color {exposicion, contraste, saturacion, luces, sombras, temperatura, tinte} de -100 a 100.
+Logos, PNG, textos sueltos o sonidos en un momento: proyecto.json "capas" (imagen: src en reel/public/capas/; texto; audio:
+src en reel/public/audios/) con start, end, x, y, w o size, rot, opacidad, anim (pop|fade|deslizar|no) o volumen.
 Persona a cámara: mientras habla a cámara siempre se la ve; escenas de color, placas o gráficos solo sobre la voz en off.
 
 Motion graphics (pedido sin material grabado, "placas", "solo gráfica" o "video animado"): en lugar de Drive/EDL, armá

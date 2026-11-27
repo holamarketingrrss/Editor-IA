@@ -17,6 +17,7 @@ export const api = {
   guardarGuion: (id, guion) => post(`/api/p/${id}/guion`, {guion}),
   guardarEdl: (id, edl) => post(`/api/p/${id}/edl`, {edl}),
   guardarProyecto: (id, cambios) => post(`/api/p/${id}/proyecto`, {cambios}),
+  subirCapa: (id, archivo) => pedir(`/api/p/${id}/subir?tipo=capa&nombre=${encodeURIComponent(archivo.name)}`, {method: 'POST', body: archivo}),
   subir: (id, tipo, archivo) => pedir(`/api/p/${id}/subir?tipo=${tipo}&nombre=${encodeURIComponent(archivo.name)}`, {method: 'POST', body: archivo}),
   miniatura: (id, archivo, t) => `/api/p/${id}/miniatura?archivo=${encodeURIComponent(archivo)}&t=${(+t || 0).toFixed(1)}`,
   exportar: (id) => new EventSource(`/api/p/${id}/exportar`),
