@@ -1,0 +1,46 @@
+# Arma los instaladores de la app de escritorio (Windows .exe y Mac .dmg) en GitHub Actions, gratis.
+# Se corre a mano: Actions › "App de escritorio" › Run workflow. Los instaladores quedan en el resumen de la corrida
+# (Artifacts) y, si se pone una versión, en un Release del repo para compartir el link con el equipo.
+name: App de escritorio
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versión para publicar en Releases (ej. 1.0.0). Vacío = solo artifacts"
+        required: false
+permissions:
+  contents: write
+jobs:
+  armar:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            comando: win
+            archivos: escritorio/dist/*.exe
+          - os: macos-latest
+            comando: mac
+            archivos: escritorio/dist/*.dmg
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: escritorio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run ${{ matrix.comando }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: editor-ia-${{ matrix.comando }}
+          path: ${{ matrix.archivos }}
+      - if: ${{ github.event.inputs.version != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: escritorio-v${{ github.event.inputs.version }}
+          name: Editor IA ${{ github.event.inputs.version }}
+          files: ${{ matrix.archivos }}

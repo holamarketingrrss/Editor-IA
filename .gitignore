@@ -33,3 +33,6 @@ proyectos/tecno-ilus-prueba/
 proyectos/.papelera/
 presets/.papelera/
 .versiones/
+escritorio/node_modules/
+escritorio/dist/
+!escritorio/build/icon.png

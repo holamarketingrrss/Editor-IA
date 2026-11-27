@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Editor IA</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:">
+<style>
+  :root { --tinta: #121110; --tinta-2: #1a1917; --linea: #34302b; --crema: #f3ede2; --crema-2: #bdb5a8; --crema-3: #857d71; --amarillo: #f9ca12; --ok: #5fd39a; --mal: #ff7a6b; }
+  * { box-sizing: border-box; } html, body { margin: 0; height: 100%; }
+  body { background: var(--tinta) radial-gradient(900px 500px at 80% -10%, rgba(249,202,18,.07), transparent 60%); color: var(--crema);
+    font: 15px/1.5 -apple-system, 'Segoe UI', system-ui, sans-serif; display: grid; place-items: center; }
+  .caja { width: min(620px, calc(100vw - 40px)); }
+  .marca { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+  .marca img { width: 56px; height: 56px; }
+  .marca b { font-size: 30px; letter-spacing: -.03em; } .marca i { font-family: Georgia, serif; color: var(--amarillo); font-size: 32px; }
+  .paso { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+  .icono { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--linea); margin-top: 2px; display: grid; place-items: center; font-size: 12px; }
+  .ok .icono { background: var(--ok); border-color: var(--ok); color: var(--tinta); } .ok .icono::after { content: '✓'; font-weight: 700; }
+  .mal .icono { border-color: var(--mal); color: var(--mal); } .mal .icono::after { content: '!'; font-weight: 700; }
+  .andando .icono { border-color: var(--amarillo); border-top-color: transparent; animation: gira 1s linear infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  h3 { margin: 0; font-size: 15px; } .det { color: var(--crema-2); font-size: 13.5px; margin-top: 2px; }
+  .codigo { font: 700 30px/1 ui-monospace, Menlo, monospace; letter-spacing: 4px; color: var(--amarillo); margin: 10px 0 4px; user-select: all; }
+  button { font: inherit; font-weight: 700; margin-top: 10px; padding: 9px 16px; border-radius: 9px; border: 1px solid var(--amarillo); background: var(--amarillo); color: var(--tinta); cursor: pointer; }
+  button.sec { background: none; color: var(--crema); border-color: var(--linea); font-weight: 500; }
+  .pie { margin-top: 18px; color: var(--crema-3); font-size: 12.5px; display: flex; justify-content: space-between; gap: 12px; }
+  .pie a { color: var(--crema-2); cursor: pointer; text-decoration: underline; }
+  .error { margin-top: 14px; color: var(--mal); white-space: pre-wrap; font-size: 13px; }
+</style></head>
+<body><div class="caja">
+  <div class="marca"><img src="build/icon.png" alt=""><b>editor</b><i>ia</i></div>
+  <div id="pasos"></div>
+  <div class="error" id="error"></div>
+  <div class="pie"><span id="usuario"></span><span><a id="reintentar">Reintentar</a> · <a id="salir">Cambiar de cuenta de GitHub</a></span></div>
+</div>
+<script>
+const PASOS = [['github', 'Cuenta de GitHub'], ['sistema', 'Windows listo (Ubuntu)'], ['editor', 'Editor IA actualizado'], ['herramientas', 'Herramientas de video'], ['claude', 'Claude de la agencia'], ['abrir', 'Abrir el editor']];
+const esWin = navigator.userAgent.includes('Windows');
+const cont = document.getElementById('pasos');
+for (const [k, n] of PASOS) {
+  if (k === 'sistema' && !esWin) continue;
+  cont.insertAdjacentHTML('beforeend', `<div class="paso" id="p-${k}"><span class="icono"></span><div><h3>${n}</h3><div class="det"></div><div class="extra"></div></div></div>`);
+}
+const accion = (que) => window.editor.accion(que);
+const boton = (txt, que, sec) => `<button class="${sec ? 'sec' : ''}" onclick="accion('${que}')">${txt}</button>`;
+const TEXTOS = {
+  github: {chequeando: ['andando', 'Chequeando tu acceso…'], ok: (d) => ['ok', `Entraste como ${d.usuario || '—'}${d.sinConexion ? ' (sin conexión: vale el último chequeo)' : ''}`],
+    codigo: (d) => ['andando', `Se abrió GitHub en el navegador. Escribí este código y tocá <b>Authorize</b>:<div class="codigo">${d.codigo}</div>Si no se abrió: ${d.url}`],
+    'sin-acceso': (d) => ['mal', `La cuenta ${d.usuario || ''} no tiene acceso al Editor IA. Pedile a un admin que te sume en GitHub (Collaborators) y tocá Reintentar.${boton('Cambiar de cuenta', 'salir-github', true)}`],
+    'sin-conexion': ['mal', 'Sin conexión a internet y hace más de 7 días que no se chequea el acceso. Conectate y tocá Reintentar.']},
+  sistema: {chequeando: ['andando', 'Buscando Ubuntu (WSL)…'], ok: (d) => ['ok', d.detalle],
+    'falta-wsl': ['mal', `Hace falta preparar Windows una sola vez (pide permiso de administrador y un reinicio).${boton('Preparar Windows', 'instalar-wsl')}`],
+    'falta-usuario': ['mal', `Ubuntu está instalado pero falta crear tu usuario (nombre y contraseña, pueden ser cualquiera: anotá la contraseña).${boton('Abrir Ubuntu', 'crear-usuario')}<br>Cuando termines, tocá Reintentar.`]},
+  editor: {chequeando: ['andando', 'Buscando el editor…'], bajando: ['andando', 'Bajando el editor (la primera vez tarda un poco)…'], actualizando: ['andando', 'Buscando actualizaciones…'],
+    ok: (d) => ['ok', `Versión ${d.detalle || ''}`], aviso: (d) => ['andando', d.detalle], 'falta-git': ['mal', `Falta git.${boton('Instalar git', 'instalar-git')}`],
+    error: (d) => ['mal', `No se pudo bajar el editor:<br><code>${d.detalle}</code>`]},
+  herramientas: {chequeando: ['andando', 'Chequeando FFmpeg, whisper, Remotion…'], ok: ['ok', 'Todo instalado'],
+    falta: ['mal', `La primera vez hay que instalar las herramientas (unos 15 min). Se abre una terminal: seguí lo que pida (la contraseña de la compu no se ve al escribirla).${boton('Instalar herramientas', 'instalar')}<br>Cuando termine, tocá Reintentar.`]},
+  claude: {chequeando: ['andando', 'Chequeando la sesión de Claude…'], ok: (d) => ['ok', d.detalle ? `Conectado: ${d.detalle}` : 'Conectado'],
+    falta: ['mal', `Entrá a Claude con la cuenta de la agencia (se abre el navegador).${boton('Entrar a Claude', 'claude')}<br>Cuando termines, tocá Reintentar.`]},
+  abrir: {arrancando: ['andando', 'Abriendo el editor…'], ok: ['ok', 'Listo'], error: (d) => ['mal', d.detalle]},
+};
+window.editor.alPaso((d) => {
+  if (d.paso === 'error') { document.getElementById('error').textContent = d.detalle; return; }
+  const el = document.getElementById('p-' + d.paso); if (!el) return;
+  let t = TEXTOS[d.paso]?.[d.estado]; if (typeof t === 'function') t = t(d); if (!t) return;
+  el.className = 'paso ' + t[0]; el.querySelector('.det').innerHTML = t[1];
+  if (d.paso === 'github' && d.usuario) document.getElementById('usuario').textContent = `GitHub: ${d.usuario}`;
+});
+document.getElementById('reintentar').onclick = () => { document.getElementById('error').textContent = ''; accion('reintentar'); };
+document.getElementById('salir').onclick = () => accion('salir-github');
+</script></body></html>

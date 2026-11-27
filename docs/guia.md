@@ -78,6 +78,13 @@ Los cambios valen para los proyectos nuevos y para los existentes la próxima ve
   stories". Claude hace el cambio y te dice qué tocó. Si hace falta código, lo prueba antes.
 - Los cambios quedan en la compu donde corre la app (en la compu del equipo, para todos).
 
+## 9. App de escritorio y acceso
+- Cada integrante instala **Editor IA** (Windows o Mac) desde Releases del repo y entra con su cuenta de **GitHub**.
+- **Sumar a alguien**: GitHub › Editor-IA › Settings › Collaborators › *Add people* (rol Read).
+- **Cuando alguien deja el equipo**: (1) *Remove* en Collaborators: la app se le bloquea y deja de actualizarse;
+  (2) sacarle Drive y Notion; (3) si conocía la clave de la cuenta de Claude, cambiarla y volver a entrar en las compus
+  del equipo; (4) si tenía usuario en Equipo, desactivarlo.
+
 ## 9. Equipo (admins)
 - Agregar personas, roles (editor o admin), desactivar, cambiar clave y límite de gasto mensual de Claude.
 - Registro: quién hizo qué y cuánto costó. Detalle en `app/EQUIPO.md`.
